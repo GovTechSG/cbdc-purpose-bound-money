@@ -1,0 +1,15 @@
+{
+  "name": "cbdc-purpose-bound-money",
+  "version": "1.0.0",
+  "description": "Purpose Bound Money (PBM) in Project Orchid is a protocol to specify conditions for the use of digital money.",
+  "repository": "https://github.com/superical/cbdc-purpose-bound-money.git",
+  "author": {
+    "name": "Seth",
+    "url": "https://github.com/superical"
+  },
+  "license": "Apache-2.0",
+  "workspaces": [
+    "packages/**/*"
+  ],
+  "private": true
+}

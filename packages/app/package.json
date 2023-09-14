@@ -1,0 +1,11 @@
+{
+  "name": "@pbm/app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": {
+    "name": "Seth",
+    "url": "https://github.com/superical"
+  },
+  "license": "Apache-2.0",
+  "private": true
+}
