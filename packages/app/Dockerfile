@@ -1,20 +1,20 @@
-FROM node:16 AS deps
+FROM node:18 AS deps
 #RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+COPY packages/app/package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --non-interactive --production
 
-FROM node:16 AS builder
+FROM node:18 AS builder
 WORKDIR /app
+COPY packages/app .
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN npm run build
+RUN yarn build
 
-FROM node:16-alpine AS runner
+FROM node:18-alpine AS runner
 
 # Create app directory
 WORKDIR /app
@@ -25,20 +25,18 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # For container healthcheck use
 RUN apk add --update curl
 
-# add a group and user for Next.js. It is also important for security.
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN adduser --system --uid 1001 appuser
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/public ./public
+COPY --from=builder --chown=appuser:nodejs /app/.next ./.next
+COPY --from=builder --chown=appuser:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=appuser:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=appuser:nodejs /app/public ./public
 
-# define the user to be nextjs that will execute the command to run the Next.js project
-USER nextjs
+USER appuser
 
 EXPOSE 3000
 
 ENV PORT 3000
 
-CMD [ "npm", "start" ]
+CMD [ "yarn", "start" ]
