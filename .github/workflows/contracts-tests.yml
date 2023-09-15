@@ -1,0 +1,38 @@
+name: PBM Smart Contracts
+
+on:
+  push:
+    branches:
+      - main
+      - beta
+      - +([0-9])?(.{+([0-9]),x}).x
+  pull_request:
+    paths:
+      - "packages/contracts/**"
+
+defaults:
+  run:
+    working-directory: packages/contracts
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    env:
+      MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
+      INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18.x
+
+      - name: "Install dependencies"
+        run: yarn install --frozen-lockfile
+
+      - name: "Compile contracts"
+        run: yarn compile
+
+      - name: "Run tests"
+        run: yarn test
