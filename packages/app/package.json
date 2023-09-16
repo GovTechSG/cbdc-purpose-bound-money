@@ -1,0 +1,58 @@
+{
+  "name": "@pbm/app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": {
+    "name": "Seth",
+    "url": "https://github.com/superical"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:prettier": "prettier --check \"**/*.*\"",
+    "lint:prettier:fix": "prettier --write \"**/*.*\""
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@rainbow-me/rainbowkit": "^0.12.14",
+    "@rainbow-me/rainbowkit-siwe-next-auth": "^0.1.10",
+    "antd": "^5.4.2",
+    "copy-to-clipboard": "^3.3.3",
+    "ellipsize": "^0.5.1",
+    "ethers": "^5.7.2",
+    "ethers-decode-error": "^1.0.0",
+    "lodash.debounce": "^4.0.8",
+    "moment": "^2.29.4",
+    "next": "13.4.3",
+    "next-auth": "^4.20.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-highlight-words": "^0.20.0",
+    "react-minimal-pie-chart": "^8.4.0",
+    "react-tooltip": "^5.18.0",
+    "siwe": "^2.1.4",
+    "wagmi": "^0.12.13"
+  },
+  "devDependencies": {
+    "@types/ellipsize": "^0.1.1",
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/node": "18.15.11",
+    "@types/react": "18.0.35",
+    "@types/react-dom": "18.0.11",
+    "@types/react-highlight-words": "^0.16.4",
+    "encoding": "^0.1.13",
+    "eslint": "8.38.0",
+    "eslint-config-next": "13.3.0",
+    "prettier": "^2.8.7",
+    "typescript": "5.0.4"
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  }
+}
