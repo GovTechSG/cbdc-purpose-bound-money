@@ -8,6 +8,11 @@
   },
   "license": "Apache-2.0",
   "private": true,
+  "workspaces": {
+    "nohoist": [
+      "wagmi/**"
+    ]
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -19,9 +24,8 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@rainbow-me/rainbowkit": "^0.12.14",
-    "@rainbow-me/rainbowkit-siwe-next-auth": "^0.1.10",
-    "antd": "^5.4.2",
+    "@rainbow-me/rainbowkit": "^0.12.18",
+    "antd": "~5.7.0",
     "copy-to-clipboard": "^3.3.3",
     "ellipsize": "^0.5.1",
     "ethers": "^5.7.2",
@@ -35,7 +39,6 @@
     "react-highlight-words": "^0.20.0",
     "react-minimal-pie-chart": "^8.4.0",
     "react-tooltip": "^5.18.0",
-    "siwe": "^2.1.4",
     "wagmi": "^0.12.13"
   },
   "devDependencies": {
