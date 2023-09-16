@@ -20,6 +20,7 @@ ENV NEXT_PUBLIC_ENABLE_HARDHAT_NODE=$ENABLE_HARDHAT_NODE
 
 COPY packages/app .
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/yarn.lock ./
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
