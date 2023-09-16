@@ -2,6 +2,7 @@ name: App Deployment
 
 on:
   pull_request:
+    types: [opened, reopened, synchronize]
     branches:
       - staging
   push:
@@ -50,8 +51,12 @@ jobs:
           ECR_REPOSITORY: ${{ vars.APP_ECR_REPOSITORY }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          echo $(pwd)
-          docker build -f packages/app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build \
+            --build-arg INFURA_API_KEY=${{ secrets.INFURA_API_KEY }} \
+            --build-arg WALLETCONNECT_PROJECT_ID=${{ vars.APP_WALLETCONNECT_PROJECT_ID }} \
+            --build-arg ENABLE_TESTNETS=${{ vars.APP_ENABLE_TESTNETS }} \
+            --build-arg ENABLE_HARDHAT_NODE=${{ vars.APP_ENABLE_HARDHAT_NODE }} \
+            -f packages/app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
