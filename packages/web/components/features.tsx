@@ -14,7 +14,7 @@ export default function Features() {
           />
         </div>
         <div className="flex justify-center pb-10 md:pb-16">
-          <SecondaryLinkButton href={process.env.NEXT_PUBLIC_UX_FEATURE_DECK!}>
+          <SecondaryLinkButton href={process.env.NEXT_PUBLIC_UX_FEATURE_DECK_URL!}>
             See Feature Screens Deck
           </SecondaryLinkButton>
         </div>
