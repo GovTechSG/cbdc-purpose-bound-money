@@ -1,4 +1,4 @@
-import { PBMVault__factory, PBM__factory } from '@contracts/types'
+import { PBMVault__factory, PBM__factory } from '@pbm/contracts'
 import { decodeError, ErrorType } from 'ethers-decode-error'
 import type { DecodedError } from 'ethers-decode-error'
 

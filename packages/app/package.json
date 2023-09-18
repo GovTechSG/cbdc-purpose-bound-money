@@ -24,6 +24,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@pbm/contracts": "1.0.0",
     "@rainbow-me/rainbowkit": "^0.12.18",
     "antd": "~5.7.0",
     "copy-to-clipboard": "^3.3.3",

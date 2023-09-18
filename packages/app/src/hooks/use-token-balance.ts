@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { BigNumber, ethers } from 'ethers'
-import { IERC20Metadata, IERC20Metadata__factory } from '@contracts/types'
+import { IERC20Metadata, IERC20Metadata__factory } from '@pbm/contracts'
 import { useAccount, useNetwork, useProvider } from 'wagmi'
 
 type UseTokenBalanceParams = {

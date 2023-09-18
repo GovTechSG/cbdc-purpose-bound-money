@@ -2,7 +2,7 @@
 
 import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
 import { ERC20MetadataContextProps } from '@app/contexts/types'
-import { IERC20Metadata } from '@contracts/types'
+import { IERC20Metadata } from '@pbm/contracts'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 type AssetTokenContextProps = {

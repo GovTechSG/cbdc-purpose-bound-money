@@ -1,9 +1,13 @@
 import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
+import { PBM } from '@pbm/contracts'
+import {
+    DepositEvent,
+    PBMVault,
+    WithdrawalEvent,
+} from '@pbm/contracts/types/contracts/base/PBMVault'
 import { BigNumber } from 'ethers'
 import moment from 'moment/moment'
-import { PBM } from '@contracts/types/contracts/PBM'
 import { useCallback, useEffect, useState } from 'react'
-import { DepositEvent, PBMVault, WithdrawalEvent } from '@contracts/types/contracts/base/PBMVault'
 
 export type PaymentData = {
     transactionHash: string

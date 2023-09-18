@@ -9,7 +9,7 @@ import {
     PBM__factory,
     PBMVault,
     PBMVault__factory,
-} from '@contracts/types'
+} from '@pbm/contracts'
 import { ERC20MetadataContextProps } from '@app/contexts/types'
 import { BigNumber } from 'ethers'
 import { getAppChainInfo } from '@app/utils/get-app-chain-info'

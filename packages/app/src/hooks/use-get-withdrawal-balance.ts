@@ -1,5 +1,5 @@
 import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
-import { PBMVault } from '@contracts/types'
+import { PBMVault } from '@pbm/contracts'
 import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from 'ethers'
 

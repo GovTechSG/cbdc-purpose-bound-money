@@ -5,7 +5,7 @@ import React from 'react'
 import { BigNumber, Signer } from 'ethers'
 import { useTransactionModal } from '@app/contexts/transaction-modal-context'
 import { useSigner } from 'wagmi'
-import { PBM } from '@contracts/types'
+import { PBM } from '@pbm/contracts'
 import { StatisticTitleWithLoader } from '@app/components/token-overview/pbm-overview-card/statistic-title-with-loader'
 
 interface WithdrawalBalanceStatisticProps {
