@@ -24,5 +24,11 @@
   "resolutions": {
     "react": "18.2.0",
     "react-dom": "18.2.0"
+  },
+  "scripts": {
+    "build:app": "yarn workspace @pbm/app build",
+    "start:app": "yarn workspace @pbm/app start",
+    "build:web": "yarn workspace @pbm/web build",
+    "start:web": "yarn workspace @pbm/web start"
   }
 }

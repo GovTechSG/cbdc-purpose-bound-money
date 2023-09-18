@@ -19,8 +19,8 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     env:
-      MNEMONIC: ${{ secrets.TEST_MNEMONIC }}
-      INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+      MNEMONIC: "here are my twelve golden words for you to run the tests"
+      INFURA_API_KEY: Test_12345678
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
