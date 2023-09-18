@@ -1,7 +1,8 @@
 {
   "name": "@pbm/contracts",
   "version": "1.0.0",
-  "main": "types/index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "author": {
     "name": "Seth",
     "url": "https://github.com/superical"
@@ -73,20 +74,24 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rimraf ./artifacts ./cache ./coverage ./types ./coverage.json && yarn typechain",
+    "clean": "rimraf ./dist ./artifacts ./cache ./coverage ./types ./coverage.json && yarn typechain",
     "compile": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat compile",
     "coverage": "hardhat coverage --solcoverjs ./.solcover.js --temp artifacts --testfiles \"test/**/*.ts\" && yarn typechain",
     "deploy": "hardhat deploy:Greeter",
     "lint": "yarn lint:sol && yarn lint:ts && yarn prettier:check",
     "lint:sol": "solhint --max-warnings 0 \"contracts/**/*.sol\"",
     "lint:ts": "eslint --ignore-path ./.eslintignore --ext .js,.ts .",
-    "postinstall": "DOTENV_CONFIG_PATH=./.env.example yarn typechain",
+    "postinstall": "DOTENV_CONFIG_PATH=./.env.example yarn typechain && yarn build:release",
     "prettier:check": "prettier --check \"**/*.{js,json,md,sol,ts,yml}\"",
     "prettier:write": "prettier --write \"**/*.{js,json,md,sol,ts,yml}\"",
     "test": "hardhat test --grep '^(?!.*PBMTaskManager).*$'",
     "test:automation": "hardhat test --grep 'PBMTaskManager' --network localhost",
     "test:all": "yarn test && yarn test:automation",
     "test:watch": "hardhat watch test",
-    "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain"
+    "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain",
+    "build:release": "tsc -p tsconfig.release.json"
+  },
+  "peerDependencies": {
+    "ethers": "^5.0.0"
   }
 }
