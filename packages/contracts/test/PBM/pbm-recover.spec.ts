@@ -4,7 +4,7 @@ import { assert, expect } from "chai";
 import { BigNumber } from "ethers";
 
 import { DSGD, PBM } from "../../types";
-import { parseAmount } from "../utils";
+import { parseAmount } from "../../common/utils";
 import { deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Recover", () => {

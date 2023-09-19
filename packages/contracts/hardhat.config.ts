@@ -1,8 +1,11 @@
+import "@nomicfoundation/hardhat-ledger";
 import "@nomicfoundation/hardhat-toolbox";
 import { config as dotenvConfig } from "dotenv";
 import "hardhat-watcher";
 import type { HardhatUserConfig } from "hardhat/config";
+import { HttpNetworkUserConfig } from "hardhat/src/types/config";
 import type { NetworkUserConfig } from "hardhat/types";
+import { HardhatNetworkUserConfig } from "hardhat/types/config";
 import { resolve } from "path";
 
 import "./tasks";
@@ -13,8 +16,9 @@ dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
 
 // Ensure that we have all the environment variables we need.
 const mnemonic: string | undefined = process.env.MNEMONIC;
-if (!mnemonic) {
-  throw new Error("Please set your MNEMONIC in a .env file");
+const activeSignerPk: string | undefined = process.env.ACTIVE_SIGNER_PK;
+if (!mnemonic && !activeSignerPk) {
+  throw new Error("Please set your MNEMONIC or ACTIVE_SIGNER_PK in a .env file");
 }
 
 const infuraApiKey: string | undefined = process.env.INFURA_API_KEY;
@@ -34,6 +38,36 @@ const chainIds = {
   sepolia: 11155111,
 };
 
+function getAccounts(): HttpNetworkUserConfig["accounts"] {
+  return activeSignerPk
+    ? [activeSignerPk]
+    : {
+        count: 10,
+        mnemonic: mnemonic!,
+        path: "m/44'/60'/0'/0",
+      };
+}
+
+function getLedgerAccounts(): HardhatNetworkUserConfig["ledgerAccounts"] | undefined {
+  if (process.env.USE_HARDWARE_WALLET !== "1") return;
+  const ledgerAccount = process.env.HARDWARE_WALLET_ADDRESS;
+  if (!ledgerAccount) {
+    throw new Error(
+      "You've indicated to use hardware wallet. Please set your HARDWARE_WALLET_ADDRESS in a .env file",
+    );
+  }
+  return [ledgerAccount];
+}
+
+function getAccountOrLedger() {
+  // Prioritise ledger account if available
+  const ledgerAccounts = getLedgerAccounts();
+  if (ledgerAccounts) {
+    return { ledgerAccounts };
+  }
+  return { accounts: getAccounts() };
+}
+
 function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
   let jsonRpcUrl: string;
   switch (chain) {
@@ -47,11 +81,7 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
       jsonRpcUrl = "https://" + chain + ".infura.io/v3/" + infuraApiKey;
   }
   return {
-    accounts: {
-      count: 10,
-      mnemonic,
-      path: "m/44'/60'/0'/0",
-    },
+    ...getAccountOrLedger(),
     chainId: chainIds[chain],
     url: jsonRpcUrl,
   };
@@ -74,7 +104,7 @@ const config: HardhatUserConfig = {
   gasReporter: {
     currency: "USD",
     coinmarketcap: process.env.COINMARKETCAP_API_KEY || "",
-    enabled: process.env.REPORT_GAS ? true : false,
+    enabled: !!process.env.REPORT_GAS,
     excludeContracts: [],
     src: "./contracts",
   },
@@ -83,6 +113,7 @@ const config: HardhatUserConfig = {
       accounts: {
         mnemonic,
       },
+      ledgerAccounts: getLedgerAccounts(),
       chainId: chainIds.hardhat,
     },
     arbitrum: getChainConfig("arbitrum-mainnet"),

@@ -1,8 +1,9 @@
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
-import { deployUpgradeableContract } from "../../test/utils";
+import { deployUpgradeableContract } from "../../common/utils";
 import { PBMVault__factory } from "../../types";
+import { getDefaultSigner } from "../helpers/default-signer";
 import { wait } from "../helpers/wait";
 
 type Parameters = {
@@ -20,7 +21,7 @@ task("deploy:vault", "Deploy PBM vault")
     try {
       const { name, symbol, noProxy } = taskArguments;
 
-      const [deployer] = await ethers.getSigners();
+      const deployer = await getDefaultSigner(ethers);
       const deployerAddress = await deployer.getAddress();
 
       console.log(`[Deployer] ${deployerAddress}`);

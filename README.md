@@ -45,7 +45,7 @@ The following tasks have been implemented using Hardhat for both deploying the s
 ##### Usage
 
 ```bash
-yarn workspace @pbm/contracts hardhat <task-name> --network <network> --<arg-name> <arg-value>
+yarn hardhat <task-name> --network <network> --<arg-name> <arg-value>
 ```
 
 #### Start Application Frontend

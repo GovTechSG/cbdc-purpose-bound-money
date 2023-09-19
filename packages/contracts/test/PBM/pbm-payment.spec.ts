@@ -4,7 +4,7 @@ import { assert, expect } from "chai";
 import { BigNumber, ContractTransaction, ethers } from "ethers";
 
 import { DSGD, PBM, PBMVault } from "../../types";
-import { parseAmount } from "../utils";
+import { parseAmount } from "../../common/utils";
 import { deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Payments", () => {

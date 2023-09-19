@@ -1,8 +1,8 @@
 import { assert } from "chai";
 
 import { DSGD__factory, PBMUpgradeable__factory, PBMVault__factory } from "../../types";
-import { HardhatEthers } from "../types";
-import { deployUpgradeableContract, parseAmount, resolveEthers } from "../utils";
+import { HardhatEthers } from "../../common/types";
+import { deployUpgradeableContract, parseAmount, resolveEthers } from "../../common/utils";
 
 export type PBMFixtureParamType = {
   name: string;

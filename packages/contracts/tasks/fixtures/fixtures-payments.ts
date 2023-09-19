@@ -3,7 +3,7 @@ import { ContractReceipt } from "ethers";
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
-import { parseAmount } from "../../test/utils";
+import { parseAmount } from "../../common/utils";
 import { PBMUpgradeable, PBMVault } from "../../types";
 
 type DeployPaymentFixturesArguments = {

@@ -1,7 +1,8 @@
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
-import { parseAmount } from "../../test/utils";
+import { parseAmount } from "../../common/utils";
+import { getDefaultSigner } from "../helpers/default-signer";
 
 type DeployPaymentFixturesArguments = {
   pbm: string;
@@ -11,8 +12,8 @@ task("send:ethers", "Send Ethers")
   .addParam<string>("to", "Recipient address")
   .addParam<number>("amount", "Amount of Ethers")
   .setAction(async function (taskArguments: DeployPaymentFixturesArguments, { ethers }) {
-    // Default is deployer account
-    const [signer] = await ethers.getSigners();
+    // Get default signer
+    const signer = await getDefaultSigner(ethers);
 
     const amount = parseAmount(taskArguments.amount, 18);
 

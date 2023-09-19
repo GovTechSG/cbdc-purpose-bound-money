@@ -29,6 +29,7 @@
     "build:app": "yarn workspace @pbm/app build",
     "start:app": "yarn workspace @pbm/app start",
     "build:web": "yarn workspace @pbm/web build",
-    "start:web": "yarn workspace @pbm/web start"
+    "start:web": "yarn workspace @pbm/web start",
+    "hardhat": "yarn workspace @pbm/contracts hardhat"
   }
 }

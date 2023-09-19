@@ -3,7 +3,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 
 import { PBM } from "../../types";
-import { parseAmount } from "../utils";
+import { parseAmount } from "../../common/utils";
 import { deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Transfer", () => {

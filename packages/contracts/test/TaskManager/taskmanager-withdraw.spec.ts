@@ -13,7 +13,7 @@ import { IAutomate, PBM, PBMTaskManager, PBMTaskManager__factory, PBMVault } fro
 import { PromiseOrValue } from "../../types/common";
 import { DepositInfoStructOutput } from "../../types/contracts/base/PBMVault";
 import { deployPBMFixture } from "../PBM/pbm.fixture";
-import { parseAmount } from "../utils";
+import { parseAmount } from "../../common/utils";
 
 // Polygon Addresses
 const GELATO_AUTOMATE_ADDRESS = "0x527a819db1eb0e34426297b03bae11F2f8B3A19E";

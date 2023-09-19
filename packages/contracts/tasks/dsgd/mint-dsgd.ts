@@ -1,8 +1,9 @@
 import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
-import { parseAmount } from "../../test/utils";
+import { parseAmount } from "../../common/utils";
 import { DSGD } from "../../types";
+import { getDefaultSigner } from "../helpers/default-signer";
 
 type DeployPaymentFixturesArguments = {
   pbm: string;
@@ -13,8 +14,8 @@ task("dsgd:mint", "Mint DSGD")
   .addParam<string>("to", "Recipient address")
   .addParam<number>("amount", "Amount of DSGD")
   .setAction(async function (taskArguments: DeployPaymentFixturesArguments, { ethers }) {
-    // Default is deployer account
-    const [signer] = await ethers.getSigners();
+    // Get default signer
+    const signer = await getDefaultSigner(ethers);
 
     const dsgdContract = (await ethers.getContractAt("DSGD", taskArguments.dsgd)) as DSGD;
     const decimals = await dsgdContract.decimals();

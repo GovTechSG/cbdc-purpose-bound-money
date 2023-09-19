@@ -4,7 +4,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { DSGD, PBMUpgradeable } from "../../types";
-import { parseAmount } from "../utils";
+import { parseAmount } from "../../common/utils";
 import { PBMFixtureParamType, deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Setup", () => {
