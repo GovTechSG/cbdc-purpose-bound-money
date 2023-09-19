@@ -1,20 +1,20 @@
 'use client'
 
-import { Layout, Menu, theme } from 'antd'
-import React, { createContext, useMemo } from 'react'
-import { LayoutHeader } from '@app/components/app-layout/header'
-import { usePathname, useRouter } from 'next/navigation'
-import styled from '@emotion/styled'
-import { useConnectedHasAdministrativeRoles } from '@app/hooks/use-connected-has-administrative-roles'
 import { pageInfo } from '@app/common/config/page-info'
-import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
-import { useTokenBalance } from '@app/hooks/use-token-balance'
-import { useAccount } from 'wagmi'
-import { useIsMounted } from '@app/hooks/use-is-mounted'
-import { ellipsizeAddress, formatNumberDisplay } from '@app/utils/helpers'
-import { BlockExplorer } from '@app/components/block-explorer'
-import Head from 'next/head'
 import { AddressTooltip } from '@app/components/address-tooltip'
+import { LayoutHeader } from '@app/components/app-layout/header'
+import { BlockExplorer } from '@app/components/block-explorer'
+import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
+import { useConnectedHasAdministrativeRoles } from '@app/hooks/use-connected-has-administrative-roles'
+import { useIsMounted } from '@app/hooks/use-is-mounted'
+import { useTokenBalance } from '@app/hooks/use-token-balance'
+import { ellipsizeAddress, formatNumberDisplay } from '@app/utils/helpers'
+import styled from '@emotion/styled'
+import { Layout, Menu, theme } from 'antd'
+import Head from 'next/head'
+import { usePathname, useRouter } from 'next/navigation'
+import React, { createContext, useMemo } from 'react'
+import { useAccount } from 'wagmi'
 
 const { Content, Footer, Sider } = Layout
 
@@ -129,6 +129,10 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
             {isMounted && (
                 <Head>
                     <title>{pageHeading} – Project Orchid</title>
+                    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+                    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+                    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+                    <link rel="manifest" href="/site.webmanifest" />
                 </Head>
             )}
             <Layout style={{ minHeight: '100vh' }}>
