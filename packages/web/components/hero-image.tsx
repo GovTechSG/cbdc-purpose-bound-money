@@ -16,6 +16,8 @@ export default function HeroImage({ src, alt }: HeroImageProps) {
         alt={alt}
         placeholder="blur"
         className="drop-shadow-xl sm:drop-shadow-2xl rounded-md"
+        quality={100}
+        priority
       />
     </div>
   );

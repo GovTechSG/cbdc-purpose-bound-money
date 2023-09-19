@@ -1,6 +1,6 @@
 import HeroImage from "@web/components/hero-image";
 import { SecondaryLinkButton } from "@web/components/secondary-link-button";
-import heroDashboardImage from "@web/public/images/hero-dashboard.png";
+import heroDashboardImage from "@web/public/images/hero-dashboard.webp";
 import React from "react";
 
 export default function Features() {
