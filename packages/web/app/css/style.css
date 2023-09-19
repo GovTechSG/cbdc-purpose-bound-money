@@ -1,48 +1,58 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
+@import "tailwindcss/base";
+@import "tailwindcss/components";
 
 /* Additional styles */
-@import 'additional-styles/utility-patterns.css';
-@import 'additional-styles/range-slider.css';
-@import 'additional-styles/toggle-switch.css';
-@import 'additional-styles/theme.css';
+@import "additional-styles/utility-patterns.css";
+@import "additional-styles/range-slider.css";
+@import "additional-styles/toggle-switch.css";
+@import "additional-styles/theme.css";
 
-@import 'tailwindcss/utilities';
+@import "tailwindcss/utilities";
 
 /* Additional Tailwind directives: https://tailwindcss.com/docs/functions-and-directives/#responsive */
 @layer utilities {
-    .rtl {
-        direction: rtl;
-    }
+  .rtl {
+    direction: rtl;
+  }
 }
 
 /* See Alpine.js: https://github.com/alpinejs/alpine#x-cloak */
 [x-cloak=""] {
-    display: none;
+  display: none;
 }
 
 ::selection {
-    background-color: theme('colors.blue.900');
-    color: theme('colors.gray.300');
+  background-color: theme("colors.blue.900");
+  color: theme("colors.gray.300");
 }
 
 ::-moz-selection {
-    background-color: theme('colors.amber.400');
+  background-color: theme("colors.amber.400");
 }
 
+html {
+  padding: env(safe-area-inset);
+}
 
 .bg-page {
-    /*noinspection CssUnknownTarget*/
-    background-image: url('/images/bg.jpg');
-    background-position-y: -12rem;
+  /*noinspection CssUnknownTarget*/
+  background-image: url("/images/bg.jpg");
+  background-position-y: -12rem;
 }
 
 @media screen and (min-width: 3880px) {
-    .bg-page {
-        background-size: contain;
-    }
+  .bg-page {
+    background-size: contain;
+  }
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 750px) {
+  .bg-page {
+    background-size: contain;
+    background-position-y: 0;
+  }
 }
 
 .Typewriter {
-    display: inline-block;
+  display: inline-block;
 }
