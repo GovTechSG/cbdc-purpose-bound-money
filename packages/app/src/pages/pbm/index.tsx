@@ -17,7 +17,7 @@ import { getPaymentDataSource } from '@app/utils/payments/helpers'
 import { withWalletConnected } from '@app/utils/with-wallet-connected'
 
 function PbmPage() {
-    useAppLayoutContext({ pageHeading: 'PBM Dashboard' })
+    useAppLayoutContext({ pageHeading: 'My PBM Dashboard' })
 
     const { data: signer } = useSigner()
     const { address: connectedAddress } = useAccount()

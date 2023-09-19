@@ -19,7 +19,7 @@ import { useAccount } from 'wagmi'
 const { Content, Footer, Sider } = Layout
 
 const contextDefaultReadValues = {
-    pageHeading: 'Project Orchid',
+    pageHeading: 'Purpose Bound Money (PBM) Portal',
 }
 
 const contextDefaultFunctions = {
@@ -128,7 +128,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         <AppLayoutContext.Provider value={values}>
             {isMounted && (
                 <Head>
-                    <title>{pageHeading} – Project Orchid</title>
+                    <title>{pageHeading} – Purpose Bound Money (PBM)</title>
                     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
                     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
                     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
