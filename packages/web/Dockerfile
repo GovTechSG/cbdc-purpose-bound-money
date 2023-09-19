@@ -7,12 +7,20 @@ RUN yarn install --frozen-lockfile --non-interactive --production
 
 FROM node:18 AS builder
 WORKDIR /app
+
+ARG BASE_URL
+ARG UX_FEATURE_DECK_URL
+
+ENV NEXT_PUBLIC_BASE_URL=$BASE_URL
+ENV NEXT_PUBLIC_UX_FEATURE_DECK_URL=$UX_FEATURE_DECK_URL
+
 COPY packages/web .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/yarn.lock ./
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
+RUN yarn install --frozen-lockfile --non-interactive
 RUN yarn build
 
 FROM node:18-alpine AS runner
@@ -30,7 +38,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 appuser
 
 COPY --from=builder --chown=appuser:nodejs /app/.next ./.next
-COPY --from=builder --chown=appuser:nodejs /app/node_modules ./node_modules
+COPY --from=deps --chown=appuser:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=appuser:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=appuser:nodejs /app/public ./public
 
