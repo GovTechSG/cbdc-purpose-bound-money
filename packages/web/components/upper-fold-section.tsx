@@ -27,7 +27,7 @@ const HeroUnit: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
         Programmable Digital Currency
       </div>
       <h1
-        className="h1 text-5xl md:text-8xl pb-1.5 bg-clip-text text-transparent bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-neutral-500 via-zinc-800 to-zinc-950"
+        className="h1 text-5xl md:text-8xl pb-1.5 bg-clip-text text-transparent bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-neutral-600 via-zinc-800 to-zinc-950"
         data-aos="fade-up"
       >
         Purpose Bound Money
@@ -74,7 +74,7 @@ const CallToActionButtons: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
     <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
       <div data-aos="fade-up" data-aos-delay="400">
         <a
-          className="btn text-white bg-blue-600 hover:bg-blue-900 transition-all duration-500 w-full mb-4 sm:w-auto sm:mb-0 rounded-md"
+          className="btn text-white bg-blue-600 hover:bg-blue-950 transition-all duration-500 w-full mb-4 sm:w-auto sm:mb-0 rounded-md"
           rel="noopener noreferrer"
           href={`//app.${baseUrlHost}`}
         >
