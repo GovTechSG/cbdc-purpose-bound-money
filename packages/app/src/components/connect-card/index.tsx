@@ -8,6 +8,7 @@ const { Title } = Typography
 const LoginContainer = styled(Space)`
     justify-content: center;
     flex-direction: column;
+    text-align: center;
     width: 100%;
     height: 100%;
     padding: 0.5rem 0;
