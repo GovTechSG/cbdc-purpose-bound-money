@@ -8,6 +8,8 @@ import type { NetworkUserConfig } from "hardhat/types";
 import { HardhatNetworkUserConfig } from "hardhat/types/config";
 import { resolve } from "path";
 
+// TODO: Fix an issue with circular dependency on the bindings in tasks
+// Current workaround is to commit with the bindings, not ideal
 import "./tasks";
 import "./tasks/accounts";
 

@@ -30,6 +30,11 @@
     "start:app": "yarn workspace @pbm/app start",
     "build:web": "yarn workspace @pbm/web build",
     "start:web": "yarn workspace @pbm/web start",
+    "build:contracts": "yarn workspace @pbm/contracts clean && yarn workspace @pbm/contracts build:release",
+    "test:contracts": "yarn workspace @pbm/contracts test",
+    "test:contracts:automation": "yarn workspace @pbm/contracts test:automation",
+    "test:contracts:all": "yarn workspace @pbm/contracts test:all",
+    "test:contracts:watch": "yarn workspace @pbm/contracts test:watch",
     "hardhat": "yarn workspace @pbm/contracts hardhat"
   }
 }
