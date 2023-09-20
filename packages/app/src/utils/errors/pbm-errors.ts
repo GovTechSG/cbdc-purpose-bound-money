@@ -18,16 +18,25 @@ export const parseTransactionError = (error: any): string => {
 
 const customErrorToReason = ({ error, args }: DecodedError): string => {
     switch (error) {
+        // PBM Errors
         case 'UnauthorisedCaller':
             return `Caller ${args?.[0]} is not authorised`
-        case 'InvalidActiveDeposit':
-            return 'Invalid active deposit'
-        case 'DepositAlreadyMatured':
-            return 'Payment has already matured beyond its holding period'
         case 'AccountHasNoRole':
             return `Address ${args?.[0]} is not a whitelisted participant`
+        case 'TaskExists':
+            return `Payment task already exists`
+
+        // PBMVault Errors
+        case 'InvalidDepositIdRange':
+            return 'Payment/Deposit ID is out of range'
+        case 'InvalidActiveDeposit':
+            return 'Invalid active deposit'
         case 'DepositNotMatured':
             return `One or more deposits have not matured`
+        case 'DepositAlreadyMatured':
+            return 'Payment has already matured beyond its holding period'
+        case 'InvalidTransfer':
+            return 'Vaulted PBM tokens cannot be transferred'
         default:
             return error
     }
