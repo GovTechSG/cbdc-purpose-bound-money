@@ -1,8 +1,9 @@
 FROM node:18 AS deps
-#RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json yarn.lock ./
+RUN apt-get update && apt-get install -y jq
+
+COPY package.json yarn.lock tsconfig.json ./
 
 COPY packages/app ./packages/app
 COPY packages/contracts ./packages/contracts
@@ -27,6 +28,7 @@ ENV NEXT_PUBLIC_ENABLE_HARDHAT_NODE=$ENABLE_HARDHAT_NODE
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN yarn install --frozen-lockfile --non-interactive
+
 RUN yarn build:app
 
 FROM node:18-alpine AS runner

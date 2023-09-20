@@ -1,12 +1,14 @@
 FROM node:18 AS deps
-#RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 COPY packages/web/package.json yarn.lock ./
+
 RUN yarn install --frozen-lockfile --non-interactive --production
 
 FROM node:18 AS builder
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y jq
 
 ARG BASE_URL
 ARG UX_FEATURE_DECK_URL
@@ -17,8 +19,11 @@ ENV NEXT_PUBLIC_UX_FEATURE_DECK_URL=$UX_FEATURE_DECK_URL
 COPY packages/web .
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/yarn.lock ./
+COPY tsconfig.json ./tsconfig-base.json
 
 ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN jq '.extends = "./tsconfig-base.json"' tsconfig.json > temp.json && mv temp.json tsconfig.json
 
 RUN yarn install --frozen-lockfile --non-interactive
 RUN yarn build
@@ -37,8 +42,8 @@ RUN apk add --update curl
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 appuser
 
-COPY --from=builder --chown=appuser:nodejs /app/.next ./.next
 COPY --from=deps --chown=appuser:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=appuser:nodejs /app/.next ./.next
 COPY --from=builder --chown=appuser:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=appuser:nodejs /app/public ./public
 
