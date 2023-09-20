@@ -8,6 +8,7 @@ on:
       - production
     paths:
       - "packages/web/**"
+      - "yarn.lock"
 
 defaults:
   run:

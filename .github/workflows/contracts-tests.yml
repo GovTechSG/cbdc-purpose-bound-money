@@ -9,6 +9,7 @@ on:
   pull_request:
     paths:
       - "packages/contracts/**"
+      - "yarn.lock"
 
 defaults:
   run:

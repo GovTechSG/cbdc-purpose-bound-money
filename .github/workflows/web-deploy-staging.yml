@@ -10,6 +10,7 @@ on:
       - staging
     paths:
       - "packages/web/**"
+      - "yarn.lock"
 
 defaults:
   run:
