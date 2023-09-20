@@ -9,11 +9,11 @@ import { assert, expect } from "chai";
 import { BigNumber, BigNumberish, BytesLike, ContractTransaction } from "ethers";
 import { ethers } from "hardhat";
 
+import { parseAmount } from "../../common/utils";
 import { IAutomate, PBM, PBMTaskManager, PBMTaskManager__factory, PBMVault } from "../../types";
 import { PromiseOrValue } from "../../types/common";
 import { DepositInfoStructOutput } from "../../types/contracts/base/PBMVault";
 import { deployPBMFixture } from "../PBM/pbm.fixture";
-import { parseAmount } from "../../common/utils";
 
 // Polygon Addresses
 const GELATO_AUTOMATE_ADDRESS = "0x527a819db1eb0e34426297b03bae11F2f8B3A19E";
@@ -63,6 +63,26 @@ describe("PBMTaskManager", () => {
     await pbmTaskManagerContract.deployed();
   });
 
+  describe("Create Task", () => {
+    it("should not allow a non-PBM caller", async () => {
+      const tx = pbmTaskManagerContract.connect(admin).createWithdrawalTask(payee.address, 0);
+
+      await expect(tx).to.be.revertedWithCustomError(pbmTaskManagerContract, "TaskCallerNotPBM");
+    });
+
+    it("should allow PBM contract to call create task", async () => {
+      await impersonateAccount(pbmContract.address);
+      const pbmContractSigner = await ethers.getSigner(pbmContract.address);
+
+      const tx = pbmTaskManagerContract
+        .connect(pbmContractSigner)
+        .createWithdrawalTask(payee.address, 0);
+
+      // Expect to throw InvalidDepositIdRange from PBMVault due to invalid parameters if PBM caller did make the call through on PBMTasksManager
+      await expect(tx).to.be.revertedWithCustomError(pbmVaultContract, "InvalidDepositIdRange");
+    });
+  });
+
   describe("PBM Payment", () => {
     it("should not create task if no task manager is provided to PBM", async () => {
       await pbmContract.connect(admin).setTaskManager(ethers.constants.AddressZero);
@@ -107,7 +127,7 @@ describe("PBMTaskManager", () => {
     it("should revert if withdraw caller is not funds owner", async () => {
       const tx = pbmTaskManagerContract.connect(payee).withdrawETH(payee.address);
 
-      await expect(tx).to.be.revertedWith("PBMTaskManager: caller is not the funds owner");
+      await expect(tx).to.be.revertedWithCustomError(pbmTaskManagerContract, "CallerNotFundsOwner");
     });
 
     it("should withdraw all ETH balance to funds owner", async () => {

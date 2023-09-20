@@ -153,6 +153,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBMAccessControlErrors__factory>;
     getContractFactory(
+      name: "PBMTaskManagerErrors",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PBMTaskManagerErrors__factory>;
+    getContractFactory(
+      name: "PBMVaultErrors",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PBMVaultErrors__factory>;
+    getContractFactory(
       name: "AutomateReady",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.AutomateReady__factory>;
@@ -376,6 +384,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.PBMAccessControlErrors>;
+    getContractAt(
+      name: "PBMTaskManagerErrors",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PBMTaskManagerErrors>;
+    getContractAt(
+      name: "PBMVaultErrors",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PBMVaultErrors>;
     getContractAt(
       name: "AutomateReady",
       address: string,

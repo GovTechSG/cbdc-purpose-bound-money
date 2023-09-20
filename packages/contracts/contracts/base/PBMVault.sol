@@ -4,10 +4,9 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@superical/time-lock-vault/contracts/TimeLockVault.sol";
+import "../interfaces/PBMVaultErrors.sol";
 
-error CallerNotPBM();
-
-contract PBMVault is OwnableUpgradeable, TimeLockVault {
+contract PBMVault is OwnableUpgradeable, TimeLockVault, PBMVaultErrors {
     modifier onlyPBM() {
         if (_msgSender() != asset()) {
             revert CallerNotPBM();

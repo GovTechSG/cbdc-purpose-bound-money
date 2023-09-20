@@ -3,9 +3,10 @@ pragma solidity ^0.8.13;
 
 import "./lib/gelato-automate/AutomateTaskCreator.sol";
 import "./interfaces/IPBM.sol";
+import "./interfaces/PBMTaskManagerErrors.sol";
 import "./base/PBMVault.sol";
 
-contract PBMTaskManager is AutomateTaskCreator {
+contract PBMTaskManager is AutomateTaskCreator, PBMTaskManagerErrors {
     event WithdrawalTaskCreated(
         bytes32 indexed taskId,
         address indexed payee,
@@ -13,8 +14,6 @@ contract PBMTaskManager is AutomateTaskCreator {
     );
 
     event WithdrawalTaskExecution(bytes32 indexed taskId, bool indexed success);
-
-    error TaskExists();
 
     IPBM public immutable PBM;
     mapping(bytes32 => bool) public taskIds;
@@ -33,7 +32,7 @@ contract PBMTaskManager is AutomateTaskCreator {
 
     modifier onlyPBM() {
         if (msg.sender != address(PBM)) {
-            revert CallerNotPBM();
+            revert TaskCallerNotPBM();
         }
         _;
     }
@@ -83,7 +82,9 @@ contract PBMTaskManager is AutomateTaskCreator {
     }
 
     function withdrawETH(address to) external {
-        require(msg.sender == fundsOwner, "PBMTaskManager: caller is not the funds owner");
+        if (msg.sender != fundsOwner) {
+            revert CallerNotFundsOwner();
+        }
 
         payable(to).transfer(address(this).balance);
     }

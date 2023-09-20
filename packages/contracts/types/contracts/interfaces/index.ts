@@ -3,3 +3,5 @@
 /* eslint-disable */
 export type { IPBM } from "./IPBM";
 export type { PBMAccessControlErrors } from "./PBMAccessControlErrors";
+export type { PBMTaskManagerErrors } from "./PBMTaskManagerErrors";
+export type { PBMVaultErrors } from "./PBMVaultErrors";
