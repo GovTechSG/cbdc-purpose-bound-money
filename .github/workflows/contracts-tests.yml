@@ -4,8 +4,10 @@ on:
   push:
     branches:
       - main
-      - beta
-      - +([0-9])?(.{+([0-9]),x}).x
+      - staging
+    paths:
+      - "packages/contracts/**"
+      - "yarn.lock"
   pull_request:
     paths:
       - "packages/contracts/**"
@@ -35,5 +37,13 @@ jobs:
       - name: "Compile contracts"
         run: yarn compile
 
+      - name: "Start node"
+        run: yarn hardhat node --fork https://polygon-mainnet.infura.io/v3/${{ secrets.INFURA_API_KEY }} &
+
       - name: "Run tests"
-        run: yarn test
+        run: |
+          sleep 10
+          yarn test:all
+
+      - name: "Stop node"
+        run: kill $(lsof -t -i:8545)
