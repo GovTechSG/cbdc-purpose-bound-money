@@ -9,6 +9,7 @@ on:
     paths:
       - "packages/web/**"
       - "yarn.lock"
+      - ".github/workflows/web-*.yml"
 
 defaults:
   run:

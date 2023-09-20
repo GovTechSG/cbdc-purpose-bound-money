@@ -11,6 +11,7 @@ on:
     paths:
       - "packages/app/**"
       - "yarn.lock"
+      - ".github/workflows/app-*.yml"
 
 defaults:
   run:

@@ -8,10 +8,12 @@ on:
     paths:
       - "packages/contracts/**"
       - "yarn.lock"
+      - ".github/workflows/contracts-tests.yml"
   pull_request:
     paths:
       - "packages/contracts/**"
       - "yarn.lock"
+      - ".github/workflows/contracts-tests.yml"
 
 defaults:
   run:
