@@ -112,9 +112,11 @@ const config: HardhatUserConfig = {
   },
   networks: {
     hardhat: {
-      accounts: {
-        mnemonic,
-      },
+      accounts: activeSignerPk
+        ? [{ privateKey: activeSignerPk, balance: "100000000000000000000000000" }]
+        : {
+            mnemonic,
+          },
       ledgerAccounts: getLedgerAccounts(),
       chainId: chainIds.hardhat,
     },
