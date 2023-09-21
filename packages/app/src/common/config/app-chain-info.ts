@@ -1,5 +1,13 @@
 import { type AppChainInfo } from '@app/utils/get-app-chain-info'
 
+export const chainInfoPolygon: AppChainInfo = {
+    pbm: {
+        address: '0x56e932991885B65bc91f719d9dac241E64B6529E',
+        genesisBlock: 39239804,
+    },
+    payees: ['0x24ba19062400185a9001EDC9F6200C438F62Fa53'],
+}
+
 export const chainInfoMumbai: AppChainInfo = {
     pbm: {
         address: '0x56e932991885B65bc91f719d9dac241E64B6529E',

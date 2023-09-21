@@ -1,4 +1,4 @@
-import { chainInfoLocal, chainInfoMumbai } from '@app/common/config'
+import { chainInfoLocal, chainInfoMumbai, chainInfoPolygon } from '@app/common/config'
 import { resolveAddressName } from '@app/utils/address-book'
 
 export type AppChainInfo = {
@@ -20,7 +20,7 @@ export const getAppChainInfo = (chainId: number | undefined): AppChainInfo | nul
     if (!chainId) return null
     switch (chainId) {
         case 137:
-            return null
+            return chainInfoPolygon
         case 80001:
             return chainInfoMumbai
         case 1337:

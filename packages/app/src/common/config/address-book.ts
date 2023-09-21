@@ -1,5 +1,14 @@
 import { type AddressBookData } from '@app/utils/address-book'
 
+export const addressBookPolygon: AddressBookData = {
+    // Contracts
+    '0x56e932991885B65bc91f719d9dac241E64B6529E': 'Purpose-Bound Money Token',
+    '0x8ca45A06836bA95648A576e7Ddc382A90B44990b': 'Digital SGD Token',
+
+    // Payee Accounts
+    '0x24ba19062400185a9001EDC9F6200C438F62Fa53': 'Local Test Payee #1',
+}
+
 export const addressBookMumbai: AddressBookData = {
     // Contracts
     '0x56e932991885B65bc91f719d9dac241E64B6529E': 'Purpose-Bound Money Token',
