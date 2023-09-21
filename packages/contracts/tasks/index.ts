@@ -1,5 +1,6 @@
 // Deployment tasks
 import "./deploy/deploy-pbm";
+import "./deploy/deploy-taskmanager";
 import "./deploy/deploy-vault";
 // Fixture tasks
 import "./dsgd/mint-dsgd";
@@ -12,3 +13,4 @@ import "./verify/verify-pbm";
 import "./verify/verify-pbm-proxy";
 import "./verify/verify-vault";
 import "./verify/verify-vault-proxy";
+import "./verify/verify-taskmanager";
