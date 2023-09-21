@@ -1,7 +1,7 @@
 'use client'
 
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useAccount, useNetwork, useProvider } from 'wagmi'
+import { ERC20MetadataContextProps } from '@app/contexts/types'
+import { getAppChainInfo } from '@app/utils/get-app-chain-info'
 import {
     IERC20Metadata,
     IERC20Metadata__factory,
@@ -10,9 +10,9 @@ import {
     PBMVault,
     PBMVault__factory,
 } from '@pbm/contracts'
-import { ERC20MetadataContextProps } from '@app/contexts/types'
 import { BigNumber } from 'ethers'
-import { getAppChainInfo } from '@app/utils/get-app-chain-info'
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useAccount, useNetwork, useProvider } from 'wagmi'
 
 type PBMTokenContextProps = {
     asset: string | undefined
@@ -101,10 +101,11 @@ export const PBMTokenProvider = ({ children }: { children: React.ReactNode }) =>
 
     const fetchAssetAllowance = useCallback(async () => {
         const tokenContract = contract
-        if (!connectedAccount || !tokenContract || !asset || !address) return
+        if (!connectedAccount || !tokenContract) return
+        const asset = await tokenContract.asset()
         const assetContract = IERC20Metadata__factory.connect(asset, tokenContract.provider)
-        return assetContract.allowance(connectedAccount, address)
-    }, [contract, address, asset, connectedAccount])
+        return assetContract.allowance(connectedAccount, tokenContract.address)
+    }, [contract, connectedAccount])
 
     const fetchTokenData = useCallback(async () => {
         const tokenContract = contract
@@ -124,6 +125,7 @@ export const PBMTokenProvider = ({ children }: { children: React.ReactNode }) =>
                     fetchAssetAllowance(),
                     tokenContract.vault(),
                 ])
+            setAddress(tokenContract.address)
             setContract(tokenContract)
             setDecimals(tokenDecimals)
             setSymbol(tokenSymbol)
@@ -134,6 +136,7 @@ export const PBMTokenProvider = ({ children }: { children: React.ReactNode }) =>
             setVaultContract(PBMVault__factory.connect(vaultAddress, tokenContract.provider))
         } catch (e) {
             console.warn('PBMTokenProvider fetchTokenData error', e)
+            setAddress(undefined)
             setContract(undefined)
             setDecimals(0)
             setSymbol('')

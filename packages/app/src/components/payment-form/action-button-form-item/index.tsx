@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
-import { Button, Form, Space } from 'antd'
 import { SendOutlined, ArrowRightOutlined } from '@ant-design/icons'
-import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
 import { useAssetTokenContext } from '@app/contexts/asset-token-context'
+import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
 import { useTokenBalance } from '@app/hooks/use-token-balance'
+import { Button, Form, Space } from 'antd'
 import { BigNumber } from 'ethers'
+import React, { useEffect } from 'react'
 
 export type PaymentActionButtonAssetApprovalHandler = (assetBalance: BigNumber) => Promise<void>
 
@@ -21,7 +21,8 @@ export const PaymentActionButtonFormItem: React.FC<PaymentActionButtonFormItemPr
     const { balance: assetBalance } = useTokenBalance({ token: assetAddress })
 
     useEffect(() => {
-        if (assetAllowance !== undefined && !requireApproval) {
+        if (!assetAllowance) return setRequireApproval(true)
+        if (!requireApproval) {
             setRequireApproval(assetAllowance.eq(0))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
