@@ -1,14 +1,14 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
-import { Modal } from 'antd'
-import { ContractTransaction } from 'ethers'
 import { TransactionDetail } from '@app/components/transaction-modal/transaction-detail'
 import { TransactionError } from '@app/components/transaction-modal/transaction-error'
 import { TransactionProgress } from '@app/components/transaction-modal/transaction-progress'
-import { TransactionModalContext } from '@app/contexts/transaction-modal-context'
 import { TransactionSuccess } from '@app/components/transaction-modal/transaction-success'
+import { TransactionModalContext } from '@app/contexts/transaction-modal-context'
 import { parseTransactionError } from '@app/utils/errors/pbm-errors'
+import { Modal } from 'antd'
+import { ContractTransaction } from 'ethers'
+import React, { useEffect, useRef, useState } from 'react'
 
 export type TransactionResultContentProps = {
     onActionClick?: () => Promise<void> | void
@@ -95,7 +95,13 @@ const TransactionResult: React.FC<TransactionResultProps> = ({
     if (txError) return <TransactionError error={txError} onActionClick={closeHandler} setTitle={setTitle}/>
     if (confirmed) {
         if (completed && transactionHash) {
-            return <TransactionSuccess transactionHash={transactionHash} setTitle={setTitle} />
+            return (
+                <TransactionSuccess
+                    transactionHash={transactionHash}
+                    onActionClick={closeHandler}
+                    setTitle={setTitle}
+                />
+            )
         }
         return <TransactionProgress setTitle={setTitle} transactionHash={transactionHash} />
     }
