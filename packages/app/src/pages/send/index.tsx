@@ -1,16 +1,16 @@
 'use client'
 
-import React, { ElementRef, useRef } from 'react'
 import { useAppLayoutContext } from '@app/components/app-layout'
 import { PaymentForm } from '@app/components/payment-form'
-import { useTransactionModal } from '@app/contexts/transaction-modal-context'
-import { useSigner } from 'wagmi'
-import { constants, Signer } from 'ethers'
+import { useAssetTokenContext } from '@app/contexts/asset-token-context'
 import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
-import { parseUnits } from 'ethers/lib/utils'
+import { useTransactionModal } from '@app/contexts/transaction-modal-context'
 import { formatNumberDisplay } from '@app/utils/helpers'
 import { withWalletConnected } from '@app/utils/with-wallet-connected'
-import { useAssetTokenContext } from '@app/contexts/asset-token-context'
+import { constants, Signer } from 'ethers'
+import { parseUnits } from 'ethers/lib/utils'
+import React, { ElementRef, useRef } from 'react'
+import { useSigner } from 'wagmi'
 
 function SendPage() {
     useAppLayoutContext({ pageHeading: 'Wrap and Send Payment' })
@@ -31,7 +31,8 @@ function SendPage() {
                 .pay(
                     values.payee,
                     parseUnits(values.inputAmount.baseAmount, decimals),
-                    Number(values.lockPeriod) * 86400
+                    Number(values.lockPeriod) * 86400,
+                    true
                 )
         const modalDetails = await formatModalDetails({
             formValues: values,

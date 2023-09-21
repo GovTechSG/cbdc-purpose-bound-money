@@ -25,6 +25,8 @@ const customErrorToReason = ({ error, args }: DecodedError): string => {
             return `Address ${args?.[0]} is not a whitelisted participant`
         case 'TaskExists':
             return `Payment task already exists`
+        case 'AutoWithdrawalUnsupported':
+            return 'Auto withdrawal is not supported. Try paying without auto withdrawal.'
 
         // PBMVault Errors
         case 'InvalidDepositIdRange':
