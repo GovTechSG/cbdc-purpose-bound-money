@@ -50,7 +50,7 @@ export interface PBMBaseInterface extends utils.Interface {
     "name()": FunctionFragment;
     "pause()": FunctionFragment;
     "paused()": FunctionFragment;
-    "pay(address,uint256,uint64)": FunctionFragment;
+    "pay(address,uint256,uint64,bool)": FunctionFragment;
     "recover(address)": FunctionFragment;
     "redeem(uint256)": FunctionFragment;
     "refund(uint256)": FunctionFragment;
@@ -175,7 +175,8 @@ export interface PBMBaseInterface extends utils.Interface {
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(
@@ -581,6 +582,7 @@ export interface PBMBase extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -736,6 +738,7 @@ export interface PBMBase extends BaseContract {
     payee: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     lockPeriod: PromiseOrValue<BigNumberish>,
+    autoWithdrawal: PromiseOrValue<boolean>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -889,6 +892,7 @@ export interface PBMBase extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1157,6 +1161,7 @@ export interface PBMBase extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1315,6 +1320,7 @@ export interface PBMBase extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

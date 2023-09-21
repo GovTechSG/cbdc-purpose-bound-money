@@ -32,7 +32,7 @@
     "build:web": "yarn workspace @pbm/web build",
     "start:web": "yarn workspace @pbm/web start",
     "start:web:dev": "yarn workspace @pbm/web dev",
-    "build:contracts": "yarn workspace @pbm/contracts clean && yarn workspace @pbm/contracts build:release",
+    "build:contracts": "yarn workspace @pbm/contracts typechain && yarn workspace @pbm/contracts build:release",
     "test:contracts": "yarn workspace @pbm/contracts test",
     "test:contracts:automation": "yarn workspace @pbm/contracts test:automation",
     "test:contracts:all": "yarn workspace @pbm/contracts test:all",

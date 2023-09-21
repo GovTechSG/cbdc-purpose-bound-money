@@ -2,8 +2,8 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 
-import { PBM } from "../../types";
 import { parseAmount } from "../../common/utils";
+import { PBM } from "../../types";
 import { deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Transfer", () => {
@@ -23,36 +23,42 @@ describe("PBM - Transfer", () => {
 
     const amount = parseAmount(500);
 
-    beforeEach(async () => {
-      payer = fixtures.signers.payer;
-      payee = fixtures.signers.payee;
-      targetRecipient = fixtures.signers.others[0];
+    const testMatrixAutoWithdrawal = [true, false];
 
-      // Pay some PBM tokens to payee
-      await pbmContract.connect(payer).pay(payee.address, amount, 0);
-    });
+    testMatrixAutoWithdrawal.forEach((autoWithdrawal) => {
+      describe(`When autoWithdrawal is ${autoWithdrawal}`, () => {
+        beforeEach(async () => {
+          payer = fixtures.signers.payer;
+          payee = fixtures.signers.payee;
+          targetRecipient = fixtures.signers.others[0];
 
-    describe("When contract is not paused", () => {
-      it("should allow transfer to anyone", async () => {
-        await pbmContract.connect(payee).transfer(targetRecipient.address, amount);
+          // Pay some PBM tokens to payee
+          await pbmContract.connect(payer).pay(payee.address, amount, 0, autoWithdrawal);
+        });
 
-        const payeeBalance = await pbmContract.balanceOf(payee.address);
-        const targetRecipientBalance = await pbmContract.balanceOf(targetRecipient.address);
+        describe("When contract is not paused", () => {
+          it("should allow transfer to anyone", async () => {
+            await pbmContract.connect(payee).transfer(targetRecipient.address, amount);
 
-        expect(payeeBalance).to.equal(0);
-        expect(targetRecipientBalance).to.equal(amount);
-      });
-    });
+            const payeeBalance = await pbmContract.balanceOf(payee.address);
+            const targetRecipientBalance = await pbmContract.balanceOf(targetRecipient.address);
 
-    describe("When the contract is paused", () => {
-      beforeEach(async () => {
-        await pbmContract.connect(fixtures.signers.admin).pause();
-      });
+            expect(payeeBalance).to.equal(0);
+            expect(targetRecipientBalance).to.equal(amount);
+          });
+        });
 
-      it("should revert when attempt to transfer", async () => {
-        const tx = pbmContract.connect(payee).transfer(targetRecipient.address, amount);
+        describe("When the contract is paused", () => {
+          beforeEach(async () => {
+            await pbmContract.connect(fixtures.signers.admin).pause();
+          });
 
-        await expect(tx).to.be.revertedWith("Pausable: paused");
+          it("should revert when attempt to transfer", async () => {
+            const tx = pbmContract.connect(payee).transfer(targetRecipient.address, amount);
+
+            await expect(tx).to.be.revertedWith("Pausable: paused");
+          });
+        });
       });
     });
   });

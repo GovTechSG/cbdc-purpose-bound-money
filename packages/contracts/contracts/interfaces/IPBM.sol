@@ -24,7 +24,7 @@ interface IPBM {
 
     function withdraw(address payee, uint256[] calldata depositIds) external returns (uint256);
 
-    function pay(address payee, uint256 amount, uint64 lockPeriod) external;
+    function pay(address payee, uint256 amount, uint64 lockPeriod, bool autoWithdrawal) external;
 
     function chargeback(address payee, uint256 paymentId) external;
 

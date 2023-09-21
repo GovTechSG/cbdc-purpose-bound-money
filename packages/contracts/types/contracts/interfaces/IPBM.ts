@@ -33,7 +33,7 @@ export interface IPBMInterface extends utils.Interface {
   functions: {
     "asset()": FunctionFragment;
     "chargeback(address,uint256)": FunctionFragment;
-    "pay(address,uint256,uint64)": FunctionFragment;
+    "pay(address,uint256,uint64,bool)": FunctionFragment;
     "redeem(uint256)": FunctionFragment;
     "refund(uint256)": FunctionFragment;
     "totalAsset()": FunctionFragment;
@@ -63,7 +63,8 @@ export interface IPBMInterface extends utils.Interface {
     values: [
       PromiseOrValue<string>,
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(
@@ -196,6 +197,7 @@ export interface IPBM extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -232,6 +234,7 @@ export interface IPBM extends BaseContract {
     payee: PromiseOrValue<string>,
     amount: PromiseOrValue<BigNumberish>,
     lockPeriod: PromiseOrValue<BigNumberish>,
+    autoWithdrawal: PromiseOrValue<boolean>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -268,6 +271,7 @@ export interface IPBM extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -355,6 +359,7 @@ export interface IPBM extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -392,6 +397,7 @@ export interface IPBM extends BaseContract {
       payee: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       lockPeriod: PromiseOrValue<BigNumberish>,
+      autoWithdrawal: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

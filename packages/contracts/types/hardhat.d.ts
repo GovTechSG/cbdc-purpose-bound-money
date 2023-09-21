@@ -149,9 +149,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IPBM__factory>;
     getContractFactory(
+      name: "IPBMTaskManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IPBMTaskManager__factory>;
+    getContractFactory(
       name: "PBMAccessControlErrors",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBMAccessControlErrors__factory>;
+    getContractFactory(
+      name: "PBMBaseErrors",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PBMBaseErrors__factory>;
     getContractFactory(
       name: "PBMTaskManagerErrors",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -192,6 +200,10 @@ declare module "hardhat/types/runtime" {
       name: "ERC1967Proxy",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC1967Proxy__factory>;
+    getContractFactory(
+      name: "MockPBMTaskManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockPBMTaskManager__factory>;
     getContractFactory(
       name: "PBM",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -380,10 +392,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IPBM>;
     getContractAt(
+      name: "IPBMTaskManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IPBMTaskManager>;
+    getContractAt(
       name: "PBMAccessControlErrors",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.PBMAccessControlErrors>;
+    getContractAt(
+      name: "PBMBaseErrors",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PBMBaseErrors>;
     getContractAt(
       name: "PBMTaskManagerErrors",
       address: string,
@@ -434,6 +456,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ERC1967Proxy>;
+    getContractAt(
+      name: "MockPBMTaskManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MockPBMTaskManager>;
     getContractAt(
       name: "PBM",
       address: string,

@@ -4,6 +4,7 @@
 export * as base from "./base";
 export * as interfaces from "./interfaces";
 export * as lib from "./lib";
+export * as mocks from "./mocks";
 export { DSGD__factory } from "./DSGD__factory";
 export { PBM__factory } from "./PBM__factory";
 export { PBMStandard__factory } from "./PBMStandard__factory";

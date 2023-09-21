@@ -98,7 +98,7 @@ task("fixtures:payments", "Send payment fixtures")
         await time.increase(payment.time);
         const tx = await pbmContract
           .connect(payment.payer)
-          .pay(payment.payee.address, payment.amount, payment.lockPeriod);
+          .pay(payment.payee.address, payment.amount, payment.lockPeriod, false);
         const receipt = await tx.wait();
         receipts.push(receipt);
         console.log(

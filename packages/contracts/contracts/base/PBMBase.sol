@@ -9,7 +9,7 @@ import "./PBMAccessControl.sol";
 import "./PBMVault.sol";
 import "../interfaces/IPBM.sol";
 import "../interfaces/PBMBaseErrors.sol";
-import "../PBMTaskManager.sol";
+import "../interfaces/IPBMTaskManager.sol";
 
 contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPBM, PBMBaseErrors {
     using SafeERC20Upgradeable for IERC20MetadataUpgradeable;
@@ -19,7 +19,7 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
 
     PBMVault internal _vault;
 
-    PBMTaskManager public taskManager;
+    IPBMTaskManager public taskManager;
 
     function __PBMBase_init(
         string memory _name,
@@ -64,7 +64,7 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
         return _vault.withdraw(payee, depositIds);
     }
 
-    function _pay(address payee, uint256 amount, uint64 lockPeriod) internal {
+    function _pay(address payee, uint256 amount, uint64 lockPeriod, bool autoWithdrawal) internal {
         if (lockPeriod == 0) {
             _mint(payee, amount);
         } else {
@@ -72,7 +72,10 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
             _approve(address(this), address(_vault), amount);
             (uint256 depositId, ) = _vault.deposit(_msgSender(), payee, amount, lockPeriod);
 
-            if (address(taskManager) != address(0)) {
+            if (autoWithdrawal) {
+                if (address(taskManager) == address(0)) {
+                    revert AutoWithdrawalUnsupported();
+                }
                 taskManager.createWithdrawalTask(payee, depositId);
             }
         }
@@ -84,9 +87,10 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
     function pay(
         address payee,
         uint256 amount,
-        uint64 lockPeriod
+        uint64 lockPeriod,
+        bool autoWithdrawal
     ) external whenNotPaused isPayee(payee) onlyPayer {
-        _pay(payee, amount, lockPeriod);
+        _pay(payee, amount, lockPeriod, autoWithdrawal);
     }
 
     function _refund(address payee, uint256 depositId) internal returns (DepositInfo memory) {
@@ -138,7 +142,7 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
     }
 
     function setTaskManager(address payable _taskManager) external onlyAdmin {
-        taskManager = PBMTaskManager(_taskManager);
+        taskManager = IPBMTaskManager(_taskManager);
     }
 
     function _beforeTokenTransfer(

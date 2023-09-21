@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { IPBM } from "./IPBM";
+export type { IPBMTaskManager } from "./IPBMTaskManager";
 export type { PBMAccessControlErrors } from "./PBMAccessControlErrors";
+export type { PBMBaseErrors } from "./PBMBaseErrors";
 export type { PBMTaskManagerErrors } from "./PBMTaskManagerErrors";
 export type { PBMVaultErrors } from "./PBMVaultErrors";

@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.13;
 
-import "./lib/gelato-automate/AutomateTaskCreator.sol";
-import "./interfaces/IPBM.sol";
+import "./interfaces/IPBMTaskManager.sol";
 import "./interfaces/PBMTaskManagerErrors.sol";
+import "./interfaces/IPBM.sol";
+import "./lib/gelato-automate/AutomateTaskCreator.sol";
 import "./base/PBMVault.sol";
 
-contract PBMTaskManager is AutomateTaskCreator, PBMTaskManagerErrors {
+contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerErrors {
     event WithdrawalTaskCreated(
         bytes32 indexed taskId,
         address indexed payee,

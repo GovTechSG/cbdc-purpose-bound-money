@@ -1,8 +1,13 @@
 import { assert } from "chai";
 
-import { DSGD__factory, PBMUpgradeable__factory, PBMVault__factory } from "../../types";
 import { HardhatEthers } from "../../common/types";
 import { deployUpgradeableContract, parseAmount, resolveEthers } from "../../common/utils";
+import {
+  DSGD__factory,
+  MockPBMTaskManager__factory,
+  PBMUpgradeable__factory,
+  PBMVault__factory,
+} from "../../types";
 
 export type PBMFixtureParamType = {
   name: string;
@@ -68,6 +73,13 @@ export async function deployPBMFixture(
     ethers,
   );
 
+  // Deploy Mock PBM Task Manager
+  const mockPbmTaskManagerFactory = (await ethers.getContractFactory(
+    "MockPBMTaskManager",
+  )) as MockPBMTaskManager__factory;
+  const mockPbmTaskManagerContract = await mockPbmTaskManagerFactory.connect(deployer).deploy();
+  await mockPbmTaskManagerContract.deployed();
+
   // Set PBM address to Vault
   const setPbmTx = await pbmVaultContract.connect(deployer).setPBM(pbmContract.address);
   await setPbmTx.wait();
@@ -116,6 +128,7 @@ export async function deployPBMFixture(
     pbmVaultContract,
     pbmDefaultParams,
     dsgdContract,
+    mockPbmTaskManagerContract,
 
     signers: {
       deployer,

@@ -6,12 +6,15 @@
 import type * as base from "./base";
 import type * as interfaces from "./interfaces";
 import type * as lib from "./lib";
+import type * as mocks from "./mocks";
 
 export type { base };
 
 export type { interfaces };
 
 export type { lib };
+
+export type { mocks };
 export type { DSGD } from "./DSGD";
 export type { PBM } from "./PBM";
 export type { PBMStandard } from "./PBMStandard";

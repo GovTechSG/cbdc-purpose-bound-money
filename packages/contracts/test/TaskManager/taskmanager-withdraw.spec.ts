@@ -84,27 +84,58 @@ describe("PBMTaskManager", () => {
   });
 
   describe("PBM Payment", () => {
-    it("should not create task if no task manager is provided to PBM", async () => {
-      await pbmContract.connect(admin).setTaskManager(ethers.constants.AddressZero);
+    const testMatrixAutoWithdrawal = [true, false];
 
-      await pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod);
+    describe("When no task manager is provided to PBM", () => {
+      beforeEach(async () => {
+        await pbmContract.connect(admin).setTaskManager(ethers.constants.AddressZero);
+      });
 
-      const taskIdsByTaskManager = await automateContract.getTaskIdsByUser(
-        pbmTaskManagerContract.address,
-      );
+      it("should revert when PBM pay is called with autoWithdrawal as true", async () => {
+        const tx = pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod, true);
 
-      expect(taskIdsByTaskManager.length).to.equal(0);
+        await expect(tx).to.be.revertedWithCustomError(pbmContract, "AutoWithdrawalUnsupported");
+      });
+
+      it("should not create task when PBM pay is called with autoWithdrawal as false", async () => {
+        await pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod, false);
+
+        const taskIdsByTaskManager = await automateContract.getTaskIdsByUser(
+          pbmTaskManagerContract.address,
+        );
+
+        expect(taskIdsByTaskManager.length).to.equal(0);
+      });
     });
 
-    it("should not create task if payment is immediate", async () => {
-      await pbmContract.connect(admin).setTaskManager(pbmTaskManagerContract.address);
-      await pbmContract.connect(payer).pay(payee.address, payingAmount, 0);
+    describe(" When task manager is provided to PBM", () => {
+      beforeEach(async () => {
+        await pbmContract.connect(admin).setTaskManager(pbmTaskManagerContract.address);
+      });
 
-      const taskIdsByTaskManager = await automateContract.getTaskIdsByUser(
-        pbmTaskManagerContract.address,
-      );
+      it("should not create task if autoWithdrawal is false", async () => {
+        await pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod, false);
 
-      expect(taskIdsByTaskManager.length).to.equal(0);
+        const taskIdsByTaskManager = await automateContract.getTaskIdsByUser(
+          pbmTaskManagerContract.address,
+        );
+
+        expect(taskIdsByTaskManager.length).to.equal(0);
+      });
+
+      testMatrixAutoWithdrawal.forEach((autoWithdrawal) => {
+        describe(`When autoWithdrawal is ${autoWithdrawal}`, () => {
+          it("should not create task if payment is immediate", async () => {
+            await pbmContract.connect(payer).pay(payee.address, payingAmount, 0, autoWithdrawal);
+
+            const taskIdsByTaskManager = await automateContract.getTaskIdsByUser(
+              pbmTaskManagerContract.address,
+            );
+
+            expect(taskIdsByTaskManager.length).to.equal(0);
+          });
+        });
+      });
     });
   });
 
@@ -166,7 +197,9 @@ describe("PBMTaskManager", () => {
         );
         assert.equal(initialTaskIdsByTaskManager.length, 0);
 
-        pbmPayTx = await pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod);
+        pbmPayTx = await pbmContract
+          .connect(payer)
+          .pay(payee.address, payingAmount, lockingPeriod, true);
 
         const depositInfo = await pbmVaultContract.getDeposit(0);
         taskId = computeTaskId(
@@ -236,9 +269,9 @@ describe("PBMTaskManager", () => {
 
         beforeEach(async () => {
           await Promise.all([
-            pbmContract.connect(payer).pay(payee.address, payingAmount, oneDaySeconds * 5),
-            pbmContract.connect(payer).pay(payee.address, payingAmount, oneDaySeconds * 2),
-            pbmContract.connect(payer).pay(payee.address, payingAmount, oneDaySeconds * 5),
+            pbmContract.connect(payer).pay(payee.address, payingAmount, oneDaySeconds * 5, true),
+            pbmContract.connect(payer).pay(payee.address, payingAmount, oneDaySeconds * 2, true),
+            pbmContract.connect(payer).pay(payee.address, payingAmount, oneDaySeconds * 5, true),
           ]);
           startTime = await time.latest();
 
@@ -333,7 +366,7 @@ describe("PBMTaskManager", () => {
         let taskInterval: number;
 
         beforeEach(async () => {
-          await pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod);
+          await pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod, true);
           depositInfo = await pbmVaultContract.getDeposit(0);
           taskInterval = computeTaskInterval(defaultInterval, 0);
         });

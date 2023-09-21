@@ -11,6 +11,11 @@ task("fixtures:deploy-pbm", "Deploy PBM fixtures").setAction(async function (
   await time.setNextBlockTimestamp(Math.floor(Date.now() / 1000));
   const fixtures = await deployPBMFixture({}, ethers);
 
+  const setTaskManagerTx = await fixtures.pbmContract
+    .connect(fixtures.signers.admin)
+    .setTaskManager(fixtures.mockPbmTaskManagerContract.address);
+  await setTaskManagerTx.wait();
+
   console.log("All PBM fixtures deployed!");
   console.table([
     {
@@ -24,6 +29,10 @@ task("fixtures:deploy-pbm", "Deploy PBM fixtures").setAction(async function (
     {
       Contract: "DSGD",
       Address: fixtures.dsgdContract.address,
+    },
+    {
+      Contract: "Mock PBMTaskManager",
+      Address: fixtures.mockPbmTaskManagerContract.address,
     },
   ]);
   console.table([

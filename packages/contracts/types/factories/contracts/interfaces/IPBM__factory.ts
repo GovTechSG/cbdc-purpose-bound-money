@@ -168,6 +168,11 @@ const _abi = [
         name: "lockPeriod",
         type: "uint64",
       },
+      {
+        internalType: "bool",
+        name: "autoWithdrawal",
+        type: "bool",
+      },
     ],
     name: "pay",
     outputs: [],
