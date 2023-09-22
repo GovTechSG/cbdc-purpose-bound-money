@@ -210,13 +210,21 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                             {children}
                         </div>
                     </Content>
-                    <Footer style={{ textAlign: 'center', fontSize: 'small' }}>
-                        Built with ❤️ by GovTech for Project Orchid
+                    <Footer style={{ textAlign: 'center', fontSize: 'small', color: '#999' }}>
+                        <div>
+                            Built with ❤️ by GovTech for Project Orchid. &copy; {getYear(2023)}. All
+                            rights reserved.
+                        </div>
                     </Footer>
                 </Layout>
             </Layout>
         </AppLayoutContext.Provider>
     )
+}
+
+const getYear = (start: number) => {
+    const now = new Date().getFullYear()
+    return start === now ? start : `${start} – ${now}`
 }
 
 export const useAppLayoutContext = ({ pageHeading }: typeof contextDefaultReadValues) => {
