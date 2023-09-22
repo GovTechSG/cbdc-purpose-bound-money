@@ -18,7 +18,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy to Staging for Website Service
+    name: Deploy to Production for Website Service
     runs-on: ubuntu-latest
     environment: production
     steps:

@@ -18,7 +18,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy to Staging for App Service
+    name: Deploy to Production for App Service
     runs-on: ubuntu-latest
     environment: production
     steps:
