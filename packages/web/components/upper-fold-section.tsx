@@ -23,16 +23,24 @@ export default function UpperFoldSection({ baseUrl }: UpperFoldSectionProps) {
 const HeroUnit: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
   return (
     <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
-      <div className="text-gray-500 text-sm md:text-lg font-medium">
+      <div
+        className="text-gray-500 text-sm md:text-lg font-medium"
+        data-aos="fade-up"
+      >
         Programmable Digital Currency
       </div>
       <h1
         className="h1 text-5xl md:text-8xl pb-1.5 bg-clip-text text-transparent bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-neutral-600 via-zinc-800 to-zinc-950"
         data-aos="fade-up"
+        data-aos-delay="200"
       >
         Purpose Bound Money
       </h1>
-      <div className="mb-4 text-gray-500 text-3xl md:text-4xl">
+      <div
+        className="mb-4 text-gray-500 text-3xl md:text-4xl"
+        data-aos="fade-up"
+        data-aos-delay="400"
+      >
         For{" "}
         <span className="text-blue-500">
           <Typewriter
@@ -56,7 +64,7 @@ const HeroUnit: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
       <p
         className="text-normal md:text-xl text-gray-500 mb-8"
         data-aos="fade-up"
-        data-aos-delay="200"
+        data-aos-delay="400"
       >
         The Purpose Bound Money (PBM) proposes a protocol for the use of digital
         money under specified conditions. As part of a wider pilot in Project

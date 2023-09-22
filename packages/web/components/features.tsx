@@ -11,7 +11,8 @@ export default function Features() {
           <div
             className="relative flex justify-center items-center min-w-[60rem] sm:min-w-full"
             data-aos="fade-up"
-            data-aos-delay="200"
+            data-aos-delay="500"
+            data-aos-anchor-placement="top-bottom"
           >
             <HeroImage
               src={heroDashboardImage}
@@ -23,7 +24,7 @@ export default function Features() {
           <div
             className="relative flex justify-center items-center min-w-[60rem] sm:min-w-full"
             data-aos="fade-up"
-            data-aos-delay="400"
+            data-aos-delay="300"
           >
             <SecondaryLinkButton
               href={process.env.NEXT_PUBLIC_UX_FEATURE_DECK_URL!}
