@@ -1,0 +1,114 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - main
+      - staging
+
+jobs:
+  changes:
+    name: Check Changes
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      default: ${{ steps.filter.outputs.default }}
+      app: ${{ steps.filter.outputs.app }}
+      web: ${{ steps.filter.outputs.web }}
+      contracts: ${{ steps.filter.outputs.contracts }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            default:
+              - .github/workflows/pull-request.yml
+              - yarn.lock
+            app:
+              - .github/workflows/app-*.yml
+              - packages/app/**
+            web:
+              - .github/workflows/web-*.yml
+              - packages/web/**
+            contracts:
+                - packages/contracts/**
+
+  app-build-test:
+    needs: changes
+    name: Build Test for App Service
+    runs-on: ubuntu-latest
+    if: |
+      needs.changes.outputs.default == 'true' || 
+      needs.changes.outputs.app == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Image
+        env:
+          ECR_REPOSITORY: test/app-service
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            --build-arg INFURA_API_KEY=12345678 \
+            --build-arg WALLETCONNECT_PROJECT_ID=12345678 \
+            --build-arg ENABLE_TESTNETS=1 \
+            --build-arg ENABLE_HARDHAT_NODE=1 \
+            -f packages/app/Dockerfile -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+  web-build-test:
+    needs: changes
+    name: Build Test for Website Service
+    runs-on: ubuntu-latest
+    if: |
+      needs.changes.outputs.default == 'true' || 
+      needs.changes.outputs.web == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build Image
+        env:
+          ECR_REPOSITORY: test/website-service
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            --build-arg BASE_URL=http://localhost \
+            --build-arg UX_FEATURE_DECK_URL=http://localhost/deck \
+            -f packages/web/Dockerfile -t $ECR_REPOSITORY:$IMAGE_TAG .
+
+  contracts-tests:
+    needs: changes
+    name: Smart Contracts Tests
+    runs-on: ubuntu-latest
+    if: |
+      needs.changes.outputs.default == 'true' || 
+      needs.changes.outputs.contracts == 'true'
+    env:
+      MNEMONIC: "here are my twelve golden words for you to run the tests"
+      INFURA_API_KEY: Test_12345678
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18.x
+
+      - name: "Install dependencies"
+        run: yarn install --frozen-lockfile
+
+      - name: "Compile contracts"
+        run: yarn build:contracts
+
+      - name: "Start node"
+        run: yarn hardhat node --fork https://polygon-mainnet.infura.io/v3/${{ secrets.INFURA_API_KEY }} &
+
+      - name: "Run tests"
+        run: |
+          sleep 10
+          yarn test:contracts:all
+
+      - name: "Stop node"
+        run: kill $(lsof -t -i:8545)

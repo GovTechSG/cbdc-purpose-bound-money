@@ -3,24 +3,40 @@ name: Deployment
 on:
   push:
     branches:
+      - main
       - staging
     paths:
       - "packages/app/**"
       - "yarn.lock"
       - ".github/workflows/app-*.yml"
 
-defaults:
-  run:
-    working-directory: packages/app
-
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}
 
 jobs:
-  deploy:
-    name: Deploy to Staging for App Service
+  check-env:
+    name: Set Deployment Environment
     runs-on: ubuntu-latest
-    environment: staging
+    outputs:
+      environment: ${{ steps.set-env.outputs.ENVIRONMENT }}
+    steps:
+      - name: Set Environment Output
+        id: set-env
+        run: |
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+              echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+              echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+          else
+              echo "ENVIRONMENT=unknown" >> $GITHUB_OUTPUT
+          fi
+          echo "Deployment environment: $ENVIRONMENT"
+
+  deploy:
+    name: Deploy App Service (${{ needs.check-env.outputs.environment }})
+    runs-on: ubuntu-latest
+    environment: ${{ needs.check-env.outputs.environment }}
+    needs: check-env
     steps:
       - name: Checkout
         uses: actions/checkout@v3
