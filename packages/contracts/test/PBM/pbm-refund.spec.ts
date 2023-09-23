@@ -150,6 +150,15 @@ describe("PBM - Refund", () => {
               );
             });
 
+            it("should revert if attempt to refund again", async () => {
+              const doubleRefundTx = pbmContract.connect(payee).refund(0);
+
+              await expect(doubleRefundTx).to.be.revertedWithCustomError(
+                pbmVaultContract,
+                "InvalidActiveDeposit",
+              );
+            });
+
             it("should emit Refund event", async () => {
               await expect(refundTx)
                 .to.emit(pbmContract, "Refund")

@@ -199,6 +199,15 @@ describe("PBM - Chargeback", () => {
                 expect(payeeDsgdBalance).to.equal(0);
               });
 
+              it("should revert if attempt to chargeback again", async () => {
+                const tx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
+
+                await expect(tx).to.be.revertedWithCustomError(
+                  pbmVaultContract,
+                  "InvalidActiveDeposit",
+                );
+              });
+
               it("should emit Refund event", async () => {
                 await expect(refundTx)
                   .to.emit(pbmContract, "Refund")
