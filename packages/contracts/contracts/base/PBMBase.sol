@@ -107,6 +107,10 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
 
         emit Refund(depositId, payee, _msgSender(), deposit.depositor, deposit.amount);
 
+        if (address(taskManager) != address(0)) {
+            taskManager.cancelWithdrawalTask(depositId);
+        }
+
         return deposit;
     }
 

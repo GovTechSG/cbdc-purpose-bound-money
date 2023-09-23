@@ -43,6 +43,25 @@ const _abi = [
       },
       {
         indexed: true,
+        internalType: "uint256",
+        name: "depositId",
+        type: "uint256",
+      },
+    ],
+    name: "WithdrawalTaskCancelled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
         internalType: "address",
         name: "payee",
         type: "address",
@@ -75,6 +94,19 @@ const _abi = [
     ],
     name: "WithdrawalTaskExecution",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "cancelWithdrawalTask",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -118,10 +150,29 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    name: "getTaskId",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "pure",
+    type: "function",
+  },
 ] as const;
 
 const _bytecode =
-  "0x608060405234801561001057600080fd5b50610132806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80630baddc9a1461003b578063cd5a3b7014610062575b600080fd5b61004e6100493660046100e0565b610077565b604051901515815260200160405180910390f35b6100756100703660046100e0565b6100ad565b005b60405160019081906000907fd5f4ed018c0f63ae293a331b01a481632d320a61c69761c6e8042783adb32a8e908290a392915050565b604051600090819081907f3539bc3fa605b5f18c4b6cd1dbbdccb87ee383e2661e0dd2cf222de822e55912908290a45050565b600080604083850312156100f357600080fd5b823573ffffffffffffffffffffffffffffffffffffffff8116811461011757600080fd5b94602093909301359350505056fea164736f6c6343000813000a";
+  "0x608060405234801561001057600080fd5b50610195806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c80630baddc9a14610051578063cd5a3b7014610079578063d44bc0881461008e578063ec122d0a146100b0575b600080fd5b61006461005f36600461012a565b6100c1565b60405190151581526020015b60405180910390f35b61008c61008736600461012a565b6100f7565b005b6100a261009c36600461016f565b50600090565b604051908152602001610070565b61008c6100be36600461016f565b50565b60405160019081906000907fd5f4ed018c0f63ae293a331b01a481632d320a61c69761c6e8042783adb32a8e908290a392915050565b604051600090819081907f3539bc3fa605b5f18c4b6cd1dbbdccb87ee383e2661e0dd2cf222de822e55912908290a45050565b6000806040838503121561013d57600080fd5b823573ffffffffffffffffffffffffffffffffffffffff8116811461016157600080fd5b946020939093013593505050565b60006020828403121561018157600080fd5b503591905056fea164736f6c6343000813000a";
 
 type MockPBMTaskManagerConstructorParams =
   | [signer?: Signer]

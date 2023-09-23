@@ -10,7 +10,11 @@ import type {
   OnEvent,
   PromiseOrValue,
 } from "../../common";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   BaseContract,
@@ -27,15 +31,25 @@ import type {
 
 export interface IPBMTaskManagerInterface extends utils.Interface {
   functions: {
+    "cancelWithdrawalTask(uint256)": FunctionFragment;
     "createWithdrawalTask(address,uint256)": FunctionFragment;
     "execWithdrawal(address,uint256)": FunctionFragment;
+    "getTaskId(uint256)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "createWithdrawalTask" | "execWithdrawal"
+    nameOrSignatureOrTopic:
+      | "cancelWithdrawalTask"
+      | "createWithdrawalTask"
+      | "execWithdrawal"
+      | "getTaskId"
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "cancelWithdrawalTask",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "createWithdrawalTask",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
@@ -43,7 +57,15 @@ export interface IPBMTaskManagerInterface extends utils.Interface {
     functionFragment: "execWithdrawal",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getTaskId",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "cancelWithdrawalTask",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "createWithdrawalTask",
     data: BytesLike
@@ -52,9 +74,55 @@ export interface IPBMTaskManagerInterface extends utils.Interface {
     functionFragment: "execWithdrawal",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getTaskId", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "WithdrawalTaskCancelled(bytes32,uint256)": EventFragment;
+    "WithdrawalTaskCreated(bytes32,address,uint256)": EventFragment;
+    "WithdrawalTaskExecution(bytes32,bool)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCancelled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskExecution"): EventFragment;
 }
+
+export interface WithdrawalTaskCancelledEventObject {
+  taskId: string;
+  depositId: BigNumber;
+}
+export type WithdrawalTaskCancelledEvent = TypedEvent<
+  [string, BigNumber],
+  WithdrawalTaskCancelledEventObject
+>;
+
+export type WithdrawalTaskCancelledEventFilter =
+  TypedEventFilter<WithdrawalTaskCancelledEvent>;
+
+export interface WithdrawalTaskCreatedEventObject {
+  taskId: string;
+  payee: string;
+  depositId: BigNumber;
+}
+export type WithdrawalTaskCreatedEvent = TypedEvent<
+  [string, string, BigNumber],
+  WithdrawalTaskCreatedEventObject
+>;
+
+export type WithdrawalTaskCreatedEventFilter =
+  TypedEventFilter<WithdrawalTaskCreatedEvent>;
+
+export interface WithdrawalTaskExecutionEventObject {
+  taskId: string;
+  success: boolean;
+}
+export type WithdrawalTaskExecutionEvent = TypedEvent<
+  [string, boolean],
+  WithdrawalTaskExecutionEventObject
+>;
+
+export type WithdrawalTaskExecutionEventFilter =
+  TypedEventFilter<WithdrawalTaskExecutionEvent>;
 
 export interface IPBMTaskManager extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -83,6 +151,11 @@ export interface IPBMTaskManager extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -94,7 +167,17 @@ export interface IPBMTaskManager extends BaseContract {
       depositId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
   };
+
+  cancelWithdrawalTask(
+    depositId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   createWithdrawalTask(
     payee: PromiseOrValue<string>,
@@ -108,7 +191,17 @@ export interface IPBMTaskManager extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  getTaskId(
+    depositId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   callStatic: {
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -120,11 +213,50 @@ export interface IPBMTaskManager extends BaseContract {
       depositId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
   };
 
-  filters: {};
+  filters: {
+    "WithdrawalTaskCancelled(bytes32,uint256)"(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCancelledEventFilter;
+    WithdrawalTaskCancelled(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCancelledEventFilter;
+
+    "WithdrawalTaskCreated(bytes32,address,uint256)"(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      payee?: PromiseOrValue<string> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCreatedEventFilter;
+    WithdrawalTaskCreated(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      payee?: PromiseOrValue<string> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCreatedEventFilter;
+
+    "WithdrawalTaskExecution(bytes32,bool)"(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      success?: PromiseOrValue<boolean> | null
+    ): WithdrawalTaskExecutionEventFilter;
+    WithdrawalTaskExecution(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      success?: PromiseOrValue<boolean> | null
+    ): WithdrawalTaskExecutionEventFilter;
+  };
 
   estimateGas: {
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -136,9 +268,19 @@ export interface IPBMTaskManager extends BaseContract {
       depositId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -149,6 +291,11 @@ export interface IPBMTaskManager extends BaseContract {
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

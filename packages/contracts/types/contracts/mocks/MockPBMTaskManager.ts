@@ -31,15 +31,25 @@ import type {
 
 export interface MockPBMTaskManagerInterface extends utils.Interface {
   functions: {
+    "cancelWithdrawalTask(uint256)": FunctionFragment;
     "createWithdrawalTask(address,uint256)": FunctionFragment;
     "execWithdrawal(address,uint256)": FunctionFragment;
+    "getTaskId(uint256)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "createWithdrawalTask" | "execWithdrawal"
+    nameOrSignatureOrTopic:
+      | "cancelWithdrawalTask"
+      | "createWithdrawalTask"
+      | "execWithdrawal"
+      | "getTaskId"
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "cancelWithdrawalTask",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "createWithdrawalTask",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
@@ -47,7 +57,15 @@ export interface MockPBMTaskManagerInterface extends utils.Interface {
     functionFragment: "execWithdrawal",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getTaskId",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "cancelWithdrawalTask",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "createWithdrawalTask",
     data: BytesLike
@@ -56,15 +74,30 @@ export interface MockPBMTaskManagerInterface extends utils.Interface {
     functionFragment: "execWithdrawal",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getTaskId", data: BytesLike): Result;
 
   events: {
+    "WithdrawalTaskCancelled(bytes32,uint256)": EventFragment;
     "WithdrawalTaskCreated(bytes32,address,uint256)": EventFragment;
     "WithdrawalTaskExecution(bytes32,bool)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCancelled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WithdrawalTaskExecution"): EventFragment;
 }
+
+export interface WithdrawalTaskCancelledEventObject {
+  taskId: string;
+  depositId: BigNumber;
+}
+export type WithdrawalTaskCancelledEvent = TypedEvent<
+  [string, BigNumber],
+  WithdrawalTaskCancelledEventObject
+>;
+
+export type WithdrawalTaskCancelledEventFilter =
+  TypedEventFilter<WithdrawalTaskCancelledEvent>;
 
 export interface WithdrawalTaskCreatedEventObject {
   taskId: string;
@@ -118,6 +151,11 @@ export interface MockPBMTaskManager extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    cancelWithdrawalTask(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createWithdrawalTask(
       arg0: PromiseOrValue<string>,
       arg1: PromiseOrValue<BigNumberish>,
@@ -129,7 +167,17 @@ export interface MockPBMTaskManager extends BaseContract {
       arg1: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getTaskId(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
   };
+
+  cancelWithdrawalTask(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   createWithdrawalTask(
     arg0: PromiseOrValue<string>,
@@ -143,7 +191,17 @@ export interface MockPBMTaskManager extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  getTaskId(
+    arg0: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   callStatic: {
+    cancelWithdrawalTask(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createWithdrawalTask(
       arg0: PromiseOrValue<string>,
       arg1: PromiseOrValue<BigNumberish>,
@@ -155,9 +213,23 @@ export interface MockPBMTaskManager extends BaseContract {
       arg1: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    getTaskId(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
   };
 
   filters: {
+    "WithdrawalTaskCancelled(bytes32,uint256)"(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCancelledEventFilter;
+    WithdrawalTaskCancelled(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCancelledEventFilter;
+
     "WithdrawalTaskCreated(bytes32,address,uint256)"(
       taskId?: PromiseOrValue<BytesLike> | null,
       payee?: PromiseOrValue<string> | null,
@@ -180,6 +252,11 @@ export interface MockPBMTaskManager extends BaseContract {
   };
 
   estimateGas: {
+    cancelWithdrawalTask(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     createWithdrawalTask(
       arg0: PromiseOrValue<string>,
       arg1: PromiseOrValue<BigNumberish>,
@@ -191,9 +268,19 @@ export interface MockPBMTaskManager extends BaseContract {
       arg1: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    getTaskId(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    cancelWithdrawalTask(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     createWithdrawalTask(
       arg0: PromiseOrValue<string>,
       arg1: PromiseOrValue<BigNumberish>,
@@ -204,6 +291,11 @@ export interface MockPBMTaskManager extends BaseContract {
       arg0: PromiseOrValue<string>,
       arg1: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getTaskId(
+      arg0: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

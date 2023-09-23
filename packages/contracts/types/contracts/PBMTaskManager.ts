@@ -35,10 +35,12 @@ export interface PBMTaskManagerInterface extends utils.Interface {
     "MAX_RETRIES()": FunctionFragment;
     "PBM()": FunctionFragment;
     "automate()": FunctionFragment;
+    "cancelWithdrawalTask(uint256)": FunctionFragment;
     "createWithdrawalTask(address,uint256)": FunctionFragment;
     "dedicatedMsgSender()": FunctionFragment;
     "execWithdrawal(address,uint256)": FunctionFragment;
     "fundsOwner()": FunctionFragment;
+    "getTaskId(uint256)": FunctionFragment;
     "taskIds(bytes32)": FunctionFragment;
     "taskRetries(bytes32)": FunctionFragment;
     "taskTreasury()": FunctionFragment;
@@ -52,10 +54,12 @@ export interface PBMTaskManagerInterface extends utils.Interface {
       | "MAX_RETRIES"
       | "PBM"
       | "automate"
+      | "cancelWithdrawalTask"
       | "createWithdrawalTask"
       | "dedicatedMsgSender"
       | "execWithdrawal"
       | "fundsOwner"
+      | "getTaskId"
       | "taskIds"
       | "taskRetries"
       | "taskTreasury"
@@ -71,6 +75,10 @@ export interface PBMTaskManagerInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "PBM", values?: undefined): string;
   encodeFunctionData(functionFragment: "automate", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "cancelWithdrawalTask",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "createWithdrawalTask",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
   ): string;
@@ -85,6 +93,10 @@ export interface PBMTaskManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "fundsOwner",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getTaskId",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "taskIds",
@@ -115,6 +127,10 @@ export interface PBMTaskManagerInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "PBM", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "automate", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "cancelWithdrawalTask",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "createWithdrawalTask",
     data: BytesLike
   ): Result;
@@ -127,6 +143,7 @@ export interface PBMTaskManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "fundsOwner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getTaskId", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "taskIds", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "taskRetries",
@@ -146,13 +163,27 @@ export interface PBMTaskManagerInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "WithdrawalTaskCancelled(bytes32,uint256)": EventFragment;
     "WithdrawalTaskCreated(bytes32,address,uint256)": EventFragment;
     "WithdrawalTaskExecution(bytes32,bool)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCancelled"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WithdrawalTaskExecution"): EventFragment;
 }
+
+export interface WithdrawalTaskCancelledEventObject {
+  taskId: string;
+  depositId: BigNumber;
+}
+export type WithdrawalTaskCancelledEvent = TypedEvent<
+  [string, BigNumber],
+  WithdrawalTaskCancelledEventObject
+>;
+
+export type WithdrawalTaskCancelledEventFilter =
+  TypedEventFilter<WithdrawalTaskCancelledEvent>;
 
 export interface WithdrawalTaskCreatedEventObject {
   taskId: string;
@@ -214,6 +245,11 @@ export interface PBMTaskManager extends BaseContract {
 
     automate(overrides?: CallOverrides): Promise<[string]>;
 
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -229,6 +265,11 @@ export interface PBMTaskManager extends BaseContract {
     ): Promise<ContractTransaction>;
 
     fundsOwner(overrides?: CallOverrides): Promise<[string]>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     taskIds(
       arg0: PromiseOrValue<BytesLike>,
@@ -262,6 +303,11 @@ export interface PBMTaskManager extends BaseContract {
 
   automate(overrides?: CallOverrides): Promise<string>;
 
+  cancelWithdrawalTask(
+    depositId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   createWithdrawalTask(
     payee: PromiseOrValue<string>,
     depositId: PromiseOrValue<BigNumberish>,
@@ -277,6 +323,11 @@ export interface PBMTaskManager extends BaseContract {
   ): Promise<ContractTransaction>;
 
   fundsOwner(overrides?: CallOverrides): Promise<string>;
+
+  getTaskId(
+    depositId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   taskIds(
     arg0: PromiseOrValue<BytesLike>,
@@ -310,6 +361,11 @@ export interface PBMTaskManager extends BaseContract {
 
     automate(overrides?: CallOverrides): Promise<string>;
 
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -325,6 +381,11 @@ export interface PBMTaskManager extends BaseContract {
     ): Promise<boolean>;
 
     fundsOwner(overrides?: CallOverrides): Promise<string>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     taskIds(
       arg0: PromiseOrValue<BytesLike>,
@@ -351,6 +412,15 @@ export interface PBMTaskManager extends BaseContract {
   };
 
   filters: {
+    "WithdrawalTaskCancelled(bytes32,uint256)"(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCancelledEventFilter;
+    WithdrawalTaskCancelled(
+      taskId?: PromiseOrValue<BytesLike> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): WithdrawalTaskCancelledEventFilter;
+
     "WithdrawalTaskCreated(bytes32,address,uint256)"(
       taskId?: PromiseOrValue<BytesLike> | null,
       payee?: PromiseOrValue<string> | null,
@@ -381,6 +451,11 @@ export interface PBMTaskManager extends BaseContract {
 
     automate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -396,6 +471,11 @@ export interface PBMTaskManager extends BaseContract {
     ): Promise<BigNumber>;
 
     fundsOwner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     taskIds(
       arg0: PromiseOrValue<BytesLike>,
@@ -430,6 +510,11 @@ export interface PBMTaskManager extends BaseContract {
 
     automate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    cancelWithdrawalTask(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -447,6 +532,11 @@ export interface PBMTaskManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     fundsOwner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getTaskId(
+      depositId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     taskIds(
       arg0: PromiseOrValue<BytesLike>,

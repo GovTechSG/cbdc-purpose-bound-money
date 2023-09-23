@@ -8,14 +8,6 @@ import "./lib/gelato-automate/AutomateTaskCreator.sol";
 import "./utils/PBMVault.sol";
 
 contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerErrors {
-    event WithdrawalTaskCreated(
-        bytes32 indexed taskId,
-        address indexed payee,
-        uint256 indexed depositId
-    );
-
-    event WithdrawalTaskExecution(bytes32 indexed taskId, bool indexed success);
-
     IPBM public immutable PBM;
     mapping(bytes32 => bool) public taskIds;
     mapping(bytes32 => uint8) public taskRetries;
@@ -54,9 +46,14 @@ contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerE
         emit WithdrawalTaskCreated(taskId, payee, depositId);
     }
 
-    function _getDepositStartTime(uint256 depositId) internal view returns (uint256) {
-        PBMVault vault = PBMVault(PBM.vault());
-        return uint256(vault.getDeposit(depositId).redeemTimestamp);
+    function cancelWithdrawalTask(uint256 depositId) external onlyPBM {
+        bytes32 taskId = getTaskId(depositId);
+
+        if (taskIds[taskId]) {
+            _cleanCancelTask(taskId);
+
+            emit WithdrawalTaskCancelled(taskId, depositId);
+        }
     }
 
     function execWithdrawal(
@@ -65,7 +62,7 @@ contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerE
     ) external onlyDedicatedMsgSender returns (bool success) {
         success = _execWithdrawal(payee, depositId);
 
-        bytes32 taskId = _getWithdrawalTaskId(_getDepositStartTime(depositId), depositId);
+        bytes32 taskId = getTaskId(depositId);
 
         if (success) {
             _cleanCancelTask(taskId);
@@ -82,12 +79,21 @@ contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerE
         emit WithdrawalTaskExecution(taskId, success);
     }
 
+    function getTaskId(uint256 depositId) public view returns (bytes32) {
+        return _getWithdrawalTaskId(_getDepositStartTime(depositId), depositId);
+    }
+
     function withdrawETH(address to) external {
         if (msg.sender != fundsOwner) {
             revert CallerNotFundsOwner();
         }
 
         payable(to).transfer(address(this).balance);
+    }
+
+    function _getDepositStartTime(uint256 depositId) internal view returns (uint256) {
+        PBMVault vault = PBMVault(PBM.vault());
+        return uint256(vault.getDeposit(depositId).redeemTimestamp);
     }
 
     function _cleanCancelTask(bytes32 taskId) internal {

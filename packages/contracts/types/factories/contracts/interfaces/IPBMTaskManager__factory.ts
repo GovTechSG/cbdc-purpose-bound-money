@@ -12,6 +12,82 @@ import { Contract, Signer, utils } from "ethers";
 
 const _abi = [
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "depositId",
+        type: "uint256",
+      },
+    ],
+    name: "WithdrawalTaskCancelled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "payee",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "depositId",
+        type: "uint256",
+      },
+    ],
+    name: "WithdrawalTaskCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "bool",
+        name: "success",
+        type: "bool",
+      },
+    ],
+    name: "WithdrawalTaskExecution",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "depositId",
+        type: "uint256",
+      },
+    ],
+    name: "cancelWithdrawalTask",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -51,6 +127,25 @@ const _abi = [
       },
     ],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "depositId",
+        type: "uint256",
+      },
+    ],
+    name: "getTaskId",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
 ] as const;

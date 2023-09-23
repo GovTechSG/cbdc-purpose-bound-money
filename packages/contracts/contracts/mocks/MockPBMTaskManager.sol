@@ -5,23 +5,24 @@ import "../interfaces/IPBMTaskManager.sol";
 import "../interfaces/PBMTaskManagerErrors.sol";
 
 contract MockPBMTaskManager is IPBMTaskManager, PBMTaskManagerErrors {
-    event WithdrawalTaskCreated(
-        bytes32 indexed taskId,
-        address indexed payee,
-        uint256 indexed depositId
-    );
-
-    event WithdrawalTaskExecution(bytes32 indexed taskId, bool indexed success);
-
     constructor() {}
 
     function createWithdrawalTask(address /*payee*/, uint256 /*depositId*/) external {
         emit WithdrawalTaskCreated(0, address(0), 0);
     }
 
-    function execWithdrawal(address /*payee*/, uint256 /*depositId*/) external returns (bool success) {
+    function execWithdrawal(
+        address /*payee*/,
+        uint256 /*depositId*/
+    ) external returns (bool success) {
         success = true;
 
         emit WithdrawalTaskExecution(0, success);
+    }
+
+    function cancelWithdrawalTask(uint256 /*depositId*/) external {}
+
+    function getTaskId(uint256 /*depositId*/) public pure returns (bytes32) {
+        return 0;
     }
 }
