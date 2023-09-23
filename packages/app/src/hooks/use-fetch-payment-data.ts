@@ -1,10 +1,6 @@
 import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
-import { PBM } from '@pbm/contracts'
-import {
-    DepositEvent,
-    PBMVault,
-    WithdrawalEvent,
-} from '@pbm/contracts/types/contracts/base/PBMVault'
+import { PBM, PBMVault } from '@pbm/contracts'
+import { DepositEvent, WithdrawalEvent } from '@pbm/contracts/dist/contracts/utils/PBMVault'
 import { BigNumber } from 'ethers'
 import moment from 'moment/moment'
 import { useCallback, useEffect, useState } from 'react'
