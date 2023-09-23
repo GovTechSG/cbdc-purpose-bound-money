@@ -4,9 +4,9 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@superical/time-lock-vault/contracts/TimeLockVault.sol";
-import "../interfaces/PBMVaultErrors.sol";
+import "../interfaces/PBMVaultBaseErrors.sol";
 
-contract PBMVault is OwnableUpgradeable, TimeLockVault, PBMVaultErrors {
+contract PBMVaultBase is OwnableUpgradeable, TimeLockVault, PBMVaultBaseErrors {
     modifier onlyPBM() {
         if (_msgSender() != asset()) {
             revert CallerNotPBM();
@@ -14,7 +14,10 @@ contract PBMVault is OwnableUpgradeable, TimeLockVault, PBMVaultErrors {
         _;
     }
 
-    function initialize(string memory _name, string memory _symbol) public initializer {
+    function __PBMVaultBase_init(
+        string memory _name,
+        string memory _symbol
+    ) internal onlyInitializing {
         __TimeLockVault_init(_name, _symbol, address(0));
         __Ownable_init();
     }

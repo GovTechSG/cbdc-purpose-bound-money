@@ -6,7 +6,7 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/IERC20MetadataUpgradeable.sol";
 import "./PBMAccessControl.sol";
-import "./PBMVault.sol";
+import "../utils/PBMVault.sol";
 import "../interfaces/IPBM.sol";
 import "../interfaces/PBMBaseErrors.sol";
 import "../interfaces/IPBMTaskManager.sol";
@@ -30,14 +30,21 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
         __ERC20_init(_name, _symbol);
         __PBMAccessControl_init(_msgSender());
 
-        _asset = IERC20MetadataUpgradeable(asset_);
-
-        try IERC20MetadataUpgradeable(asset_).decimals() returns (uint8 val) {
-            _decimals = val;
-        } catch {
+        uint256 cSize;
+        assembly {
+            cSize := extcodesize(asset_)
+        }
+        if (cSize == 0) {
             _decimals = super.decimals();
+        } else {
+            try IERC20MetadataUpgradeable(asset_).decimals() returns (uint8 val) {
+                _decimals = val;
+            } catch {
+                _decimals = super.decimals();
+            }
         }
 
+        _asset = IERC20MetadataUpgradeable(asset_);
         _vault = PBMVault(vault_);
     }
 

@@ -4,9 +4,9 @@
 
 /* eslint-disable */
 import type {
-  PBMVaultErrors,
-  PBMVaultErrorsInterface,
-} from "../../../contracts/interfaces/PBMVaultErrors";
+  PBMVaultBaseErrors,
+  PBMVaultBaseErrorsInterface,
+} from "../../../contracts/interfaces/PBMVaultBaseErrors";
 import type { Provider } from "@ethersproject/providers";
 import { Contract, Signer, utils } from "ethers";
 
@@ -18,15 +18,15 @@ const _abi = [
   },
 ] as const;
 
-export class PBMVaultErrors__factory {
+export class PBMVaultBaseErrors__factory {
   static readonly abi = _abi;
-  static createInterface(): PBMVaultErrorsInterface {
-    return new utils.Interface(_abi) as PBMVaultErrorsInterface;
+  static createInterface(): PBMVaultBaseErrorsInterface {
+    return new utils.Interface(_abi) as PBMVaultBaseErrorsInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): PBMVaultErrors {
-    return new Contract(address, _abi, signerOrProvider) as PBMVaultErrors;
+  ): PBMVaultBaseErrors {
+    return new Contract(address, _abi, signerOrProvider) as PBMVaultBaseErrors;
   }
 }

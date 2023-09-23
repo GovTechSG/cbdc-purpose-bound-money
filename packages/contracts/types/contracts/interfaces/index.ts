@@ -6,4 +6,4 @@ export type { IPBMTaskManager } from "./IPBMTaskManager";
 export type { PBMAccessControlErrors } from "./PBMAccessControlErrors";
 export type { PBMBaseErrors } from "./PBMBaseErrors";
 export type { PBMTaskManagerErrors } from "./PBMTaskManagerErrors";
-export type { PBMVaultErrors } from "./PBMVaultErrors";
+export type { PBMVaultBaseErrors } from "./PBMVaultBaseErrors";

@@ -34,7 +34,7 @@ task("deploy:pbm", "Deploy PBM token")
       const pbmFactory = (await ethers.getContractFactory(
         "PBMUpgradeable",
       )) as PBMUpgradeable__factory;
-      const pbmImpl = await pbmFactory.connect(deployer).deploy();
+      const pbmImpl = await pbmFactory.connect(deployer).deploy(name, symbol);
 
       const pbmImplTx = pbmImpl.deployTransaction;
       console.log(`[Transaction] Pending ${pbmImplTx.hash}`);
@@ -43,16 +43,6 @@ task("deploy:pbm", "Deploy PBM token")
       console.log(`[Address] PBM token implementation deployed at ${pbmImpl.address}`);
 
       await wait(3000);
-
-      console.log(`[Status] Initialising PBM token implementation...`);
-      const pbmImplSealTx = await pbmImpl.initialize(
-        name,
-        symbol,
-        pbmImpl.address,
-        ethers.constants.AddressZero,
-      );
-      console.log(`[Transaction] Pending ${pbmImplSealTx.hash}`);
-      console.log(`[Status] PBM token implementation initialised`);
 
       if (!noProxy) {
         console.log(`[Status] Deploying PBM token proxy...`);

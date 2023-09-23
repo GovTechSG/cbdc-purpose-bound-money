@@ -12,18 +12,18 @@ import type {
 import type { Listener, Provider } from "@ethersproject/providers";
 import type { BaseContract, Signer, utils } from "ethers";
 
-export interface PBMVaultErrorsInterface extends utils.Interface {
+export interface PBMVaultBaseErrorsInterface extends utils.Interface {
   functions: {};
 
   events: {};
 }
 
-export interface PBMVaultErrors extends BaseContract {
+export interface PBMVaultBaseErrors extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: PBMVaultErrorsInterface;
+  interface: PBMVaultBaseErrorsInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

@@ -6,4 +6,4 @@ export { IPBMTaskManager__factory } from "./IPBMTaskManager__factory";
 export { PBMAccessControlErrors__factory } from "./PBMAccessControlErrors__factory";
 export { PBMBaseErrors__factory } from "./PBMBaseErrors__factory";
 export { PBMTaskManagerErrors__factory } from "./PBMTaskManagerErrors__factory";
-export { PBMVaultErrors__factory } from "./PBMVaultErrors__factory";
+export { PBMVaultBaseErrors__factory } from "./PBMVaultBaseErrors__factory";

@@ -137,13 +137,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBMBase__factory>;
     getContractFactory(
-      name: "PBMVault",
+      name: "PBMVaultBase",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PBMVault__factory>;
-    getContractFactory(
-      name: "DSGD",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.DSGD__factory>;
+    ): Promise<Contracts.PBMVaultBase__factory>;
     getContractFactory(
       name: "IPBM",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -165,9 +161,9 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBMTaskManagerErrors__factory>;
     getContractFactory(
-      name: "PBMVaultErrors",
+      name: "PBMVaultBaseErrors",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PBMVaultErrors__factory>;
+    ): Promise<Contracts.PBMVaultBaseErrors__factory>;
     getContractFactory(
       name: "AutomateReady",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -220,6 +216,14 @@ declare module "hardhat/types/runtime" {
       name: "PBMUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBMUpgradeable__factory>;
+    getContractFactory(
+      name: "DSGD",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.DSGD__factory>;
+    getContractFactory(
+      name: "PBMVault",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PBMVault__factory>;
 
     getContractAt(
       name: "AccessControlUpgradeable",
@@ -377,15 +381,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.PBMBase>;
     getContractAt(
-      name: "PBMVault",
+      name: "PBMVaultBase",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.PBMVault>;
-    getContractAt(
-      name: "DSGD",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.DSGD>;
+    ): Promise<Contracts.PBMVaultBase>;
     getContractAt(
       name: "IPBM",
       address: string,
@@ -412,10 +411,10 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.PBMTaskManagerErrors>;
     getContractAt(
-      name: "PBMVaultErrors",
+      name: "PBMVaultBaseErrors",
       address: string,
       signer?: ethers.Signer
-    ): Promise<Contracts.PBMVaultErrors>;
+    ): Promise<Contracts.PBMVaultBaseErrors>;
     getContractAt(
       name: "AutomateReady",
       address: string,
@@ -481,6 +480,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.PBMUpgradeable>;
+    getContractAt(
+      name: "DSGD",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.DSGD>;
+    getContractAt(
+      name: "PBMVault",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PBMVault>;
 
     // default types
     getContractFactory(

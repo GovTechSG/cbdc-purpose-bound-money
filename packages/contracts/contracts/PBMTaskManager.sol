@@ -5,7 +5,7 @@ import "./interfaces/IPBMTaskManager.sol";
 import "./interfaces/PBMTaskManagerErrors.sol";
 import "./interfaces/IPBM.sol";
 import "./lib/gelato-automate/AutomateTaskCreator.sol";
-import "./base/PBMVault.sol";
+import "./utils/PBMVault.sol";
 
 contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerErrors {
     event WithdrawalTaskCreated(

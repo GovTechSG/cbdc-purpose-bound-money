@@ -3,25 +3,29 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
-import { DSGD, PBMUpgradeable } from "../../types";
 import { parseAmount } from "../../common/utils";
+import { DSGD, PBMUpgradeable, PBMVault } from "../../types";
 import { PBMFixtureParamType, deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Setup", () => {
   let fixtures: Awaited<ReturnType<typeof deployPBMFixture>>;
 
   let pbmContract: PBMUpgradeable;
+  let pbmVaultContract: PBMVault;
   let dsgdContract: DSGD;
 
   let pbmParams: PBMFixtureParamType;
   let deployer: SignerWithAddress;
+  let admin: SignerWithAddress;
 
   beforeEach(async () => {
     fixtures = await loadFixture(deployPBMFixture);
     pbmContract = fixtures.pbmContract;
+    pbmVaultContract = fixtures.pbmVaultContract;
     dsgdContract = fixtures.dsgdContract;
 
     deployer = fixtures.signers.deployer;
+    admin = fixtures.signers.admin;
 
     pbmParams = fixtures.pbmDefaultParams;
   });
@@ -90,49 +94,173 @@ describe("PBM - Setup", () => {
     });
 
     describe("Proxy Setup", () => {
-      describe("When upgrading the contract", () => {
-        let newPbmContract: PBMUpgradeable;
+      let newPbmContract: PBMUpgradeable;
+      let newPbmVaultContract: PBMVault;
 
-        beforeEach(async () => {
-          newPbmContract = (await (
-            await ethers.getContractFactory("PBMUpgradeable")
-          ).deploy()) as PBMUpgradeable;
-        });
+      let initName: string;
+      let initSymbol: string;
 
-        describe("When caller to upgrade is not an admin", () => {
-          it("should revert if caller is not an admin", async () => {
-            const nonAdminSigner = fixtures.signers.others[0];
+      beforeEach(async () => {
+        initName = "New PBM";
+        initSymbol = "NEWPBM";
+        newPbmContract = (await (
+          await ethers.getContractFactory("PBMUpgradeable")
+        ).deploy(initName, initSymbol)) as PBMUpgradeable;
 
-            const tx = pbmContract.connect(nonAdminSigner).upgradeTo(newPbmContract.address);
+        newPbmVaultContract = (await (
+          await ethers.getContractFactory("PBMVault")
+        ).deploy(initName, initSymbol)) as PBMVault;
+      });
 
-            await expect(tx)
-              .to.be.revertedWithCustomError(pbmContract, "UnauthorisedCaller")
-              .withArgs(nonAdminSigner.address, fixtures.roles.adminRole);
-          });
-        });
-
-        describe("When caller to upgrade is an admin", () => {
-          it("should revert when attempt to re-initialise", async () => {
-            const upgradeData = newPbmContract.interface.encodeFunctionData("initialize", [
-              pbmParams.name,
-              pbmParams.symbol,
-              dsgdContract.address,
-              pbmParams.vault,
-            ]);
-
-            const tx = pbmContract
-              .connect(fixtures.signers.admin)
-              .upgradeToAndCall(newPbmContract.address, upgradeData);
+      describe("When initialising implementations", () => {
+        describe("When contract is PBM", () => {
+          it("should revert when initialise", async () => {
+            const tx = newPbmContract
+              .connect(deployer)
+              .initialize(pbmParams.name, pbmParams.symbol, dsgdContract.address, pbmParams.vault);
 
             await expect(tx).to.be.revertedWith("Initializable: contract is already initialized");
           });
 
-          it("should upgrade to new contract if caller is an admin", async () => {
-            const tx = pbmContract
-              .connect(fixtures.signers.admin)
-              .upgradeTo(newPbmContract.address);
+          it("should initialise with default values", async () => {
+            const [name, symbol, asset, vault] = await Promise.all([
+              newPbmContract.name(),
+              newPbmContract.symbol(),
+              newPbmContract.asset(),
+              newPbmContract.vault(),
+            ]);
 
-            await expect(tx).to.not.be.reverted;
+            expect(name).to.be.equal(initName);
+            expect(symbol).to.be.equal(initSymbol);
+            expect(asset).to.be.equal(ethers.constants.AddressZero);
+            expect(vault).to.be.equal(ethers.constants.AddressZero);
+          });
+        });
+
+        describe("When contract is PBMVault", () => {
+          it("should revert when initialise PBMVault contract", async () => {
+            const tx = newPbmVaultContract
+              .connect(deployer)
+              .initialize(pbmParams.name, pbmParams.symbol);
+
+            await expect(tx).to.be.revertedWith("Initializable: contract is already initialized");
+          });
+
+          it("should initialise with default values", async () => {
+            const [name, symbol] = await Promise.all([
+              newPbmVaultContract.name(),
+              newPbmVaultContract.symbol(),
+            ]);
+
+            expect(name).to.be.equal(initName);
+            expect(symbol).to.be.equal(initSymbol);
+          });
+        });
+      });
+
+      describe("When upgrading the contract", () => {
+        describe("When caller to upgrade is not an admin", () => {
+          describe("When contract is PBM", () => {
+            it("should revert if caller is not an admin", async () => {
+              const nonAdminSigner = fixtures.signers.others[0];
+
+              const tx = pbmContract.connect(nonAdminSigner).upgradeTo(newPbmContract.address);
+
+              await expect(tx)
+                .to.be.revertedWithCustomError(pbmContract, "UnauthorisedCaller")
+                .withArgs(nonAdminSigner.address, fixtures.roles.adminRole);
+            });
+          });
+
+          describe("When contract is PBMVault", () => {
+            it("should revert in PBMVault contract if caller is not an admin", async () => {
+              const nonAdminSigner = fixtures.signers.others[0];
+
+              const tx = pbmVaultContract.connect(nonAdminSigner).upgradeTo(newPbmContract.address);
+
+              await expect(tx).to.be.revertedWith("Ownable: caller is not the owner");
+            });
+          });
+        });
+
+        describe("When caller to upgrade is an admin", () => {
+          const implSlot = "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc";
+
+          describe("When contract is PBM", () => {
+            it("should revert when attempt to re-initialise PBM contract", async () => {
+              const upgradeData = newPbmContract.interface.encodeFunctionData("initialize", [
+                pbmParams.name,
+                pbmParams.symbol,
+                dsgdContract.address,
+                pbmParams.vault,
+              ]);
+
+              const tx = pbmContract
+                .connect(admin)
+                .upgradeToAndCall(newPbmContract.address, upgradeData);
+
+              await expect(tx).to.be.revertedWith("Initializable: contract is already initialized");
+            });
+
+            it("should upgrade to new contract if caller is an admin", async () => {
+              await pbmContract.connect(admin).upgradeTo(newPbmContract.address);
+
+              const value = await pbmContract.provider.getStorageAt(pbmContract.address, implSlot);
+              const impl = ethers.utils.getAddress(value.slice(-40));
+
+              await expect(impl).to.be.equal(newPbmContract.address);
+            });
+          });
+
+          describe("When contract is PBMVault", () => {
+            let pbmVaultOwner: SignerWithAddress;
+
+            beforeEach(async () => {
+              // Caveat: PBMVault contract owner is deployer
+              pbmVaultOwner = fixtures.signers.deployer;
+            });
+
+            it("should revert when attempt to re-initialise PBMVault contract", async () => {
+              const upgradeData = newPbmVaultContract.interface.encodeFunctionData("initialize", [
+                pbmParams.name,
+                pbmParams.symbol,
+              ]);
+
+              const tx = pbmVaultContract
+                .connect(pbmVaultOwner)
+                .upgradeToAndCall(newPbmVaultContract.address, upgradeData);
+
+              await expect(tx).to.be.revertedWith("Initializable: contract is already initialized");
+            });
+
+            describe("When upgrade to new contract", () => {
+              it("should revert if caller is admin", async () => {
+                const tx = pbmVaultContract.connect(admin).upgradeTo(newPbmVaultContract.address);
+
+                await expect(tx).to.be.revertedWith("Ownable: caller is not the owner");
+              });
+
+              it("should revert during upgrade if caller is an admin", async () => {
+                // Caveat: PBMVault contract owner is not admin
+                const tx = pbmVaultContract.connect(admin).upgradeTo(newPbmVaultContract.address);
+
+                await expect(tx).to.be.revertedWith("Ownable: caller is not the owner");
+              });
+
+              it("should upgrade to new contract if caller is owner", async () => {
+                await pbmVaultContract
+                  .connect(pbmVaultOwner)
+                  .upgradeTo(newPbmVaultContract.address);
+
+                const value = await pbmVaultContract.provider.getStorageAt(
+                  pbmVaultContract.address,
+                  implSlot,
+                );
+                const impl = ethers.utils.getAddress(value.slice(-40));
+
+                await expect(impl).to.be.equal(newPbmVaultContract.address);
+              });
+            });
           });
         });
       });

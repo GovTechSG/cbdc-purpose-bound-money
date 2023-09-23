@@ -14,8 +14,8 @@ type Parameters = {
 task("verify:vault:proxy", "Verify PBM vault")
   .addParam<string>("address", "Target address to verify")
   .addParam<string>("implementation", "Implementation contract address")
-  .addParam<string>("name", "Vaulted token name")
-  .addParam<string>("symbol", "Vaulted token symbol")
+  .addParam<string>("name", "Vault token name")
+  .addParam<string>("symbol", "Vault token symbol")
   .setAction(async function (taskArguments, hre) {
     try {
       const { address, name, symbol, implementation } = taskArguments as Parameters;

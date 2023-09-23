@@ -3,19 +3,25 @@ import type { TaskArguments } from "hardhat/types";
 
 import { verifyContract } from "../helpers/verify-contract";
 
-type Parameters = TaskArguments;
+type Parameters = {
+  address: string;
+  name: string;
+  symbol: string;
+} & TaskArguments;
 
 task("verify:pbm", "Verify PBM token")
   .addParam<string>("address", "Target address to verify")
+  .addParam<string>("name", "PBM token name")
+  .addParam<string>("symbol", "PBM token symbol")
   .setAction(async function (taskArguments, hre) {
     try {
-      const { address } = taskArguments as Parameters;
+      const { address, name, symbol } = taskArguments as Parameters;
 
       console.log(`[Status] Verifying PBM token contract...`);
 
       await verifyContract({
         address,
-        constructorArgsParams: [],
+        constructorArgsParams: [name, symbol],
         contract: "contracts/PBMUpgradeable.sol:PBMUpgradeable",
         hre,
       });

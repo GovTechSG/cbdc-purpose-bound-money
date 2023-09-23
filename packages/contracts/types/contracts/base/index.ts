@@ -3,4 +3,4 @@
 /* eslint-disable */
 export type { PBMAccessControl } from "./PBMAccessControl";
 export type { PBMBase } from "./PBMBase";
-export type { PBMVault } from "./PBMVault";
+export type { PBMVaultBase } from "./PBMVaultBase";

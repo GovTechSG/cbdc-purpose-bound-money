@@ -5,6 +5,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "./base/PBMBase.sol";
 
 contract PBMUpgradeable is UUPSUpgradeable, PBMBase {
+    constructor(string memory _name, string memory _symbol) {
+        initialize(_name, _symbol, address(0), address(0));
+    }
+
     function initialize(
         string memory _name,
         string memory _symbol,

@@ -41,7 +41,7 @@ export type DepositInfoStructOutput = [BigNumber, string, BigNumber] & {
   redeemTimestamp: BigNumber;
 };
 
-export interface PBMVaultInterface extends utils.Interface {
+export interface PBMVaultBaseInterface extends utils.Interface {
   functions: {
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
@@ -56,7 +56,6 @@ export interface PBMVaultInterface extends utils.Interface {
     "getDepositIds(address,uint256,uint256)": FunctionFragment;
     "getDeposits(uint256[])": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "initialize(string,string)": FunctionFragment;
     "isDepositActive(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -91,7 +90,6 @@ export interface PBMVaultInterface extends utils.Interface {
       | "getDepositIds"
       | "getDeposits"
       | "increaseAllowance"
-      | "initialize"
       | "isDepositActive"
       | "name"
       | "owner"
@@ -165,10 +163,6 @@ export interface PBMVaultInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "increaseAllowance",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "initialize",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "isDepositActive",
@@ -265,7 +259,6 @@ export interface PBMVaultInterface extends utils.Interface {
     functionFragment: "increaseAllowance",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isDepositActive",
     data: BytesLike
@@ -400,12 +393,12 @@ export type WithdrawalEvent = TypedEvent<
 
 export type WithdrawalEventFilter = TypedEventFilter<WithdrawalEvent>;
 
-export interface PBMVault extends BaseContract {
+export interface PBMVaultBase extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: PBMVaultInterface;
+  interface: PBMVaultBaseInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -494,12 +487,6 @@ export interface PBMVault extends BaseContract {
     increaseAllowance(
       spender: PromiseOrValue<string>,
       addedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -650,12 +637,6 @@ export interface PBMVault extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  initialize(
-    _name: PromiseOrValue<string>,
-    _symbol: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   isDepositActive(
     recipient: PromiseOrValue<string>,
     depositId: PromiseOrValue<BigNumberish>,
@@ -802,12 +783,6 @@ export interface PBMVault extends BaseContract {
       addedValue: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     isDepositActive(
       recipient: PromiseOrValue<string>,
@@ -1023,12 +998,6 @@ export interface PBMVault extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     isDepositActive(
       recipient: PromiseOrValue<string>,
       depositId: PromiseOrValue<BigNumberish>,
@@ -1169,12 +1138,6 @@ export interface PBMVault extends BaseContract {
     increaseAllowance(
       spender: PromiseOrValue<string>,
       addedValue: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    initialize(
-      _name: PromiseOrValue<string>,
-      _symbol: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -3,8 +3,8 @@
 /* tslint:disable */
 
 /* eslint-disable */
-import type { PromiseOrValue } from "../../common";
-import type { DSGD, DSGDInterface } from "../../contracts/DSGD";
+import type { PromiseOrValue } from "../../../common";
+import type { DSGD, DSGDInterface } from "../../../contracts/utils/DSGD";
 import type { Provider, TransactionRequest } from "@ethersproject/providers";
 import { Signer, utils, Contract, ContractFactory, Overrides } from "ethers";
 

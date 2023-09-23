@@ -5,7 +5,7 @@ export * as base from "./base";
 export * as interfaces from "./interfaces";
 export * as lib from "./lib";
 export * as mocks from "./mocks";
-export { DSGD__factory } from "./DSGD__factory";
+export * as utils from "./utils";
 export { PBM__factory } from "./PBM__factory";
 export { PBMStandard__factory } from "./PBMStandard__factory";
 export { PBMTaskManager__factory } from "./PBMTaskManager__factory";

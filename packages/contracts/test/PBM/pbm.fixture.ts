@@ -39,7 +39,9 @@ export async function deployPBMFixture(
 
   // Deploy Vault
   const pbmVaultFactory = (await ethers.getContractFactory("PBMVault")) as PBMVault__factory;
-  const pbmVaultImpl = await pbmVaultFactory.connect(deployer).deploy();
+  const pbmVaultImpl = await pbmVaultFactory
+    .connect(deployer)
+    .deploy(`v${pbmDefaultParams.name}`, `v${pbmDefaultParams.symbol}`);
   await pbmVaultImpl.deployed();
   const pbmVaultContract = await deployUpgradeableContract(
     {
@@ -57,7 +59,9 @@ export async function deployPBMFixture(
 
   // Deploy PBM
   const pbmFactory = (await ethers.getContractFactory("PBMUpgradeable")) as PBMUpgradeable__factory;
-  const pbmImpl = await pbmFactory.connect(deployer).deploy();
+  const pbmImpl = await pbmFactory
+    .connect(deployer)
+    .deploy(pbmDefaultParams.name, pbmDefaultParams.symbol);
   await pbmImpl.deployed();
   const pbmContract = await deployUpgradeableContract(
     {

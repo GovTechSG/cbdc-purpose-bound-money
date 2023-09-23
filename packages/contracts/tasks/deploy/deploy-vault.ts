@@ -28,7 +28,7 @@ task("deploy:vault", "Deploy PBM vault")
 
       console.log(`[Status] Deploying PBMVault implementation...`);
       const pbmVaultFactory = (await ethers.getContractFactory("PBMVault")) as PBMVault__factory;
-      const pbmVaultImpl = await pbmVaultFactory.connect(deployer).deploy();
+      const pbmVaultImpl = await pbmVaultFactory.connect(deployer).deploy(name, symbol);
 
       const pbmVaultImplTx = pbmVaultImpl.deployTransaction;
       console.log(`[Transaction] Pending ${pbmVaultImplTx.hash}`);
@@ -37,11 +37,6 @@ task("deploy:vault", "Deploy PBM vault")
       console.log(`[Address] PBMVault implementation deployed at ${pbmVaultImpl.address}`);
 
       await wait(3000);
-
-      console.log(`[Status] Initialising PBMVault implementation...`);
-      const pbmVaultImplSealTx = await pbmVaultImpl.initialize(name, symbol);
-      console.log(`[Transaction] Pending ${pbmVaultImplSealTx.hash}`);
-      console.log(`[Status] PBMVault implementation initialised`);
 
       if (!noProxy) {
         console.log(`[Status] Deploying PBMVault proxy...`);

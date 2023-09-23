@@ -3,4 +3,9 @@ pragma solidity ^0.8.13;
 
 import "./PBMUpgradeable.sol";
 
-contract PBM is PBMUpgradeable {}
+contract PBM is PBMUpgradeable {
+    constructor(
+        string memory _name,
+        string memory _symbol
+    ) PBMUpgradeable(_name, _symbol) {}
+}
