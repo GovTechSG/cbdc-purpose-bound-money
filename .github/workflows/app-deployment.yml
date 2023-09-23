@@ -70,6 +70,7 @@ jobs:
             --build-arg WALLETCONNECT_PROJECT_ID=${{ vars.APP_WALLETCONNECT_PROJECT_ID }} \
             --build-arg ENABLE_TESTNETS=${{ vars.APP_ENABLE_TESTNETS }} \
             --build-arg ENABLE_HARDHAT_NODE=${{ vars.APP_ENABLE_HARDHAT_NODE }} \
+            --build-arg ENABLE_AUTOMATION=${{ vars.APP_ENABLE_AUTOMATION }} \
             -f packages/app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT

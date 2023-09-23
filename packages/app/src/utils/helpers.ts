@@ -1,7 +1,7 @@
-import { BigNumber, ethers } from 'ethers'
 import { Chain } from '@rainbow-me/rainbowkit'
-import { hardhat, polygon, polygonMumbai } from 'wagmi/chains'
 import ellipsize from 'ellipsize'
+import { BigNumber, ethers } from 'ethers'
+import { hardhat, polygon, polygonMumbai } from 'wagmi/chains'
 
 export const formatHex = (value: string, addPrefix: boolean = false) => {
     if (value === undefined || value.length <= 2) return value || ''
@@ -66,6 +66,8 @@ export const getDefaultChains = () => {
 
     return defaultChains
 }
+
+export const isAutomationEnabled = () => process.env.NEXT_PUBLIC_ENABLE_AUTOMATION === '1'
 
 export const raise = (err: string): never => {
     throw new Error(err)

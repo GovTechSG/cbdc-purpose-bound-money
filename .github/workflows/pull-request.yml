@@ -56,6 +56,7 @@ jobs:
             --build-arg WALLETCONNECT_PROJECT_ID=12345678 \
             --build-arg ENABLE_TESTNETS=1 \
             --build-arg ENABLE_HARDHAT_NODE=1 \
+            --build-arg ENABLE_AUTOMATION=1 \
             -f packages/app/Dockerfile -t $ECR_REPOSITORY:$IMAGE_TAG .
 
   web-build-test:

@@ -5,7 +5,7 @@ import { PaymentForm } from '@app/components/payment-form'
 import { useAssetTokenContext } from '@app/contexts/asset-token-context'
 import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
 import { useTransactionModal } from '@app/contexts/transaction-modal-context'
-import { formatNumberDisplay } from '@app/utils/helpers'
+import { formatNumberDisplay, isAutomationEnabled } from '@app/utils/helpers'
 import { withWalletConnected } from '@app/utils/with-wallet-connected'
 import { constants, Signer } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
@@ -32,7 +32,7 @@ function SendPage() {
                     values.payee,
                     parseUnits(values.inputAmount.baseAmount, decimals),
                     Number(values.lockPeriod) * 86400,
-                    true
+                    isAutomationEnabled()
                 )
         const modalDetails = await formatModalDetails({
             formValues: values,
