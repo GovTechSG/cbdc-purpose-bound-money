@@ -93,12 +93,12 @@ export type { AutomateReady } from "./contracts/lib/gelato-automate/AutomateRead
 export { AutomateReady__factory } from "./factories/contracts/lib/gelato-automate/AutomateReady__factory";
 export type { AutomateTaskCreator } from "./contracts/lib/gelato-automate/AutomateTaskCreator";
 export { AutomateTaskCreator__factory } from "./factories/contracts/lib/gelato-automate/AutomateTaskCreator__factory";
-export type { IAutomate } from "./contracts/lib/gelato-automate/interfaces/IAutomate";
-export { IAutomate__factory } from "./factories/contracts/lib/gelato-automate/interfaces/IAutomate__factory";
-export type { ITaskTreasuryUpgradable } from "./contracts/lib/gelato-automate/interfaces/ITaskTreasuryUpgradable";
-export { ITaskTreasuryUpgradable__factory } from "./factories/contracts/lib/gelato-automate/interfaces/ITaskTreasuryUpgradable__factory";
+export type { IAutomate } from "./contracts/lib/gelato-automate/Types.sol/IAutomate";
+export { IAutomate__factory } from "./factories/contracts/lib/gelato-automate/Types.sol/IAutomate__factory";
 export type { IOpsProxyFactory } from "./contracts/lib/gelato-automate/Types.sol/IOpsProxyFactory";
 export { IOpsProxyFactory__factory } from "./factories/contracts/lib/gelato-automate/Types.sol/IOpsProxyFactory__factory";
+export type { ITaskTreasuryUpgradable } from "./contracts/lib/gelato-automate/Types.sol/ITaskTreasuryUpgradable";
+export { ITaskTreasuryUpgradable__factory } from "./factories/contracts/lib/gelato-automate/Types.sol/ITaskTreasuryUpgradable__factory";
 export type { ERC1967Proxy } from "./contracts/lib/proxy/ERC1967Proxy";
 export { ERC1967Proxy__factory } from "./factories/contracts/lib/proxy/ERC1967Proxy__factory";
 export type { MockPBMTaskManager } from "./contracts/mocks/MockPBMTaskManager";

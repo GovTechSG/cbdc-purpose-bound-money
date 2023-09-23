@@ -4,10 +4,7 @@
 
 /* eslint-disable */
 import type * as typesSol from "./Types.sol";
-import type * as interfaces from "./interfaces";
 
 export type { typesSol };
-
-export type { interfaces };
 export type { AutomateReady } from "./AutomateReady";
 export type { AutomateTaskCreator } from "./AutomateTaskCreator";

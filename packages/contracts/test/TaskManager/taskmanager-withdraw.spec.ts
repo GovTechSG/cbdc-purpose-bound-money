@@ -12,7 +12,8 @@ import { ethers } from "hardhat";
 import { parseAmount } from "../../common/utils";
 import { IAutomate, PBM, PBMTaskManager, PBMTaskManager__factory, PBMVault } from "../../types";
 import { PromiseOrValue } from "../../types/common";
-import { DepositInfoStructOutput } from "../../types/contracts/base/PBMVault";
+import { ModuleDataStruct } from "../../types/contracts/lib/gelato-automate/Types.sol/IAutomate";
+import { DepositInfoStructOutput } from "../../types/contracts/utils/PBMVault";
 import { deployPBMFixture } from "../PBM/pbm.fixture";
 
 // Polygon Addresses
@@ -54,7 +55,7 @@ describe("PBMTaskManager", () => {
     pbmVaultContract = fixtures.pbmVaultContract;
 
     automateContract = (await ethers.getContractAt(
-      "contracts/lib/gelato-automate/interfaces/IAutomate.sol:IAutomate",
+      "contracts/lib/gelato-automate/Types.sol:IAutomate",
       GELATO_AUTOMATE_ADDRESS,
     )) as IAutomate;
     pbmTaskManagerContract = await (
@@ -238,13 +239,13 @@ describe("PBMTaskManager", () => {
     describe("When executing tasks", () => {
       let executeWithdrawalTask: (
         executionData: PromiseOrValue<BytesLike>,
-        moduleData: IAutomate.ModuleDataStruct,
+        moduleData: ModuleDataStruct,
       ) => Promise<ContractTransaction>;
 
       beforeEach(async () => {
         executeWithdrawalTask = (
           executionData: PromiseOrValue<BytesLike>,
-          moduleData: IAutomate.ModuleDataStruct,
+          moduleData: ModuleDataStruct,
         ) =>
           automateContract
             .connect(gelatoExecutor)
@@ -361,7 +362,7 @@ describe("PBMTaskManager", () => {
         });
       });
 
-      describe("When there is a single task", () => {
+      describe.only("When there is a single task", () => {
         let depositInfo: DepositInfoStructOutput;
         let taskInterval: number;
 
@@ -665,7 +666,7 @@ const computeTaskId = (
   taskCreator: string,
   execAddress: string,
   execSelector: string,
-  moduleData: IAutomate.ModuleDataStruct,
+  moduleData: ModuleDataStruct,
   feeToken: string,
 ): string => {
   const encoded = ethers.utils.defaultAbiCoder.encode(

@@ -177,14 +177,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IAutomate__factory>;
     getContractFactory(
-      name: "ITaskTreasuryUpgradable",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ITaskTreasuryUpgradable__factory>;
-    getContractFactory(
-      name: "IAutomate",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IAutomate__factory>;
-    getContractFactory(
       name: "IOpsProxyFactory",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IOpsProxyFactory__factory>;
@@ -425,16 +417,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.AutomateTaskCreator>;
-    getContractAt(
-      name: "IAutomate",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.IAutomate>;
-    getContractAt(
-      name: "ITaskTreasuryUpgradable",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.ITaskTreasuryUpgradable>;
     getContractAt(
       name: "IAutomate",
       address: string,

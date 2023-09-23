@@ -2,6 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as typesSol from "./Types.sol";
-export * as interfaces from "./interfaces";
 export { AutomateReady__factory } from "./AutomateReady__factory";
 export { AutomateTaskCreator__factory } from "./AutomateTaskCreator__factory";

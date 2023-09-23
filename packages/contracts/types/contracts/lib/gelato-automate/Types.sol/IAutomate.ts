@@ -39,10 +39,12 @@ export interface IAutomateInterface extends utils.Interface {
   functions: {
     "cancelTask(bytes32)": FunctionFragment;
     "createTask(address,bytes,(uint8[],bytes[]),address)": FunctionFragment;
+    "exec(address,address,bytes,(uint8[],bytes[]),uint256,address,bool,bool)": FunctionFragment;
     "gelato()": FunctionFragment;
     "getFeeDetails()": FunctionFragment;
     "getTaskId(address,address,bytes4,(uint8[],bytes[]),address)": FunctionFragment;
     "getTaskId(address,address,bytes4,bool,address,bytes32)": FunctionFragment;
+    "getTaskIdsByUser(address)": FunctionFragment;
     "taskTreasury()": FunctionFragment;
   };
 
@@ -50,10 +52,12 @@ export interface IAutomateInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "cancelTask"
       | "createTask"
+      | "exec"
       | "gelato"
       | "getFeeDetails"
       | "getTaskId(address,address,bytes4,(uint8[],bytes[]),address)"
       | "getTaskId(address,address,bytes4,bool,address,bytes32)"
+      | "getTaskIdsByUser"
       | "taskTreasury"
   ): FunctionFragment;
 
@@ -68,6 +72,19 @@ export interface IAutomateInterface extends utils.Interface {
       PromiseOrValue<BytesLike>,
       ModuleDataStruct,
       PromiseOrValue<string>
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "exec",
+    values: [
+      PromiseOrValue<string>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BytesLike>,
+      ModuleDataStruct,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<boolean>,
+      PromiseOrValue<boolean>
     ]
   ): string;
   encodeFunctionData(functionFragment: "gelato", values?: undefined): string;
@@ -97,12 +114,17 @@ export interface IAutomateInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "getTaskIdsByUser",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "taskTreasury",
     values?: undefined
   ): string;
 
   decodeFunctionResult(functionFragment: "cancelTask", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "createTask", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "exec", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "gelato", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getFeeDetails",
@@ -114,6 +136,10 @@ export interface IAutomateInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getTaskId(address,address,bytes4,bool,address,bytes32)",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getTaskIdsByUser",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -164,6 +190,18 @@ export interface IAutomate extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    exec(
+      taskCreator: PromiseOrValue<string>,
+      execAddress: PromiseOrValue<string>,
+      execData: PromiseOrValue<BytesLike>,
+      moduleData: ModuleDataStruct,
+      txFee: PromiseOrValue<BigNumberish>,
+      feeToken: PromiseOrValue<string>,
+      useTaskTreasuryFunds: PromiseOrValue<boolean>,
+      revertOnFailure: PromiseOrValue<boolean>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     gelato(overrides?: CallOverrides): Promise<[string]>;
 
     getFeeDetails(overrides?: CallOverrides): Promise<[BigNumber, string]>;
@@ -187,6 +225,11 @@ export interface IAutomate extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    getTaskIdsByUser(
+      _taskCreator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[string[]]>;
+
     taskTreasury(overrides?: CallOverrides): Promise<[string]>;
   };
 
@@ -200,6 +243,18 @@ export interface IAutomate extends BaseContract {
     execDataOrSelector: PromiseOrValue<BytesLike>,
     moduleData: ModuleDataStruct,
     feeToken: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  exec(
+    taskCreator: PromiseOrValue<string>,
+    execAddress: PromiseOrValue<string>,
+    execData: PromiseOrValue<BytesLike>,
+    moduleData: ModuleDataStruct,
+    txFee: PromiseOrValue<BigNumberish>,
+    feeToken: PromiseOrValue<string>,
+    useTaskTreasuryFunds: PromiseOrValue<boolean>,
+    revertOnFailure: PromiseOrValue<boolean>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -226,6 +281,11 @@ export interface IAutomate extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  getTaskIdsByUser(
+    _taskCreator: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<string[]>;
+
   taskTreasury(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
@@ -241,6 +301,18 @@ export interface IAutomate extends BaseContract {
       feeToken: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    exec(
+      taskCreator: PromiseOrValue<string>,
+      execAddress: PromiseOrValue<string>,
+      execData: PromiseOrValue<BytesLike>,
+      moduleData: ModuleDataStruct,
+      txFee: PromiseOrValue<BigNumberish>,
+      feeToken: PromiseOrValue<string>,
+      useTaskTreasuryFunds: PromiseOrValue<boolean>,
+      revertOnFailure: PromiseOrValue<boolean>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     gelato(overrides?: CallOverrides): Promise<string>;
 
@@ -265,6 +337,11 @@ export interface IAutomate extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    getTaskIdsByUser(
+      _taskCreator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<string[]>;
+
     taskTreasury(overrides?: CallOverrides): Promise<string>;
   };
 
@@ -281,6 +358,18 @@ export interface IAutomate extends BaseContract {
       execDataOrSelector: PromiseOrValue<BytesLike>,
       moduleData: ModuleDataStruct,
       feeToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    exec(
+      taskCreator: PromiseOrValue<string>,
+      execAddress: PromiseOrValue<string>,
+      execData: PromiseOrValue<BytesLike>,
+      moduleData: ModuleDataStruct,
+      txFee: PromiseOrValue<BigNumberish>,
+      feeToken: PromiseOrValue<string>,
+      useTaskTreasuryFunds: PromiseOrValue<boolean>,
+      revertOnFailure: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -307,6 +396,11 @@ export interface IAutomate extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getTaskIdsByUser(
+      _taskCreator: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     taskTreasury(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
@@ -321,6 +415,18 @@ export interface IAutomate extends BaseContract {
       execDataOrSelector: PromiseOrValue<BytesLike>,
       moduleData: ModuleDataStruct,
       feeToken: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    exec(
+      taskCreator: PromiseOrValue<string>,
+      execAddress: PromiseOrValue<string>,
+      execData: PromiseOrValue<BytesLike>,
+      moduleData: ModuleDataStruct,
+      txFee: PromiseOrValue<BigNumberish>,
+      feeToken: PromiseOrValue<string>,
+      useTaskTreasuryFunds: PromiseOrValue<boolean>,
+      revertOnFailure: PromiseOrValue<boolean>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -344,6 +450,11 @@ export interface IAutomate extends BaseContract {
       useTaskTreasuryFunds: PromiseOrValue<boolean>,
       feeToken: PromiseOrValue<string>,
       resolverHash: PromiseOrValue<BytesLike>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getTaskIdsByUser(
+      _taskCreator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
