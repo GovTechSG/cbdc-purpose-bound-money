@@ -1,12 +1,13 @@
-import { Button, Space } from 'antd'
+import { InfoCircleTwoTone } from '@ant-design/icons'
+import { StatisticTitleWithLoader } from '@app/components/token-overview/pbm-overview-card/statistic-title-with-loader'
+import { useTransactionModal } from '@app/contexts/transaction-modal-context'
 import { formatNumberDisplay } from '@app/utils/helpers'
+import { PBM } from '@pbm/contracts'
+import { Button, Space, Tooltip, Typography } from 'antd'
+import { BigNumber, Signer } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import React from 'react'
-import { BigNumber, Signer } from 'ethers'
-import { useTransactionModal } from '@app/contexts/transaction-modal-context'
 import { useSigner } from 'wagmi'
-import { PBM } from '@pbm/contracts'
-import { StatisticTitleWithLoader } from '@app/components/token-overview/pbm-overview-card/statistic-title-with-loader'
 
 interface WithdrawalBalanceStatisticProps {
     withdrawalBalance: BigNumber
@@ -77,6 +78,18 @@ export const WithdrawalBalanceStatistic: React.FC<WithdrawalBalanceStatisticProp
             >
                 Withdraw All
             </Button>
+            <Space>
+                <Tooltip
+                    title={`When Automatic Withdrawal is enabled, your pending ${pbmSymbol} will be withdrawn and transferred into your wallet as soon as they mature.`}
+                    placement="bottom"
+                    style={{ display: 'flex' }}
+                >
+                    <InfoCircleTwoTone />
+                </Tooltip>
+                <Typography.Text type="secondary" style={{ fontSize: 'smaller' }}>
+                    Automatic Withdrawal is enabled
+                </Typography.Text>
+            </Space>
         </Space>
     )
 }
