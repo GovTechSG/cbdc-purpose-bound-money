@@ -1,6 +1,7 @@
 import { Chain } from '@rainbow-me/rainbowkit'
 import ellipsize from 'ellipsize'
 import { BigNumber, ethers } from 'ethers'
+import { getAddress } from 'ethers/lib/utils'
 import { hardhat, polygon, polygonMumbai } from 'wagmi/chains'
 
 export const formatHex = (value: string, addPrefix: boolean = false) => {
@@ -40,6 +41,10 @@ export const parseWei = (wei: BigNumber, decimals: number = 18) => {
 }
 
 export const ellipsizeAddress = (address: string, length: number = 10) => {
+    address = getAddress(address)
+    if (length >= 40) {
+        return `0x${formatHex(address as string)}`
+    }
     return `0x${ellipsize(formatHex(address as string), length, {
         // @ts-ignore
         truncate: 'middle',
