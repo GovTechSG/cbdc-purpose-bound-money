@@ -81,7 +81,7 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
 
             if (autoWithdrawal) {
                 if (address(taskManager) == address(0)) {
-                    revert AutoWithdrawalUnsupported();
+                    revert TaskManagerNotFound();
                 }
                 taskManager.createWithdrawalTask(payee, depositId);
             }
@@ -108,7 +108,9 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
         emit Refund(depositId, payee, _msgSender(), deposit.depositor, deposit.amount);
 
         if (address(taskManager) != address(0)) {
-            taskManager.cancelWithdrawalTask(depositId);
+            try taskManager.cancelWithdrawalTask(depositId) returns (bool) {} catch {
+                emit TaskManagerCancelWithdrawalFailed(payee, depositId);
+            }
         }
 
         return deposit;

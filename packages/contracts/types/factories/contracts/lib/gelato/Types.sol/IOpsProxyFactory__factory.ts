@@ -6,7 +6,7 @@
 import type {
   IOpsProxyFactory,
   IOpsProxyFactoryInterface,
-} from "../../../../../contracts/lib/gelato-automate/Types.sol/IOpsProxyFactory";
+} from "../../../../../contracts/lib/gelato/Types.sol/IOpsProxyFactory";
 import type { Provider } from "@ethersproject/providers";
 import { Contract, Signer, utils } from "ethers";
 

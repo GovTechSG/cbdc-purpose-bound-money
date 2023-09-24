@@ -99,12 +99,16 @@ export interface IPBMInterface extends utils.Interface {
     "Payment(address,address,uint256,uint64)": EventFragment;
     "Redemption(address,uint256)": EventFragment;
     "Refund(uint256,address,address,address,uint256)": EventFragment;
+    "TaskManagerCancelWithdrawalFailed(address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "EmergencyWithdrawal"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Payment"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Redemption"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Refund"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "TaskManagerCancelWithdrawalFailed"
+  ): EventFragment;
 }
 
 export interface EmergencyWithdrawalEventObject {
@@ -157,6 +161,18 @@ export type RefundEvent = TypedEvent<
 >;
 
 export type RefundEventFilter = TypedEventFilter<RefundEvent>;
+
+export interface TaskManagerCancelWithdrawalFailedEventObject {
+  payee: string;
+  depositId: BigNumber;
+}
+export type TaskManagerCancelWithdrawalFailedEvent = TypedEvent<
+  [string, BigNumber],
+  TaskManagerCancelWithdrawalFailedEventObject
+>;
+
+export type TaskManagerCancelWithdrawalFailedEventFilter =
+  TypedEventFilter<TaskManagerCancelWithdrawalFailedEvent>;
 
 export interface IPBM extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -344,6 +360,15 @@ export interface IPBM extends BaseContract {
       payer?: null,
       amount?: null
     ): RefundEventFilter;
+
+    "TaskManagerCancelWithdrawalFailed(address,uint256)"(
+      payee?: PromiseOrValue<string> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): TaskManagerCancelWithdrawalFailedEventFilter;
+    TaskManagerCancelWithdrawalFailed(
+      payee?: PromiseOrValue<string> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): TaskManagerCancelWithdrawalFailedEventFilter;
   };
 
   estimateGas: {

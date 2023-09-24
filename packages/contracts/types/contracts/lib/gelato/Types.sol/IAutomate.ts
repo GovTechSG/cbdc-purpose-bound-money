@@ -10,7 +10,11 @@ import type {
   OnEvent,
   PromiseOrValue,
 } from "../../../../common";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   BaseContract,
@@ -147,8 +151,40 @@ export interface IAutomateInterface extends utils.Interface {
     data: BytesLike
   ): Result;
 
-  events: {};
+  events: {
+    "TaskCancelled(bytes32,address)": EventFragment;
+    "TaskCreated(address,address,bytes,tuple,address,bytes32)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "TaskCancelled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskCreated"): EventFragment;
 }
+
+export interface TaskCancelledEventObject {
+  taskId: string;
+  taskCreator: string;
+}
+export type TaskCancelledEvent = TypedEvent<
+  [string, string],
+  TaskCancelledEventObject
+>;
+
+export type TaskCancelledEventFilter = TypedEventFilter<TaskCancelledEvent>;
+
+export interface TaskCreatedEventObject {
+  taskCreator: string;
+  execAddress: string;
+  execDataOrSelector: string;
+  moduleData: ModuleDataStructOutput;
+  feeToken: string;
+  taskId: string;
+}
+export type TaskCreatedEvent = TypedEvent<
+  [string, string, string, ModuleDataStructOutput, string, string],
+  TaskCreatedEventObject
+>;
+
+export type TaskCreatedEventFilter = TypedEventFilter<TaskCreatedEvent>;
 
 export interface IAutomate extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -345,7 +381,30 @@ export interface IAutomate extends BaseContract {
     taskTreasury(overrides?: CallOverrides): Promise<string>;
   };
 
-  filters: {};
+  filters: {
+    "TaskCancelled(bytes32,address)"(
+      taskId?: null,
+      taskCreator?: null
+    ): TaskCancelledEventFilter;
+    TaskCancelled(taskId?: null, taskCreator?: null): TaskCancelledEventFilter;
+
+    "TaskCreated(address,address,bytes,tuple,address,bytes32)"(
+      taskCreator?: PromiseOrValue<string> | null,
+      execAddress?: PromiseOrValue<string> | null,
+      execDataOrSelector?: null,
+      moduleData?: null,
+      feeToken?: null,
+      taskId?: PromiseOrValue<BytesLike> | null
+    ): TaskCreatedEventFilter;
+    TaskCreated(
+      taskCreator?: PromiseOrValue<string> | null,
+      execAddress?: PromiseOrValue<string> | null,
+      execDataOrSelector?: null,
+      moduleData?: null,
+      feeToken?: null,
+      taskId?: PromiseOrValue<BytesLike> | null
+    ): TaskCreatedEventFilter;
+  };
 
   estimateGas: {
     cancelTask(

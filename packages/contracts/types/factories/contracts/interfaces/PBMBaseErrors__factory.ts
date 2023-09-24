@@ -13,7 +13,7 @@ import { Contract, Signer, utils } from "ethers";
 const _abi = [
   {
     inputs: [],
-    name: "AutoWithdrawalUnsupported",
+    name: "TaskManagerNotFound",
     type: "error",
   },
 ] as const;

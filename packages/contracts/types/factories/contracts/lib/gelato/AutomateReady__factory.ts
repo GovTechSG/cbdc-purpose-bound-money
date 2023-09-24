@@ -6,7 +6,7 @@
 import type {
   AutomateReady,
   AutomateReadyInterface,
-} from "../../../../contracts/lib/gelato-automate/AutomateReady";
+} from "../../../../contracts/lib/gelato/AutomateReady";
 import type { Provider } from "@ethersproject/providers";
 import { Contract, Signer, utils } from "ethers";
 

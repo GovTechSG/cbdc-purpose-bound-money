@@ -3,9 +3,9 @@
 /* tslint:disable */
 
 /* eslint-disable */
-import type * as gelatoAutomate from "./gelato-automate";
+import type * as gelato from "./gelato";
 import type * as proxy from "./proxy";
 
-export type { gelatoAutomate };
+export type { gelato };
 
 export type { proxy };

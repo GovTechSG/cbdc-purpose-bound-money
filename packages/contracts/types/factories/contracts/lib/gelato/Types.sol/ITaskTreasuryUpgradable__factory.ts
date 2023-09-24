@@ -6,7 +6,7 @@
 import type {
   ITaskTreasuryUpgradable,
   ITaskTreasuryUpgradableInterface,
-} from "../../../../../contracts/lib/gelato-automate/Types.sol/ITaskTreasuryUpgradable";
+} from "../../../../../contracts/lib/gelato/Types.sol/ITaskTreasuryUpgradable";
 import type { Provider } from "@ethersproject/providers";
 import { Contract, Signer, utils } from "ethers";
 

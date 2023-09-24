@@ -26,6 +26,11 @@ const _abi = [
     name: "TaskExists",
     type: "error",
   },
+  {
+    inputs: [],
+    name: "UnauthorisedCaller",
+    type: "error",
+  },
 ] as const;
 
 export class PBMTaskManagerErrors__factory {

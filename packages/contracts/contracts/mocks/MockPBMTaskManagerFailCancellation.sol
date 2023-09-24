@@ -4,16 +4,10 @@ pragma solidity ^0.8.13;
 import "../interfaces/IPBMTaskManager.sol";
 import "../interfaces/PBMTaskManagerErrors.sol";
 
-contract MockPBMTaskManager is IPBMTaskManager, PBMTaskManagerErrors {
-    event TaskCreated();
-
-    event TaskCancelled();
-
+contract MockPBMTaskManagerFailCancellation is IPBMTaskManager, PBMTaskManagerErrors {
     constructor() {}
 
-    function createWithdrawalTask(address /*payee*/, uint256 /*depositId*/) external {
-        emit TaskCreated();
-    }
+    function createWithdrawalTask(address /*payee*/, uint256 /*depositId*/) external {}
 
     function execWithdrawal(
         address /*payee*/,
@@ -24,9 +18,8 @@ contract MockPBMTaskManager is IPBMTaskManager, PBMTaskManagerErrors {
         emit WithdrawalTaskExecution(0, success);
     }
 
-    function cancelWithdrawalTask(uint256 /*depositId*/) external returns (bool) {
-        emit TaskCancelled();
-        return true;
+    function cancelWithdrawalTask(uint256 /*depositId*/) external pure returns (bool) {
+        return false;
     }
 
     function getTaskId(uint256 /*depositId*/) public pure returns (bytes32) {

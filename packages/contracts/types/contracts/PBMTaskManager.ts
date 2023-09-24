@@ -163,40 +163,11 @@ export interface PBMTaskManagerInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "WithdrawalTaskCancelled(bytes32,uint256)": EventFragment;
-    "WithdrawalTaskCreated(bytes32,address,uint256)": EventFragment;
     "WithdrawalTaskExecution(bytes32,bool)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCancelled"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WithdrawalTaskExecution"): EventFragment;
 }
-
-export interface WithdrawalTaskCancelledEventObject {
-  taskId: string;
-  depositId: BigNumber;
-}
-export type WithdrawalTaskCancelledEvent = TypedEvent<
-  [string, BigNumber],
-  WithdrawalTaskCancelledEventObject
->;
-
-export type WithdrawalTaskCancelledEventFilter =
-  TypedEventFilter<WithdrawalTaskCancelledEvent>;
-
-export interface WithdrawalTaskCreatedEventObject {
-  taskId: string;
-  payee: string;
-  depositId: BigNumber;
-}
-export type WithdrawalTaskCreatedEvent = TypedEvent<
-  [string, string, BigNumber],
-  WithdrawalTaskCreatedEventObject
->;
-
-export type WithdrawalTaskCreatedEventFilter =
-  TypedEventFilter<WithdrawalTaskCreatedEvent>;
 
 export interface WithdrawalTaskExecutionEventObject {
   taskId: string;
@@ -364,7 +335,7 @@ export interface PBMTaskManager extends BaseContract {
     cancelWithdrawalTask(
       depositId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     createWithdrawalTask(
       payee: PromiseOrValue<string>,
@@ -412,26 +383,6 @@ export interface PBMTaskManager extends BaseContract {
   };
 
   filters: {
-    "WithdrawalTaskCancelled(bytes32,uint256)"(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCancelledEventFilter;
-    WithdrawalTaskCancelled(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCancelledEventFilter;
-
-    "WithdrawalTaskCreated(bytes32,address,uint256)"(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      payee?: PromiseOrValue<string> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCreatedEventFilter;
-    WithdrawalTaskCreated(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      payee?: PromiseOrValue<string> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCreatedEventFilter;
-
     "WithdrawalTaskExecution(bytes32,bool)"(
       taskId?: PromiseOrValue<BytesLike> | null,
       success?: PromiseOrValue<boolean> | null

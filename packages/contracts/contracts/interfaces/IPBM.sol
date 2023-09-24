@@ -16,6 +16,8 @@ interface IPBM {
 
     event EmergencyWithdrawal(address indexed caller, address indexed recipient, uint256 amount);
 
+    event TaskManagerCancelWithdrawalFailed(address indexed payee, uint256 indexed depositId);
+
     function asset() external view returns (address);
 
     function totalAsset() external view returns (uint256);

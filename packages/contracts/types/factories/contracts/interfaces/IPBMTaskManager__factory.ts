@@ -22,50 +22,6 @@ const _abi = [
       },
       {
         indexed: true,
-        internalType: "uint256",
-        name: "depositId",
-        type: "uint256",
-      },
-    ],
-    name: "WithdrawalTaskCancelled",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "taskId",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "payee",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "depositId",
-        type: "uint256",
-      },
-    ],
-    name: "WithdrawalTaskCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "bytes32",
-        name: "taskId",
-        type: "bytes32",
-      },
-      {
-        indexed: true,
         internalType: "bool",
         name: "success",
         type: "bool",
@@ -83,7 +39,13 @@ const _abi = [
       },
     ],
     name: "cancelWithdrawalTask",
-    outputs: [],
+    outputs: [
+      {
+        internalType: "bool",
+        name: "success",
+        type: "bool",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "function",
   },

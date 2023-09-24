@@ -121,6 +121,25 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "payee",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "depositId",
+        type: "uint256",
+      },
+    ],
+    name: "TaskManagerCancelWithdrawalFailed",
+    type: "event",
+  },
+  {
     inputs: [],
     name: "asset",
     outputs: [

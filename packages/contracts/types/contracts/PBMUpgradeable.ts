@@ -365,6 +365,7 @@ export interface PBMUpgradeableInterface extends utils.Interface {
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
     "RoleGranted(bytes32,address,address)": EventFragment;
     "RoleRevoked(bytes32,address,address)": EventFragment;
+    "TaskManagerCancelWithdrawalFailed(address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "Unpaused(address)": EventFragment;
     "Upgraded(address)": EventFragment;
@@ -382,6 +383,9 @@ export interface PBMUpgradeableInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(
+    nameOrSignatureOrTopic: "TaskManagerCancelWithdrawalFailed"
+  ): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Upgraded"): EventFragment;
@@ -521,6 +525,18 @@ export type RoleRevokedEvent = TypedEvent<
 >;
 
 export type RoleRevokedEventFilter = TypedEventFilter<RoleRevokedEvent>;
+
+export interface TaskManagerCancelWithdrawalFailedEventObject {
+  payee: string;
+  depositId: BigNumber;
+}
+export type TaskManagerCancelWithdrawalFailedEvent = TypedEvent<
+  [string, BigNumber],
+  TaskManagerCancelWithdrawalFailedEventObject
+>;
+
+export type TaskManagerCancelWithdrawalFailedEventFilter =
+  TypedEventFilter<TaskManagerCancelWithdrawalFailedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -1216,6 +1232,15 @@ export interface PBMUpgradeable extends BaseContract {
       account?: PromiseOrValue<string> | null,
       sender?: PromiseOrValue<string> | null
     ): RoleRevokedEventFilter;
+
+    "TaskManagerCancelWithdrawalFailed(address,uint256)"(
+      payee?: PromiseOrValue<string> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): TaskManagerCancelWithdrawalFailedEventFilter;
+    TaskManagerCancelWithdrawalFailed(
+      payee?: PromiseOrValue<string> | null,
+      depositId?: PromiseOrValue<BigNumberish> | null
+    ): TaskManagerCancelWithdrawalFailedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,

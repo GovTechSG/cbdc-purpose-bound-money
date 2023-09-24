@@ -193,6 +193,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockPBMTaskManager__factory>;
     getContractFactory(
+      name: "MockPBMTaskManagerFailCancellation",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockPBMTaskManagerFailCancellation__factory>;
+    getContractFactory(
+      name: "MockPBMTaskManagerRevert",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MockPBMTaskManagerRevert__factory>;
+    getContractFactory(
       name: "PBM",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBM__factory>;
@@ -442,6 +450,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.MockPBMTaskManager>;
+    getContractAt(
+      name: "MockPBMTaskManagerFailCancellation",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MockPBMTaskManagerFailCancellation>;
+    getContractAt(
+      name: "MockPBMTaskManagerRevert",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MockPBMTaskManagerRevert>;
     getContractAt(
       name: "PBM",
       address: string,

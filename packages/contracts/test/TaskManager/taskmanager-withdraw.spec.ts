@@ -71,7 +71,7 @@ describe("PBMTaskManager", () => {
       await expect(tx).to.be.revertedWithCustomError(pbmTaskManagerContract, "TaskCallerNotPBM");
     });
 
-    it("should allow PBM contract to call create task", async () => {
+    it("should allow PBM contract caller to call create task", async () => {
       await impersonateAccount(pbmContract.address);
       await setBalance(pbmContract.address, parseAmount(10));
       const pbmContractSigner = await ethers.getSigner(pbmContract.address);
@@ -94,7 +94,7 @@ describe("PBMTaskManager", () => {
     it("should not allow a non-PBM caller to cancel task", async () => {
       const tx = pbmTaskManagerContract.connect(admin).cancelWithdrawalTask(0);
 
-      await expect(tx).to.be.revertedWithCustomError(pbmTaskManagerContract, "TaskCallerNotPBM");
+      await expect(tx).to.be.revertedWithCustomError(pbmTaskManagerContract, "UnauthorisedCaller");
     });
 
     it("should allow PBM contract to cancel task", async () => {
@@ -102,9 +102,15 @@ describe("PBMTaskManager", () => {
       await setBalance(pbmContract.address, parseAmount(10));
       const pbmContractSigner = await ethers.getSigner(pbmContract.address);
 
-      const tx = pbmTaskManagerContract.connect(pbmContractSigner).cancelWithdrawalTask(0);
+      const tx = await pbmTaskManagerContract.connect(pbmContractSigner).cancelWithdrawalTask(0);
 
-      await expect(tx).to.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+      await expect(tx).to.emit(automateContract, "TaskCancelled");
+    });
+
+    it("should allow funds owner to cancel task", async () => {
+      const tx = await pbmTaskManagerContract.connect(treasurer).cancelWithdrawalTask(0);
+
+      await expect(tx).to.emit(automateContract, "TaskCancelled");
     });
   });
 
@@ -119,7 +125,7 @@ describe("PBMTaskManager", () => {
       it("should revert when PBM pay is called with autoWithdrawal as true", async () => {
         const tx = pbmContract.connect(payer).pay(payee.address, payingAmount, lockingPeriod, true);
 
-        await expect(tx).to.be.revertedWithCustomError(pbmContract, "AutoWithdrawalUnsupported");
+        await expect(tx).to.be.revertedWithCustomError(pbmContract, "TaskManagerNotFound");
       });
 
       it("should not create task when PBM pay is called with autoWithdrawal as false", async () => {
@@ -259,10 +265,8 @@ describe("PBMTaskManager", () => {
         expect(isTaskIdCreated).to.equal(true);
       });
 
-      it("should emit WithdrawalTaskCreated event", async () => {
-        await expect(pbmPayTx)
-          .to.emit(pbmTaskManagerContract, "WithdrawalTaskCreated")
-          .withArgs(taskId, payee.address, 0);
+      it("should emit TaskCreated event", async () => {
+        await expect(pbmPayTx).to.emit(automateContract, "TaskCreated");
       });
     });
 
@@ -709,7 +713,47 @@ describe("PBMTaskManager", () => {
 
             const tx = pbmTaskManagerContract.connect(pbmContractSigner).cancelWithdrawalTask(0);
 
-            await expect(tx).to.not.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+            await expect(tx).to.not.emit(automateContract, "TaskCancelled");
+          });
+
+          describe("When task is cancelled before refund or chargeback", () => {
+            beforeEach(async () => {
+              await impersonateAccount(pbmContract.address);
+              await setBalance(pbmContract.address, parseAmount(10));
+              const pbmContractSigner = await ethers.getSigner(pbmContract.address);
+
+              await pbmTaskManagerContract.connect(pbmContractSigner).cancelWithdrawalTask(0);
+              const finalTaskIdsByTaskManager = await automateContract.getTaskIdsByUser(
+                pbmTaskManagerContract.address,
+              );
+              expect(finalTaskIdsByTaskManager.length).to.equal(0);
+            });
+
+            it("should not revert refund if task has already been cancelled", async () => {
+              const tx = await pbmContract.connect(payee).refund(0);
+
+              await expect(tx).to.not.be.reverted;
+            });
+
+            it("should not revert chargeback if task has already been cancelled", async () => {
+              const tx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
+
+              await expect(tx).to.not.be.reverted;
+            });
+
+            it("should emit withdrawal failed event when refund ", async () => {
+              const tx = pbmContract.connect(payee).refund(0);
+
+              await expect(tx).to.not.emit(automateContract, "TaskCancelled");
+              await expect(tx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawalFailed");
+            });
+
+            it("should emit withdrawal failed event when chargeback ", async () => {
+              const tx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
+
+              await expect(tx).to.not.emit(automateContract, "TaskCancelled");
+              await expect(tx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawalFailed");
+            });
           });
         });
 
@@ -732,7 +776,7 @@ describe("PBMTaskManager", () => {
               pbmTaskManagerContract.address,
             );
 
-            expect(tx).to.not.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+            expect(tx).to.not.emit(automateContract, "TaskCancelled");
             expect(taskIdsByTaskManager.length).to.equal(1);
           });
 
@@ -743,7 +787,7 @@ describe("PBMTaskManager", () => {
               pbmTaskManagerContract.address,
             );
 
-            expect(tx).to.not.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+            expect(tx).to.not.emit(automateContract, "TaskCancelled");
             expect(taskIdsByTaskManager.length).to.equal(1);
           });
         });
@@ -763,13 +807,13 @@ describe("PBMTaskManager", () => {
           it("should not be able to find a task to cancel when payment is refunded", async () => {
             const tx = pbmContract.connect(payee).refund(0);
 
-            await expect(tx).to.not.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+            await expect(tx).to.not.emit(automateContract, "TaskCancelled");
           });
 
           it("should not be able to find a task to cancel when payment is charged back", async () => {
             const tx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
 
-            await expect(tx).to.not.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+            await expect(tx).to.not.emit(automateContract, "TaskCancelled");
           });
         });
 
@@ -787,13 +831,13 @@ describe("PBMTaskManager", () => {
           it("should not call task manager to cancel task when payment is refunded", async () => {
             const tx = pbmContract.connect(payee).refund(0);
 
-            await expect(tx).to.not.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+            await expect(tx).to.not.emit(automateContract, "TaskCancelled");
           });
 
           it("should not call task manager to cancel task when payment is charged back", async () => {
             const tx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
 
-            await expect(tx).to.not.emit(pbmTaskManagerContract, "WithdrawalTaskCancelled");
+            await expect(tx).to.not.emit(automateContract, "TaskCancelled");
           });
         });
       });

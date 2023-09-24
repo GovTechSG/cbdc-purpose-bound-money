@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export { MockPBMTaskManager__factory } from "./MockPBMTaskManager__factory";
+export { MockPBMTaskManagerFailCancellation__factory } from "./MockPBMTaskManagerFailCancellation__factory";
+export { MockPBMTaskManagerRevert__factory } from "./MockPBMTaskManagerRevert__factory";

@@ -2,3 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { MockPBMTaskManager } from "./MockPBMTaskManager";
+export type { MockPBMTaskManagerFailCancellation } from "./MockPBMTaskManagerFailCancellation";
+export type { MockPBMTaskManagerRevert } from "./MockPBMTaskManagerRevert";

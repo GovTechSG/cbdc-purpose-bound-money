@@ -77,40 +77,25 @@ export interface MockPBMTaskManagerInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "getTaskId", data: BytesLike): Result;
 
   events: {
-    "WithdrawalTaskCancelled(bytes32,uint256)": EventFragment;
-    "WithdrawalTaskCreated(bytes32,address,uint256)": EventFragment;
+    "TaskCancelled()": EventFragment;
+    "TaskCreated()": EventFragment;
     "WithdrawalTaskExecution(bytes32,bool)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCancelled"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "WithdrawalTaskCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskCancelled"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TaskCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WithdrawalTaskExecution"): EventFragment;
 }
 
-export interface WithdrawalTaskCancelledEventObject {
-  taskId: string;
-  depositId: BigNumber;
-}
-export type WithdrawalTaskCancelledEvent = TypedEvent<
-  [string, BigNumber],
-  WithdrawalTaskCancelledEventObject
->;
+export interface TaskCancelledEventObject {}
+export type TaskCancelledEvent = TypedEvent<[], TaskCancelledEventObject>;
 
-export type WithdrawalTaskCancelledEventFilter =
-  TypedEventFilter<WithdrawalTaskCancelledEvent>;
+export type TaskCancelledEventFilter = TypedEventFilter<TaskCancelledEvent>;
 
-export interface WithdrawalTaskCreatedEventObject {
-  taskId: string;
-  payee: string;
-  depositId: BigNumber;
-}
-export type WithdrawalTaskCreatedEvent = TypedEvent<
-  [string, string, BigNumber],
-  WithdrawalTaskCreatedEventObject
->;
+export interface TaskCreatedEventObject {}
+export type TaskCreatedEvent = TypedEvent<[], TaskCreatedEventObject>;
 
-export type WithdrawalTaskCreatedEventFilter =
-  TypedEventFilter<WithdrawalTaskCreatedEvent>;
+export type TaskCreatedEventFilter = TypedEventFilter<TaskCreatedEvent>;
 
 export interface WithdrawalTaskExecutionEventObject {
   taskId: string;
@@ -200,7 +185,7 @@ export interface MockPBMTaskManager extends BaseContract {
     cancelWithdrawalTask(
       arg0: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     createWithdrawalTask(
       arg0: PromiseOrValue<string>,
@@ -221,25 +206,11 @@ export interface MockPBMTaskManager extends BaseContract {
   };
 
   filters: {
-    "WithdrawalTaskCancelled(bytes32,uint256)"(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCancelledEventFilter;
-    WithdrawalTaskCancelled(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCancelledEventFilter;
+    "TaskCancelled()"(): TaskCancelledEventFilter;
+    TaskCancelled(): TaskCancelledEventFilter;
 
-    "WithdrawalTaskCreated(bytes32,address,uint256)"(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      payee?: PromiseOrValue<string> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCreatedEventFilter;
-    WithdrawalTaskCreated(
-      taskId?: PromiseOrValue<BytesLike> | null,
-      payee?: PromiseOrValue<string> | null,
-      depositId?: PromiseOrValue<BigNumberish> | null
-    ): WithdrawalTaskCreatedEventFilter;
+    "TaskCreated()"(): TaskCreatedEventFilter;
+    TaskCreated(): TaskCreatedEventFilter;
 
     "WithdrawalTaskExecution(bytes32,bool)"(
       taskId?: PromiseOrValue<BytesLike> | null,

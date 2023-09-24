@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "./interfaces/IPBMTaskManager.sol";
 import "./interfaces/PBMTaskManagerErrors.sol";
 import "./interfaces/IPBM.sol";
-import "./lib/gelato-automate/AutomateTaskCreator.sol";
+import "./lib/gelato/AutomateTaskCreator.sol";
 import "./utils/PBMVault.sol";
 
 contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerErrors {
@@ -23,14 +23,21 @@ contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerE
         PBM = IPBM(_pbm);
     }
 
-    modifier onlyPBM() {
+    modifier onlyPbm() {
         if (msg.sender != address(PBM)) {
             revert TaskCallerNotPBM();
         }
         _;
     }
 
-    function createWithdrawalTask(address payee, uint256 depositId) external onlyPBM {
+    modifier onlyPbmOrFundOwner() {
+        if (msg.sender != address(PBM) && msg.sender != fundsOwner) {
+            revert UnauthorisedCaller();
+        }
+        _;
+    }
+
+    function createWithdrawalTask(address payee, uint256 depositId) external onlyPbm {
         uint256 startTime = _getDepositStartTime(depositId);
 
         if (taskIds[_getWithdrawalTaskId(startTime, depositId)]) {
@@ -42,18 +49,17 @@ contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerE
         bytes memory execData = abi.encodeCall(this.execWithdrawal, (payee, depositId));
         bytes32 taskId = _createTask(address(this), execData, moduleData, ETH);
         taskIds[taskId] = true;
-
-        emit WithdrawalTaskCreated(taskId, payee, depositId);
     }
 
-    function cancelWithdrawalTask(uint256 depositId) external onlyPBM {
+    function cancelWithdrawalTask(uint256 depositId) external onlyPbmOrFundOwner returns (bool) {
         bytes32 taskId = getTaskId(depositId);
 
         if (taskIds[taskId]) {
             _cleanCancelTask(taskId);
-
-            emit WithdrawalTaskCancelled(taskId, depositId);
+            return true;
         }
+
+        return false;
     }
 
     function execWithdrawal(

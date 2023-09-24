@@ -6,7 +6,7 @@
 import type {
   AutomateTaskCreator,
   AutomateTaskCreatorInterface,
-} from "../../../../contracts/lib/gelato-automate/AutomateTaskCreator";
+} from "../../../../contracts/lib/gelato/AutomateTaskCreator";
 import type { Provider } from "@ethersproject/providers";
 import { Contract, Signer, utils } from "ethers";
 

@@ -7,4 +7,6 @@ interface PBMTaskManagerErrors {
     error TaskCallerNotPBM();
 
     error CallerNotFundsOwner();
+
+    error UnauthorisedCaller();
 }

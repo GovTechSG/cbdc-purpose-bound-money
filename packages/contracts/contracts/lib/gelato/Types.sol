@@ -90,6 +90,17 @@ interface IAutomate {
         bool useTaskTreasuryFunds,
         bool revertOnFailure
     ) external;
+
+    event TaskCreated(
+        address indexed taskCreator,
+        address indexed execAddress,
+        bytes execDataOrSelector,
+        ModuleData moduleData,
+        address feeToken,
+        bytes32 indexed taskId
+    );
+
+    event TaskCancelled(bytes32 taskId, address taskCreator);
 }
 
 interface ITaskTreasuryUpgradable {

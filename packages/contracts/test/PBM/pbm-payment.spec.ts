@@ -1,10 +1,17 @@
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { assert, expect } from "chai";
-import { BigNumber, ContractTransaction, ethers } from "ethers";
+import { BigNumber, ContractTransaction } from "ethers";
+import { ethers } from "hardhat";
 
 import { parseAmount } from "../../common/utils";
-import { DSGD, PBM, PBMVault } from "../../types";
+import {
+  DSGD,
+  MockPBMTaskManagerRevert,
+  MockPBMTaskManagerRevert__factory,
+  PBM,
+  PBMVault,
+} from "../../types";
 import { deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Payments", () => {
@@ -15,6 +22,7 @@ describe("PBM - Payments", () => {
   let dsgdContract: DSGD;
 
   let payer: SignerWithAddress;
+  let payee: SignerWithAddress;
 
   beforeEach(async () => {
     fixtures = await loadFixture(deployPBMFixture);
@@ -23,6 +31,7 @@ describe("PBM - Payments", () => {
     dsgdContract = fixtures.dsgdContract;
 
     payer = fixtures.signers.payer;
+    payee = fixtures.signers.payee; // Whitelisted payee
   });
 
   describe("Payments", () => {
@@ -37,13 +46,13 @@ describe("PBM - Payments", () => {
 
     describe("When PBM is setup without task manager", () => {
       describe("When autoWithdrawal is true", () => {
-        it("should revert AutoWithdrawalUnsupported error", async () => {
+        it("should revert TaskManagerNotFound error", async () => {
           const { payee } = fixtures.signers;
           const tx = pbmContract
             .connect(payer)
             .pay(payee.address, payingAmount, lockingPeriod, true);
 
-          expect(tx).to.be.revertedWithCustomError(pbmContract, "AutoWithdrawalUnsupported");
+          expect(tx).to.be.revertedWithCustomError(pbmContract, "TaskManagerNotFound");
         });
       });
     });
@@ -95,12 +104,7 @@ describe("PBM - Payments", () => {
               });
 
               describe("When payee is whitelisted", () => {
-                let payee: SignerWithAddress;
-
-                beforeEach(async () => {
-                  // Whitelisted payee from fixtures
-                  payee = fixtures.signers.payee;
-                });
+                // Whitelisted payee from fixtures
 
                 describe("When payer does not have underlying asset at all", () => {
                   let payerWithNoAsset: SignerWithAddress;
@@ -174,13 +178,6 @@ describe("PBM - Payments", () => {
             });
 
             describe("When caller is not a payer", () => {
-              let payee: SignerWithAddress;
-
-              beforeEach(async () => {
-                // Whitelisted payee from fixtures
-                payee = fixtures.signers.payee;
-              });
-
               it("should revert if caller is not a payer", async () => {
                 const nonPayer = fixtures.signers.others[5];
 
@@ -231,12 +228,8 @@ describe("PBM - Payments", () => {
             describe("When making payments", () => {
               let payTx: ContractTransaction;
               let nextBlockTimeStamp: number;
-              let payee: SignerWithAddress;
 
               beforeEach(async () => {
-                // Whitelisted payee
-                payee = fixtures.signers.payee;
-
                 // Assert initial payee deposits state
                 const initialPayeeDeposits = await pbmVaultContract.getAllDepositIds(payee.address);
                 assert.equal(initialPayeeDeposits.length, 0);
@@ -644,8 +637,6 @@ describe("PBM - Payments", () => {
 
             describe("When payment parameters do not pass validation check", () => {
               it("should revert if amount is zero", async () => {
-                const payee = fixtures.signers.payee;
-
                 const tx = pbmContract
                   .connect(payer)
                   .pay(payee.address, 0, lockingPeriod, autoWithdrawal);
@@ -671,6 +662,117 @@ describe("PBM - Payments", () => {
                 );
               });
             });
+          });
+        });
+      });
+    });
+
+    describe("When creating a withdrawal automation on task manager", () => {
+      describe("When task manger does not revert on PBM", () => {
+        beforeEach(async () => {
+          await pbmContract
+            .connect(fixtures.signers.admin)
+            .setTaskManager(fixtures.mockPbmTaskManagerContract.address);
+        });
+
+        describe("When autoWithdrawal is true", () => {
+          let payTx: ContractTransaction;
+
+          beforeEach(async () => {
+            payTx = await pbmContract
+              .connect(payer)
+              .pay(payee.address, payingAmount, lockingPeriod, true);
+          });
+
+          it("should pay successfully without reverting", async () => {
+            expect(payTx).to.not.be.reverted;
+          });
+
+          it("should emit TaskManagerCreateWithdrawal event", async () => {
+            expect(payTx)
+              .to.emit(pbmContract, "TaskManagerCreateWithdrawal")
+              .withArgs(payee.address, 0);
+          });
+        });
+
+        describe("When autoWithdrawal is false", () => {
+          let payTx: ContractTransaction;
+
+          beforeEach(async () => {
+            payTx = await pbmContract
+              .connect(payer)
+              .pay(payee.address, payingAmount, lockingPeriod, false);
+          });
+
+          it("should pay successfully without reverting", async () => {
+            await expect(payTx).to.not.be.reverted;
+          });
+
+          it("should not emit TaskManagerCreateWithdrawal event", async () => {
+            await expect(payTx).to.not.emit(pbmContract, "TaskManagerCreateWithdrawal");
+          });
+        });
+      });
+
+      describe("When task manager reverts on PBM", () => {
+        let mockPbmTaskManagerRevertContract: MockPBMTaskManagerRevert;
+
+        beforeEach(async () => {
+          const { deployer } = fixtures.signers;
+
+          const mockPbmTaskManagerRevertFactory = (await ethers.getContractFactory(
+            "MockPBMTaskManagerRevert",
+          )) as MockPBMTaskManagerRevert__factory;
+          mockPbmTaskManagerRevertContract = await mockPbmTaskManagerRevertFactory
+            .connect(deployer)
+            .deploy();
+          await mockPbmTaskManagerRevertContract.deployed();
+
+          // Assert that mock PBMTaskManager will revert
+          const tx = mockPbmTaskManagerRevertContract.createWithdrawalTask(
+            ethers.constants.AddressZero,
+            0,
+          );
+          await expect(tx).to.be.reverted;
+
+          // Set mock PBMTaskManager to PBM
+          await pbmContract
+            .connect(fixtures.signers.admin)
+            .setTaskManager(mockPbmTaskManagerRevertContract.address);
+        });
+
+        describe("When autoWithdrawal is true", () => {
+          let payTx: Promise<ContractTransaction>;
+
+          beforeEach(async () => {
+            payTx = pbmContract
+              .connect(payer)
+              .pay(payee.address, payingAmount, lockingPeriod, true);
+          });
+
+          it("should revert when pay", async () => {
+            await expect(payTx).to.be.revertedWithCustomError(
+              mockPbmTaskManagerRevertContract,
+              "FakeError",
+            );
+          });
+        });
+
+        describe("When autoWithdrawal is false", () => {
+          let payTx: ContractTransaction;
+
+          beforeEach(async () => {
+            payTx = await pbmContract
+              .connect(payer)
+              .pay(payee.address, payingAmount, lockingPeriod, false);
+          });
+
+          it("should pay successfully without reverting", async () => {
+            expect(payTx).to.not.be.reverted;
+          });
+
+          it("should not emit TaskManagerCreateWithdrawal event", async () => {
+            expect(payTx).to.not.emit(pbmContract, "TaskManagerCreateWithdrawal");
           });
         });
       });

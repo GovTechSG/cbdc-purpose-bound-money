@@ -1,10 +1,19 @@
 import { loadFixture, time } from "@nomicfoundation/hardhat-network-helpers";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { assert, expect } from "chai";
-import { BigNumber, ContractTransaction, ethers } from "ethers";
+import { BigNumber, ContractTransaction } from "ethers";
+import { ethers } from "hardhat";
 
 import { parseAmount } from "../../common/utils";
-import { DSGD, PBM, PBMVault } from "../../types";
+import {
+  DSGD,
+  MockPBMTaskManagerFailCancellation,
+  MockPBMTaskManagerFailCancellation__factory,
+  MockPBMTaskManagerRevert,
+  MockPBMTaskManagerRevert__factory,
+  PBM,
+  PBMVault,
+} from "../../types";
 import { deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Chargeback", () => {
@@ -34,16 +43,18 @@ describe("PBM - Chargeback", () => {
     const amount = parseAmount(500);
     const lockPeriod = 3600 * 24 * 14; // 14 days
 
+    beforeEach(async () => {
+      admin = fixtures.signers.admin;
+      payer = fixtures.signers.payer;
+      treasurer = fixtures.signers.treasurer;
+      payee = fixtures.signers.payee;
+    });
+
     const testMatrixAutoWithdrawal = [true, false];
 
     testMatrixAutoWithdrawal.forEach((autoWithdrawal) => {
       describe(`When autoWithdrawal is ${autoWithdrawal}`, () => {
         beforeEach(async () => {
-          admin = fixtures.signers.admin;
-          payer = fixtures.signers.payer;
-          treasurer = fixtures.signers.treasurer;
-          payee = fixtures.signers.payee;
-
           // Make a payment
           await pbmContract.connect(payer).pay(payee.address, amount, lockPeriod, autoWithdrawal);
 
@@ -264,6 +275,144 @@ describe("PBM - Chargeback", () => {
               .to.be.revertedWithCustomError(pbmContract, "UnauthorisedCaller")
               .withArgs(admin.address, fixtures.roles.treasurerRole);
           });
+        });
+      });
+    });
+
+    describe("When cancelling withdrawal automation on task manager", () => {
+      describe("When task manager does not revert on PBM", () => {
+        describe("When task manager cancelWithdrawTask returns true", () => {
+          let chargebackTx: ContractTransaction;
+
+          beforeEach(async () => {
+            await pbmContract
+              .connect(admin)
+              .setTaskManager(fixtures.mockPbmTaskManagerContract.address);
+
+            await pbmContract.connect(payer).pay(payee.address, amount, lockPeriod, true);
+            chargebackTx = await pbmContract.connect(treasurer).chargeback(payee.address, 0);
+          });
+
+          it("should chargeback successfully without reverting", async () => {
+            expect(chargebackTx).to.not.be.reverted;
+          });
+
+          it("should emit TaskManagerCancelWithdrawal event", async () => {
+            expect(chargebackTx)
+              .to.emit(pbmContract, "TaskManagerCancelWithdrawal")
+              .withArgs(payee.address, 0);
+          });
+        });
+
+        describe("When task manager cancelWithdrawTask returns false", () => {
+          let chargebackTx: Promise<ContractTransaction>;
+          let mockPbmTaskManagerFailCancellationContract: MockPBMTaskManagerFailCancellation;
+
+          beforeEach(async () => {
+            const { deployer } = fixtures.signers;
+
+            // Set a non-reverting mock PBMTaskManager to PBM first to order to proceed with payment
+            await pbmContract
+              .connect(admin)
+              .setTaskManager(fixtures.mockPbmTaskManagerContract.address);
+            await pbmContract.connect(payer).pay(payee.address, amount, lockPeriod, true);
+
+            const mockPbmTaskManagerFailCancellationFactory = (await ethers.getContractFactory(
+              "MockPBMTaskManagerFailCancellation",
+            )) as MockPBMTaskManagerFailCancellation__factory;
+            mockPbmTaskManagerFailCancellationContract =
+              await mockPbmTaskManagerFailCancellationFactory.connect(deployer).deploy();
+            await mockPbmTaskManagerFailCancellationContract.deployed();
+
+            // Now, swap the task manager on PBM to one that will revert
+            await pbmContract
+              .connect(admin)
+              .setTaskManager(mockPbmTaskManagerFailCancellationContract.address);
+
+            chargebackTx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
+          });
+
+          it("should chargeback successfully without reverting", async () => {
+            await expect(chargebackTx).to.not.be.reverted;
+          });
+
+          it("should not emit TaskManagerCancelWithdrawal event", async () => {
+            await expect(chargebackTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
+          });
+
+          it("should not emit TaskManagerCancelWithdrawalFailed event", async () => {
+            await expect(chargebackTx).to.not.emit(
+              pbmContract,
+              "TaskManagerCancelWithdrawalFailed",
+            );
+          });
+        });
+      });
+
+      describe("When task manager reverts on PBM", () => {
+        let mockPbmTaskManagerRevertContract: MockPBMTaskManagerRevert;
+        let chargebackTx: ContractTransaction;
+
+        beforeEach(async () => {
+          const { deployer } = fixtures.signers;
+
+          // Set a non-reverting mock PBMTaskManager to PBM first to order to proceed with payment
+          await pbmContract
+            .connect(fixtures.signers.admin)
+            .setTaskManager(fixtures.mockPbmTaskManagerContract.address);
+          await pbmContract.connect(payer).pay(payee.address, amount, lockPeriod, true);
+
+          const mockPbmTaskManagerRevertFactory = (await ethers.getContractFactory(
+            "MockPBMTaskManagerRevert",
+          )) as MockPBMTaskManagerRevert__factory;
+          mockPbmTaskManagerRevertContract = await mockPbmTaskManagerRevertFactory
+            .connect(deployer)
+            .deploy();
+          await mockPbmTaskManagerRevertContract.deployed();
+
+          // Assert that mock PBMTaskManager will revert
+          const tx = mockPbmTaskManagerRevertContract.createWithdrawalTask(
+            ethers.constants.AddressZero,
+            0,
+          );
+          await expect(tx).to.be.reverted;
+
+          // Now, swap the task manager on PBM to one that will revert
+          await pbmContract
+            .connect(fixtures.signers.admin)
+            .setTaskManager(mockPbmTaskManagerRevertContract.address);
+
+          chargebackTx = await pbmContract.connect(treasurer).chargeback(payee.address, 0);
+        });
+
+        it("should chargeback successfully without reverting", async () => {
+          expect(chargebackTx).to.not.be.reverted;
+        });
+
+        it("should not emit TaskManagerCancelWithdrawal event", async () => {
+          expect(chargebackTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
+        });
+      });
+
+      describe("When there is no task manager attached to PBM", () => {
+        let chargebackTx: ContractTransaction;
+
+        beforeEach(async () => {
+          // Set mock PBMTaskManager as zero on PBM
+          await pbmContract
+            .connect(fixtures.signers.admin)
+            .setTaskManager(ethers.constants.AddressZero);
+
+          await pbmContract.connect(payer).pay(payee.address, amount, lockPeriod, false);
+          chargebackTx = await pbmContract.connect(treasurer).chargeback(payee.address, 0);
+        });
+
+        it("should chargeback successfully without reverting", async () => {
+          expect(chargebackTx).to.not.be.reverted;
+        });
+
+        it("should not emit TaskManagerCancelWithdrawal event", async () => {
+          expect(chargebackTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
         });
       });
     });

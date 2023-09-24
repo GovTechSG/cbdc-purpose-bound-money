@@ -6,11 +6,85 @@
 import type {
   IAutomate,
   IAutomateInterface,
-} from "../../../../../contracts/lib/gelato-automate/Types.sol/IAutomate";
+} from "../../../../../contracts/lib/gelato/Types.sol/IAutomate";
 import type { Provider } from "@ethersproject/providers";
 import { Contract, Signer, utils } from "ethers";
 
 const _abi = [
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "taskCreator",
+        type: "address",
+      },
+    ],
+    name: "TaskCancelled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "taskCreator",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "execAddress",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "bytes",
+        name: "execDataOrSelector",
+        type: "bytes",
+      },
+      {
+        components: [
+          {
+            internalType: "enum Module[]",
+            name: "modules",
+            type: "uint8[]",
+          },
+          {
+            internalType: "bytes[]",
+            name: "args",
+            type: "bytes[]",
+          },
+        ],
+        indexed: false,
+        internalType: "struct ModuleData",
+        name: "moduleData",
+        type: "tuple",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "feeToken",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+    ],
+    name: "TaskCreated",
+    type: "event",
+  },
   {
     inputs: [
       {
