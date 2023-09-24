@@ -1,5 +1,5 @@
 import { ChainId } from '@app/common/enums'
-import { addressBookLocal, addressBookMumbai, addressBookPolygon } from '@app/common/config/address-book';
+import { addressBookLocal, addressBookMumbai, addressBookPolygon } from '@app/common/config';
 
 export type AddressBookData = {
     [address: `0x${string}` | string]: string
