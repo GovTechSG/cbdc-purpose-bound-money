@@ -81,7 +81,7 @@ export const WithdrawalBalanceStatistic: React.FC<WithdrawalBalanceStatisticProp
             {isAutomationEnabled() && (
                 <Space>
                     <Tooltip
-                        title={`When Automatic Withdrawal is enabled, your pending ${pbmSymbol} will be withdrawn and transferred into your wallet as soon as they mature. You can still withdraw manually should the automation delay.`}
+                        title={`When Automatic Withdrawal is enabled, your pending ${pbmSymbol} will be withdrawn and transferred into your wallet as soon as they mature. You can still withdraw manually should the automation be disabled or delayed.`}
                         placement="bottom"
                     >
                         <InfoCircleTwoTone style={{ display: 'flex' }} />
