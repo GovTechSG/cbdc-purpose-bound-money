@@ -119,6 +119,13 @@ const config: HardhatUserConfig = {
           },
       ledgerAccounts: getLedgerAccounts(),
       chainId: chainIds.hardhat,
+      forking:
+        process.env.NETWORK_FORK === "1"
+          ? {
+              url: "https://polygon-mainnet.infura.io/v3/" + infuraApiKey,
+              blockNumber: 47887965,
+            }
+          : undefined,
     },
     arbitrum: getChainConfig("arbitrum-mainnet"),
     avalanche: getChainConfig("avalanche"),
