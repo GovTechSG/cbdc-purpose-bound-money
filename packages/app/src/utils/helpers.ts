@@ -2,7 +2,7 @@ import { Chain } from '@rainbow-me/rainbowkit'
 import ellipsize from 'ellipsize'
 import { BigNumber, ethers } from 'ethers'
 import { getAddress } from 'ethers/lib/utils'
-import { hardhat, polygon, polygonMumbai } from 'wagmi/chains'
+import { hardhat } from 'wagmi/chains'
 
 export const formatHex = (value: string, addPrefix: boolean = false) => {
     if (value === undefined || value.length <= 2) return value || ''
@@ -51,25 +51,22 @@ export const ellipsizeAddress = (address: string, length: number = 10) => {
     })}`
 }
 
-export const getDefaultChains = () => {
-    let defaultChains: Chain[] = []
-
-    const enableTestnets = process.env.NEXT_PUBLIC_ENABLE_TESTNETS === '1'
-    const enableHardhatNode = process.env.NEXT_PUBLIC_ENABLE_HARDHAT_NODE === '1'
-
-    if (enableHardhatNode) {
-        defaultChains.push(hardhat)
+export const getDefaultChains = (defaultChains: {
+    mainnets: Chain[]
+    testnets: Chain[]
+    local?: Chain[]
+}) => {
+    defaultChains.local = defaultChains.local ?? [hardhat]
+    const flags = {
+        mainnets: process.env.NEXT_PUBLIC_ENABLE_MAINNETS === '1',
+        testnets: process.env.NEXT_PUBLIC_ENABLE_TESTNETS === '1',
+        local: process.env.NEXT_PUBLIC_ENABLE_HARDHAT_NODE === '1',
     }
 
-    if (enableTestnets) {
-        defaultChains.push(polygonMumbai)
-    }
-
-    if (!enableHardhatNode && !enableTestnets) {
-        defaultChains.push(polygon)
-    }
-
-    return defaultChains
+    return Object.entries(flags)
+        .filter(([, enabled]) => enabled)
+        .flatMap(([chainType]) => defaultChains[chainType as keyof typeof defaultChains])
+        .filter(Boolean) as Chain[]
 }
 
 export const isAutomationEnabled = () => process.env.NEXT_PUBLIC_ENABLE_AUTOMATION === '1'

@@ -1,14 +1,20 @@
 'use client'
 
-import '@rainbow-me/rainbowkit/styles.css'
-import { configureChains, createClient, WagmiConfig } from 'wagmi'
-import { infuraProvider } from "@wagmi/core/providers/infura";
-import { publicProvider } from "@wagmi/core/providers/public";
-import { connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { injectedWallet, metaMaskWallet } from '@rainbow-me/rainbowkit/wallets'
 import { getDefaultChains } from '@app/utils/helpers'
+import { connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
+import '@rainbow-me/rainbowkit/styles.css'
+import { injectedWallet, metaMaskWallet } from '@rainbow-me/rainbowkit/wallets'
+import { infuraProvider } from '@wagmi/core/providers/infura'
+import { publicProvider } from '@wagmi/core/providers/public'
+import { configureChains, createClient, WagmiConfig } from 'wagmi'
+import { polygon, polygonMumbai } from 'wagmi/chains'
 
-const { chains, provider, webSocketProvider } = configureChains(getDefaultChains(), [
+const defaultChains = {
+    mainnets: [polygon],
+    testnets: [polygonMumbai],
+}
+
+const { chains, provider, webSocketProvider } = configureChains(getDefaultChains(defaultChains), [
     infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY!, priority: 1 }),
     publicProvider({ priority: 2 }),
 ])
