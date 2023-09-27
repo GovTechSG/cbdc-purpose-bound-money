@@ -3,6 +3,7 @@ import Footer from "@web/components/ui/footer";
 import Header from "@web/components/ui/header";
 import { Metadata } from "next";
 import { Inter, Architects_Daughter } from "next/font/google";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,6 +42,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
   // noinspection HtmlRequiredTitleElement
   return (
     <html lang="en">
@@ -52,6 +55,18 @@ export default function RootLayout({
           {children}
           <Footer />
         </div>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
+        />
+        <Script id="google-analytics">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+ 
+          gtag('config', '${gaMeasurementId}');
+        `}
+        </Script>
       </body>
     </html>
   );
