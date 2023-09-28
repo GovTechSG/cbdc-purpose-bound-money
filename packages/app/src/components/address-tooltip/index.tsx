@@ -1,10 +1,10 @@
-import React from 'react'
-import { useAccount, useNetwork } from 'wagmi'
+import { CopyOutlined } from '@ant-design/icons'
+import { BlockExplorer } from '@app/components/block-explorer'
 import { resolveAddressName } from '@app/utils/address-book'
 import { Tooltip, message } from 'antd'
 import copy from 'copy-to-clipboard'
-import { BlockExplorer } from '@app/components/block-explorer'
-import { CopyOutlined } from '@ant-design/icons'
+import React from 'react'
+import { useAccount, useNetwork } from 'wagmi'
 
 interface AddressTooltipProps extends React.PropsWithChildren {
     address: `0x${string}` | string
@@ -39,7 +39,7 @@ export const AddressTooltip: React.FC<AddressTooltipProps> = ({ address, childre
                 <div>
                     <div style={typeLabelStyle}>Address:</div>
                     {address}{' '}
-                    <span>
+                    <span title="Copy Address">
                         <CopyOutlined onClick={copyAddress} />
                     </span>
                 </div>
