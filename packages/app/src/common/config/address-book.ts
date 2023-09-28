@@ -2,7 +2,7 @@ import { type AddressBookData } from '@app/utils/address-book'
 
 export const addressBookPolygon: AddressBookData = {
     // Contracts
-    '0x56e932991885B65bc91f719d9dac241E64B6529E': 'Purpose-Bound Money Token',
+    '0x56e932991885B65bc91f719d9dac241E64B6529E': 'Purpose Bound Money Token',
     '0x8ca45A06836bA95648A576e7Ddc382A90B44990b': 'Digital SGD Token',
 
     // Payee Accounts
@@ -11,7 +11,7 @@ export const addressBookPolygon: AddressBookData = {
 
 export const addressBookMumbai: AddressBookData = {
     // Contracts
-    '0x09512049d43448a82499db5f3DB2e03BCBC2ee11': 'Purpose-Bound Money Token',
+    '0x09512049d43448a82499db5f3DB2e03BCBC2ee11': 'Purpose Bound Money Token',
     '0x36dd929b5d6250b283e0dababa3d11cb677c03d6': 'Digital SGD Token',
 
     // User Accounts
@@ -23,7 +23,7 @@ export const addressBookMumbai: AddressBookData = {
 
 export const addressBookLocal: AddressBookData = {
     // Contracts
-    '0x9B9eb636b3dCdB515A4746781D235B1501162275': 'Purpose-Bound Money Token',
+    '0x9B9eb636b3dCdB515A4746781D235B1501162275': 'Purpose Bound Money Token',
     '0x36d19301F73A0a2C5d8ac0BEe7EB8CF838F2A66A': 'Digital SGD Token',
 
     // User Accounts

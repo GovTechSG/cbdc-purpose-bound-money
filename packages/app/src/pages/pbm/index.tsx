@@ -1,20 +1,21 @@
-import { Col, Row } from 'antd'
+import { AddressBookLabelWithTooltip } from '@app/components/address-book-label-with-tooltip'
 import { useAppLayoutContext } from '@app/components/app-layout'
+import { PaymentsReceivedTable } from '@app/components/payments-received-table'
 import { PbmOverviewCard } from '@app/components/token-overview/pbm-overview-card'
-import { useAccount, useProvider, useSigner } from 'wagmi'
-import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
-import { useTokenBalance } from '@app/hooks/use-token-balance'
 import { PbmUnwrapCard } from '@app/components/token-overview/pbm-unwrap-card'
+import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
 import { useTransactionModal } from '@app/contexts/transaction-modal-context'
-import { BigNumber, ethers, Signer } from 'ethers'
+import { useFetchPaymentData } from '@app/hooks/use-fetch-payment-data'
+import { useTokenBalance } from '@app/hooks/use-token-balance'
 import { formatNumberDisplay } from '@app/utils/helpers'
+import { getPaymentDataSource } from '@app/utils/payments/helpers'
+import { PaymentDataSource } from '@app/utils/payments/types'
+import { withWalletConnected } from '@app/utils/with-wallet-connected'
+import { Col, Row } from 'antd'
+import { BigNumber, ethers, Signer } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import React, { ComponentProps, useCallback, useEffect, useState } from 'react'
-import { PaymentsReceivedTable } from '@app/components/payments-received-table'
-import { PaymentDataSource } from '@app/utils/payments/types'
-import { useFetchPaymentData } from '@app/hooks/use-fetch-payment-data'
-import { getPaymentDataSource } from '@app/utils/payments/helpers'
-import { withWalletConnected } from '@app/utils/with-wallet-connected'
+import { useAccount, useProvider, useSigner } from 'wagmi'
 
 function PbmPage() {
     useAppLayoutContext({ pageHeading: 'My PBM Dashboard' })
@@ -139,8 +140,8 @@ const formatUnwrapModalDetails = async ({
 
     return {
         Action: 'Unwrap PBM',
-        'PBM Address': pbmAddress,
-        'From/To Address': signerAddress,
+        'PBM Address': <AddressBookLabelWithTooltip address={pbmAddress} />,
+        'From/To Address': <AddressBookLabelWithTooltip address={signerAddress} />,
         Amount: `${formatNumberDisplay(
             formatUnits(amount, decimals),
             decimals
@@ -154,8 +155,8 @@ const formatRefundModalDetails = (
     const { fromAddress, toAddress, decimals, symbol } = paymentData
     return {
         Action: 'Recall Payment',
-        'Recall From': toAddress,
-        'Return To': fromAddress,
+        'Recall From': <AddressBookLabelWithTooltip address={toAddress} />,
+        'Return To': <AddressBookLabelWithTooltip address={fromAddress} />,
         Amount: `${formatNumberDisplay(
             formatUnits(paymentData.amount, decimals),
             decimals

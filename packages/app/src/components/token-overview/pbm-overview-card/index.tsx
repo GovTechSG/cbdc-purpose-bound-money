@@ -1,5 +1,4 @@
-import { AddressBookLabel } from '@app/components/address-book-label'
-import { AddressTooltip } from '@app/components/address-tooltip'
+import { AddressBookLabelWithTooltip } from '@app/components/address-book-label-with-tooltip'
 import { SkeletonLoader } from '@app/components/skeleton-loader'
 import { DashboardCard } from '@app/components/token-overview/dashboard-card'
 import { AllocationLegendIndicator } from '@app/components/token-overview/pbm-overview-card/allocation-legend-indicator'
@@ -31,15 +30,7 @@ const CardTitle: React.FC<{ connectedAddress: string | undefined }> = ({ connect
     const loading = !isMounted || !connectedAddress
     const displayAddress = (
         <SkeletonLoader.Input loading={loading}>
-            <AddressTooltip address={connectedAddress!}>
-                <AddressBookLabel
-                    address={connectedAddress!}
-                    truncateAddress={true}
-                    includeAddress={true}
-                    truncateAddressIfLabel={true}
-                    addressLength={10}
-                />
-            </AddressTooltip>
+            <AddressBookLabelWithTooltip address={connectedAddress!} />
         </SkeletonLoader.Input>
     )
 

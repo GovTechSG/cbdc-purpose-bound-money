@@ -1,4 +1,5 @@
 import { InfoCircleTwoTone } from '@ant-design/icons'
+import { AddressBookLabelWithTooltip } from '@app/components/address-book-label-with-tooltip'
 import { StatisticTitleWithLoader } from '@app/components/token-overview/pbm-overview-card/statistic-title-with-loader'
 import { useTransactionModal } from '@app/contexts/transaction-modal-context'
 import { formatNumberDisplay, isAutomationEnabled } from '@app/utils/helpers'
@@ -114,8 +115,8 @@ const formatModalDetails = async ({
 
     return {
         Action: 'Withdraw All PBM',
-        'PBM Address': pbmAddress,
-        'From/To Address': signerAddress,
+        'PBM Address': <AddressBookLabelWithTooltip address={pbmAddress} />,
+        'From/To Address': <AddressBookLabelWithTooltip address={signerAddress} />,
         'Target Deposit IDs': targetDepositIds.map((id) => id.toString()).join(', '),
         'Estimated Amount': `${formatNumberDisplay(
             formatUnits(withdrawalBalance, decimals),

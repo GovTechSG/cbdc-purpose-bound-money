@@ -1,5 +1,6 @@
 'use client'
 
+import { AddressBookLabelWithTooltip } from '@app/components/address-book-label-with-tooltip'
 import { useAppLayoutContext } from '@app/components/app-layout'
 import { PaymentForm } from '@app/components/payment-form'
 import { useAssetTokenContext } from '@app/contexts/asset-token-context'
@@ -84,8 +85,8 @@ const formatModalDetails = async ({
 
     return {
         Action: 'Wrap and Send Payment',
-        'From Address': from,
-        'To Address': formValues.payee,
+        'From Address': <AddressBookLabelWithTooltip address={from} />,
+        'To Address': <AddressBookLabelWithTooltip address={formValues.payee} />,
         Amount: `${baseCurrency.toUpperCase()}$ ${formatNumberDisplay(baseAmount, decimals)}`,
         'Holding Period': `${formValues.lockPeriod} Days`,
     }
@@ -105,8 +106,8 @@ const formatApprovalModalDetails = async ({
     const from = await signer.getAddress()
     return {
         Action: `Approve ${assetSymbol} for Spending by ${pbmSymbol}`,
-        'Approver Address': from,
-        'Spender Address': spender,
+        'Approver Address': <AddressBookLabelWithTooltip address={from} />,
+        'Spender Address': <AddressBookLabelWithTooltip address={spender} />,
     }
 }
 

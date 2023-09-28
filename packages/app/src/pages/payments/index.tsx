@@ -1,19 +1,20 @@
 'use client'
 
-import React, { ElementRef, useCallback, useEffect, useRef, useState } from 'react'
+import { AddressBookLabelWithTooltip } from '@app/components/address-book-label-with-tooltip'
 import { useAppLayoutContext } from '@app/components/app-layout'
-import { Button, Space } from 'antd'
-import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
-import { ethers, Signer } from 'ethers'
-import { useProvider, useSigner } from 'wagmi'
-import { useFetchPaymentData } from '@app/hooks/use-fetch-payment-data'
-import { PaymentDataSource } from '@app/utils/payments/types'
-import { getPaymentDataSource } from '@app/utils/payments/helpers'
-import { useTransactionModal } from '@app/contexts/transaction-modal-context'
-import { formatUnits } from 'ethers/lib/utils'
-import { formatNumberDisplay } from '@app/utils/helpers'
-import { withWalletConnected } from '@app/utils/with-wallet-connected'
 import { PaymentsListingTable } from '@app/components/payments-listing-table'
+import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
+import { useTransactionModal } from '@app/contexts/transaction-modal-context'
+import { useFetchPaymentData } from '@app/hooks/use-fetch-payment-data'
+import { formatNumberDisplay } from '@app/utils/helpers'
+import { getPaymentDataSource } from '@app/utils/payments/helpers'
+import { PaymentDataSource } from '@app/utils/payments/types'
+import { withWalletConnected } from '@app/utils/with-wallet-connected'
+import { Button, Space } from 'antd'
+import { ethers, Signer } from 'ethers'
+import { formatUnits } from 'ethers/lib/utils'
+import React, { ElementRef, useCallback, useEffect, useRef, useState } from 'react'
+import { useProvider, useSigner } from 'wagmi'
 
 function PaymentsPage() {
     useAppLayoutContext({ pageHeading: 'All Payments' })
@@ -89,8 +90,8 @@ const formatModalDetails = (
     const { fromAddress, toAddress, decimals, symbol } = paymentData
     return {
         Action: 'Recall Payment',
-        'Recall From': toAddress,
-        'Return To': fromAddress,
+        'Recall From': <AddressBookLabelWithTooltip address={toAddress} />,
+        'Return To': <AddressBookLabelWithTooltip address={fromAddress} />,
         Amount: `${formatNumberDisplay(
             formatUnits(paymentData.amount, decimals),
             decimals
