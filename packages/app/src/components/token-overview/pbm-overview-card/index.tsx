@@ -124,7 +124,7 @@ export const PbmOverviewCard: React.FC<WithdrawalStatisticProps> = ({
                 <Col span={0} xxl={6}>
                     <TokenBalanceStatistic
                         title={'Wallet Holding'}
-                        decimalBalance={Number(formatUnits(pbmBalance, pbmDecimals))}
+                        decimalBalance={String(formatUnits(pbmBalance, pbmDecimals))}
                         loading={pbmContextLoading}
                         pbmSymbol={pbmSymbol}
                         legendColour={legendColours.holding}

@@ -23,7 +23,6 @@ export const ColumnFilterDropdownBox = ({
         confirm: (param?: FilterConfirmProps) => void
     ) => {
         confirm({ closeDropdown: true })
-        console.log('=====selectedKeys', selectedKeys)
     }
 
     const handleReset = (

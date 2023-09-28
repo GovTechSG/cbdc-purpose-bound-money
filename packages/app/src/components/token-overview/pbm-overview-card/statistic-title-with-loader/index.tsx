@@ -1,6 +1,6 @@
-import React from 'react'
 import { StatisticTitle } from '@app/components/token-overview/pbm-overview-card/statistic-title'
 import { Skeleton, Statistic, Typography } from 'antd'
+import React from 'react'
 
 const { Text } = Typography
 
@@ -19,7 +19,7 @@ export const StatisticTitleWithLoader: React.FC<StatisticWithLoaderProps> = ({
 }) => {
     const statisticTitle = <StatisticTitle colour={legendColour}>{title}</StatisticTitle>
 
-    return value && !loading ? (
+    return value?.toString() && !loading ? (
         <Statistic title={statisticTitle} value={value} precision={4} />
     ) : (
         <div>
