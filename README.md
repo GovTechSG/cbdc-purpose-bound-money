@@ -1,9 +1,9 @@
 <h1 align="center">
-    <img src="docs/images/logo.png" alt="Purpose Bound Money (PBM)" />
+    <a href="https://www.pbm.money"><img src="docs/images/logo.png" alt="Purpose Bound Money (PBM)" /></a>
     <p align="center">Project Orchid:<br/>Purpose Bound Money (PBM)</p>
 </h1>
 <p align="center">
-    🔗 Website: <a href="https://pbm.money" target="_blank">pbm.money</a>
+    🔗 Website: <a href="https://www.pbm.money" target="_blank">pbm.money</a>
 </p>
 
 ## Introduction
