@@ -10,12 +10,12 @@ export const chainInfoPolygon: AppChainInfo = {
 
 export const chainInfoMumbai: AppChainInfo = {
     pbm: {
-        address: '0x27fFde7Eeb50d5a7E0288B6142377d0fD7FEA115',
-        genesisBlock: 40360319,
+        address: '0x09512049d43448a82499db5f3DB2e03BCBC2ee11',
+        genesisBlock: 40620681,
     },
     payees: [
-        '0x7bd37875BBC40b43Fd6557D6542b5A1b528cD9f4',
-        '0xa50B92dA032a0E150dabc8FD4b50C5D1ef7ef94F',
+        '0x771499FC4D26e0Da1C59240F7dDEe3bB863Ff4BC',
+        '0xc23b132A72BE2c122b08F8F5F6874442BAaE9a4A',
     ],
 }
 

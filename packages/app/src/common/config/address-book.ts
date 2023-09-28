@@ -11,14 +11,14 @@ export const addressBookPolygon: AddressBookData = {
 
 export const addressBookMumbai: AddressBookData = {
     // Contracts
-    '0x27fFde7Eeb50d5a7E0288B6142377d0fD7FEA115': 'Purpose-Bound Money Token',
-    '0x1862D57339126E5a4c08d8EEDEBD223Cf1c5A0a5': 'Digital SGD Token',
+    '0x09512049d43448a82499db5f3DB2e03BCBC2ee11': 'Purpose-Bound Money Token',
+    '0x36dd929b5d6250b283e0dababa3d11cb677c03d6': 'Digital SGD Token',
 
     // User Accounts
-    '0xa50B92dA032a0E150dabc8FD4b50C5D1ef7ef94F': 'Seth',
+    '0xc23b132A72BE2c122b08F8F5F6874442BAaE9a4A': 'Seth',
 
     // Payee Accounts
-    '0x7bd37875BBC40b43Fd6557D6542b5A1b528cD9f4': 'Test Payee #1',
+    '0x771499FC4D26e0Da1C59240F7dDEe3bB863Ff4BC': 'Test Payee #1',
 }
 
 export const addressBookLocal: AddressBookData = {
