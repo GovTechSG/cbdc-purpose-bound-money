@@ -31,7 +31,7 @@ describe("PBM - Setup", () => {
   });
 
   describe("Setup", function () {
-    describe("Admin Roles", () => {
+    describe("When setting up admin roles", () => {
       it("should grant deployer as admin", async () => {
         const adminRole = await pbmContract.DEFAULT_ADMIN_ROLE();
         const res = await pbmContract.hasRole(adminRole, deployer.address);
@@ -54,7 +54,7 @@ describe("PBM - Setup", () => {
       });
     });
 
-    describe("Token Setup", () => {
+    describe("When setting up PBM token", () => {
       it("should have the correct token name", async () => {
         const res = await pbmContract.name();
 
@@ -75,7 +75,7 @@ describe("PBM - Setup", () => {
       });
     });
 
-    describe("Underlying Asset", () => {
+    describe("When setting up the underlying asset of PBM", () => {
       it("should return the correct asset address", async () => {
         it("should have the correct asset", async () => {
           const res = await pbmContract.asset();
@@ -90,6 +90,54 @@ describe("PBM - Setup", () => {
         const res = await pbmContract.totalAsset();
 
         expect(res.toString()).to.be.equal(parseAmount(8888).toString());
+      });
+    });
+
+    describe("When setting up the PBM vault", () => {
+      describe("When setting PBM as asset in PBM vault", () => {
+        beforeEach(async () => {
+          // Reset PBM address on vault to zero before each test
+          await pbmVaultContract.connect(deployer).setPBM(ethers.constants.AddressZero);
+          const res = await pbmVaultContract.asset();
+          // Assert that PBM address is zero
+          expect(res).to.be.equal(ethers.constants.AddressZero);
+        });
+
+        it("should revert if caller is not deployer", async () => {
+          const tx = pbmVaultContract.connect(admin).setPBM(pbmContract.address);
+
+          await expect(tx).to.be.revertedWith("Ownable: caller is not the owner");
+        });
+
+        it("should set PBM address as asset in PBM vault if caller is deployer", async () => {
+          await pbmVaultContract.connect(deployer).setPBM(pbmContract.address);
+
+          const asset = await pbmVaultContract.asset();
+
+          expect(asset).to.be.equal(pbmContract.address);
+        });
+
+        it("should revert with AssetNotSet when reading decimals without PBM set", async () => {
+          const tx = pbmVaultContract.decimals();
+
+          await expect(tx).to.be.revertedWithCustomError(pbmVaultContract, "AssetNotSet");
+        });
+      });
+
+      describe("When PBM is already set as asset in PBM vault", () => {
+        it("should have the same decimals as PBM token", async () => {
+          const pbmVaultDecimals = await pbmVaultContract.decimals();
+          const pbmDecimals = await pbmContract.decimals();
+
+          expect(pbmVaultDecimals).to.be.equal(pbmDecimals);
+        });
+
+        it("should have the same decimals as the underlying asset of PBM", async () => {
+          const pbmVaultDecimals = await pbmVaultContract.decimals();
+          const dsgdDecimals = await dsgdContract.decimals();
+
+          expect(pbmVaultDecimals).to.be.equal(dsgdDecimals);
+        });
       });
     });
 

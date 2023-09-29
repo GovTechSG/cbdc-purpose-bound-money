@@ -54,4 +54,18 @@ contract PBMVaultBase is OwnableUpgradeable, TimeLockVault, PBMVaultBaseErrors {
 
         return deposit_;
     }
+
+    function decimals()
+        public
+        view
+        virtual
+        override(ERC20Upgradeable, IERC20MetadataUpgradeable)
+        returns (uint8)
+    {
+        address asset = asset();
+        if (asset == address(0)) {
+            revert AssetNotSet();
+        }
+        return IERC20MetadataUpgradeable(asset).decimals();
+    }
 }

@@ -13,6 +13,11 @@ import { Contract, Signer, utils } from "ethers";
 const _abi = [
   {
     inputs: [],
+    name: "AssetNotSet",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "CallerNotPBM",
     type: "error",
   },
