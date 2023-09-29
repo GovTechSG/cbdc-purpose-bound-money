@@ -12,7 +12,7 @@ import { ethers } from "hardhat";
 import { parseAmount } from "../../common/utils";
 import { IAutomate, PBM, PBMTaskManager, PBMTaskManager__factory, PBMVault } from "../../types";
 import { PromiseOrValue } from "../../types/common";
-import { ModuleDataStruct } from "../../types/contracts/lib/gelato-automate/Types.sol/IAutomate";
+import { ModuleDataStruct } from "../../types/contracts/lib/gelato/Types.sol/IAutomate";
 import { DepositInfoStructOutput } from "../../types/contracts/utils/PBMVault";
 import { deployPBMFixture } from "../PBM/pbm.fixture";
 
@@ -55,7 +55,7 @@ describe("PBMTaskManager", () => {
     pbmVaultContract = fixtures.pbmVaultContract;
 
     automateContract = (await ethers.getContractAt(
-      "contracts/lib/gelato-automate/Types.sol:IAutomate",
+      "contracts/lib/gelato/Types.sol:IAutomate",
       GELATO_AUTOMATE_ADDRESS,
     )) as IAutomate;
     pbmTaskManagerContract = await (
