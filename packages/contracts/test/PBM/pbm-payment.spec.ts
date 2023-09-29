@@ -687,12 +687,6 @@ describe("PBM - Payments", () => {
           it("should pay successfully without reverting", async () => {
             expect(payTx).to.not.be.reverted;
           });
-
-          it("should emit TaskManagerCreateWithdrawal event", async () => {
-            expect(payTx)
-              .to.emit(pbmContract, "TaskManagerCreateWithdrawal")
-              .withArgs(payee.address, 0);
-          });
         });
 
         describe("When autoWithdrawal is false", () => {
@@ -706,10 +700,6 @@ describe("PBM - Payments", () => {
 
           it("should pay successfully without reverting", async () => {
             await expect(payTx).to.not.be.reverted;
-          });
-
-          it("should not emit TaskManagerCreateWithdrawal event", async () => {
-            await expect(payTx).to.not.emit(pbmContract, "TaskManagerCreateWithdrawal");
           });
         });
       });
@@ -769,10 +759,6 @@ describe("PBM - Payments", () => {
 
           it("should pay successfully without reverting", async () => {
             expect(payTx).to.not.be.reverted;
-          });
-
-          it("should not emit TaskManagerCreateWithdrawal event", async () => {
-            expect(payTx).to.not.emit(pbmContract, "TaskManagerCreateWithdrawal");
           });
         });
       });

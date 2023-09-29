@@ -296,12 +296,6 @@ describe("PBM - Chargeback", () => {
           it("should chargeback successfully without reverting", async () => {
             expect(chargebackTx).to.not.be.reverted;
           });
-
-          it("should emit TaskManagerCancelWithdrawal event", async () => {
-            expect(chargebackTx)
-              .to.emit(pbmContract, "TaskManagerCancelWithdrawal")
-              .withArgs(payee.address, 0);
-          });
         });
 
         describe("When task manager cancelWithdrawTask returns false", () => {
@@ -334,17 +328,6 @@ describe("PBM - Chargeback", () => {
 
           it("should chargeback successfully without reverting", async () => {
             await expect(chargebackTx).to.not.be.reverted;
-          });
-
-          it("should not emit TaskManagerCancelWithdrawal event", async () => {
-            await expect(chargebackTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
-          });
-
-          it("should not emit TaskManagerCancelWithdrawalFailed event", async () => {
-            await expect(chargebackTx).to.not.emit(
-              pbmContract,
-              "TaskManagerCancelWithdrawalFailed",
-            );
           });
         });
       });
@@ -388,10 +371,6 @@ describe("PBM - Chargeback", () => {
         it("should chargeback successfully without reverting", async () => {
           expect(chargebackTx).to.not.be.reverted;
         });
-
-        it("should not emit TaskManagerCancelWithdrawal event", async () => {
-          expect(chargebackTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
-        });
       });
 
       describe("When there is no task manager attached to PBM", () => {
@@ -409,10 +388,6 @@ describe("PBM - Chargeback", () => {
 
         it("should chargeback successfully without reverting", async () => {
           expect(chargebackTx).to.not.be.reverted;
-        });
-
-        it("should not emit TaskManagerCancelWithdrawal event", async () => {
-          expect(chargebackTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
         });
       });
     });

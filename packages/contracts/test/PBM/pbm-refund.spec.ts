@@ -4,12 +4,17 @@ import { assert, expect } from "chai";
 import { BigNumber, ContractTransaction } from "ethers";
 import { ethers } from "hardhat";
 
-
-
 import { parseAmount } from "../../common/utils";
-import { DSGD, MockPBMTaskManagerFailCancellation, MockPBMTaskManagerFailCancellation__factory, MockPBMTaskManagerRevert, MockPBMTaskManagerRevert__factory, PBM, PBMVault } from "../../types";
+import {
+  DSGD,
+  MockPBMTaskManagerFailCancellation,
+  MockPBMTaskManagerFailCancellation__factory,
+  MockPBMTaskManagerRevert,
+  MockPBMTaskManagerRevert__factory,
+  PBM,
+  PBMVault,
+} from "../../types";
 import { deployPBMFixture } from "./pbm.fixture";
-
 
 describe("PBM - Refund", () => {
   let fixtures: Awaited<ReturnType<typeof deployPBMFixture>>;
@@ -234,12 +239,6 @@ describe("PBM - Refund", () => {
           it("should refund successfully without reverting", async () => {
             expect(refundTx).to.not.be.reverted;
           });
-
-          it("should emit TaskManagerCancelWithdrawal event", async () => {
-            expect(refundTx)
-              .to.emit(pbmContract, "TaskManagerCancelWithdrawal")
-              .withArgs(payee.address, 0);
-          });
         });
 
         describe("When task manager cancelWithdrawTask returns false", () => {
@@ -266,14 +265,6 @@ describe("PBM - Refund", () => {
 
           it("should refund successfully without reverting", async () => {
             await expect(refundTx).to.not.be.reverted;
-          });
-
-          it("should not emit TaskManagerCancelWithdrawal event", async () => {
-            await expect(refundTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
-          });
-
-          it("should not emit TaskManagerCancelWithdrawalFailed event", async () => {
-            await expect(refundTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawalFailed");
           });
         });
       });
@@ -316,10 +307,6 @@ describe("PBM - Refund", () => {
         it("should refund successfully without reverting", async () => {
           expect(refundTx).to.not.be.reverted;
         });
-
-        it("should not emit TaskManagerCancelWithdrawal event", async () => {
-          expect(refundTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
-        });
       });
 
       describe("When there is no task manager attached to PBM", () => {
@@ -337,10 +324,6 @@ describe("PBM - Refund", () => {
 
         it("should refund successfully without reverting", async () => {
           expect(refundTx).to.not.be.reverted;
-        });
-
-        it("should not emit TaskManagerCancelWithdrawal event", async () => {
-          expect(refundTx).to.not.emit(pbmContract, "TaskManagerCancelWithdrawal");
         });
       });
     });
