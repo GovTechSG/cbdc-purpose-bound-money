@@ -1,5 +1,5 @@
 module.exports = {
-  istanbulReporter: ["html", "lcov"],
+  istanbulReporter: ["html", "lcov", "text-summary"],
   providerOptions: {
     mnemonic: process.env.MNEMONIC,
   },

@@ -89,7 +89,7 @@ jobs:
       needs.changes.outputs.contracts == 'true'
     env:
       MNEMONIC: "here are my twelve golden words for you to run the tests"
-      INFURA_API_KEY: Test_12345678
+      INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -103,13 +103,5 @@ jobs:
       - name: "Compile contracts"
         run: yarn build:contracts
 
-      - name: "Start node"
-        run: yarn hardhat node --fork https://polygon-mainnet.infura.io/v3/${{ secrets.INFURA_API_KEY }} &
-
-      - name: "Run tests"
-        run: |
-          sleep 10
-          yarn test:contracts:all
-
-      - name: "Stop node"
-        run: kill $(lsof -t -i:8545)
+      - name: "Run test coverage"
+        run: yarn test:contracts:coverage

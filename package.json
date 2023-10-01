@@ -36,6 +36,7 @@
     "test:contracts": "yarn workspace @pbm/contracts test",
     "test:contracts:automation": "yarn workspace @pbm/contracts test:automation",
     "test:contracts:all": "yarn workspace @pbm/contracts test:all",
+    "test:contracts:coverage": "yarn workspace @pbm/contracts coverage",
     "test:contracts:watch": "yarn workspace @pbm/contracts test:watch",
     "hardhat": "yarn workspace @pbm/contracts hardhat"
   }
