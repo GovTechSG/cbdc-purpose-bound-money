@@ -78,6 +78,8 @@ const HeroUnit: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
 
 const CallToActionButtons: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
   const baseUrlHost = new URL(baseUrl).host;
+  const githubUrl = process.env.NEXT_PUBLIC_GITHUB_URL ?? "#";
+
   return (
     <div className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center">
       <div data-aos="fade-up" data-aos-delay="400">
@@ -92,12 +94,12 @@ const CallToActionButtons: React.FC<{ baseUrl: string }> = ({ baseUrl }) => {
       <div>
         <div className="flex justify-between sm:hidden">
           <WhitepaperCtaButton />
-          <GithubCtaButton />
+          <GithubCtaButton url={githubUrl} />
         </div>
       </div>
       <div className="hidden sm:flex">
         <WhitepaperCtaButton />
-        <GithubCtaButton />
+        <GithubCtaButton url={githubUrl} />
       </div>
     </div>
   );
@@ -113,14 +115,14 @@ const WhitepaperCtaButton: React.FC = () => {
   );
 };
 
-const GithubCtaButton: React.FC = () => {
+const GithubCtaButton: React.FC<{ url: string }> = ({ url }) => {
   return (
     <div data-aos="fade-up" data-aos-delay="800" className="md:grid">
       <a
         className="btn p-3 text-gray-600 bg-transparent border-gray-400 rounded-md hover:bg-neutral-200 hover:text-white transition-all duration-500 aspect-square w-auto sm:ml-4"
         rel="noopener noreferrer"
         target="_blank"
-        href="https://github.com/superical"
+        href={url}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

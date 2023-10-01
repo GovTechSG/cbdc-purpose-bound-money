@@ -68,6 +68,7 @@ jobs:
           docker build \
             --build-arg BASE_URL=${{ vars.WEB_BASE_URL }} \
             --build-arg UX_FEATURE_DECK_URL=${{ vars.WEB_UX_FEATURE_DECK_URL }} \
+            --build-arg GITHUB_URL=${{ vars.WEB_GITHUB_URL }} \
             --build-arg GA_MEASUREMENT_ID=${{ vars.WEB_GA_MEASUREMENT_ID }} \
             -f packages/web/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
