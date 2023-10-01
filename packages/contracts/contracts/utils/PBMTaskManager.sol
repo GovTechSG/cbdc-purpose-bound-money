@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.13;
 
-import "./interfaces/IPBMTaskManager.sol";
-import "./interfaces/PBMTaskManagerErrors.sol";
-import "./interfaces/IPBM.sol";
-import "./lib/gelato/AutomateTaskCreator.sol";
-import "./utils/PBMVault.sol";
+import "../interfaces/IPBMTaskManager.sol";
+import "../interfaces/PBMTaskManagerErrors.sol";
+import "../interfaces/IPBM.sol";
+import "../lib/gelato/AutomateTaskCreator.sol";
+import "./PBMVault.sol";
 
 contract PBMTaskManager is AutomateTaskCreator, IPBMTaskManager, PBMTaskManagerErrors {
     IPBM public immutable PBM;
