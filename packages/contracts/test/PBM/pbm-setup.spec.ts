@@ -117,10 +117,10 @@ describe("PBM - Setup", () => {
           expect(asset).to.be.equal(pbmContract.address);
         });
 
-        it("should revert with AssetNotSet when reading decimals without PBM set", async () => {
+        it("should revert with AssetUndefined when reading decimals without PBM set", async () => {
           const tx = pbmVaultContract.decimals();
 
-          await expect(tx).to.be.revertedWithCustomError(pbmVaultContract, "AssetNotSet");
+          await expect(tx).to.be.revertedWithCustomError(pbmVaultContract, "AssetUndefined");
         });
       });
 

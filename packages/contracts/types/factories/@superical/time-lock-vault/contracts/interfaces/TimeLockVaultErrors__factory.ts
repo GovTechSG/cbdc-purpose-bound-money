@@ -13,6 +13,11 @@ import { Contract, Signer, utils } from "ethers";
 const _abi = [
   {
     inputs: [],
+    name: "AssetUndefined",
+    type: "error",
+  },
+  {
+    inputs: [],
     name: "DepositAlreadyMatured",
     type: "error",
   },
