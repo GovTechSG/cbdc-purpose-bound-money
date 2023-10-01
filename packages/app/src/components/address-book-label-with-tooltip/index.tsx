@@ -21,7 +21,6 @@ export const AddressBookLabelWithTooltip: React.FC<AddressBookLabelWithTooltipTy
                 truncateAddress={true}
                 includeAddress={true}
                 truncateAddressIfLabel={true}
-                addressLength={10}
                 {...rest}
             />
         </AddressTooltip>

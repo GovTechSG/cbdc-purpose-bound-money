@@ -182,12 +182,14 @@ export const TransactionModalProvider: React.FC<React.PropsWithChildren> = ({ ch
                 onCancel={closeHandler}
                 afterClose={() => dispatch({ type: 'reset' })}
             >
-                <TransactionResult
-                    state={state}
-                    setTitle={setTitle}
-                    closeHandler={closeHandler}
-                    confirmHandler={confirmHandler}
-                />
+                <div style={{ minWidth: '550px' }}>
+                    <TransactionResult
+                        state={state}
+                        setTitle={setTitle}
+                        closeHandler={closeHandler}
+                        confirmHandler={confirmHandler}
+                    />
+                </div>
             </Modal>
         </TransactionModalContext.Provider>
     )

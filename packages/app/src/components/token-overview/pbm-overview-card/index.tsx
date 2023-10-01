@@ -30,7 +30,12 @@ const CardTitle: React.FC<{ connectedAddress: string | undefined }> = ({ connect
     const loading = !isMounted || !connectedAddress
     const displayAddress = (
         <SkeletonLoader.Input loading={loading}>
-            <AddressBookLabelWithTooltip address={connectedAddress!} />
+            <AddressBookLabelWithTooltip
+                address={connectedAddress!}
+                includeAddress={true}
+                truncateAddress={true}
+                addressLength={10}
+            />
         </SkeletonLoader.Input>
     )
 

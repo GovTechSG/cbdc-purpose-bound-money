@@ -65,18 +65,18 @@ export const AddressBookLabel: React.FC<AddressLabelProps> = ({
 }
 
 const getResponsiveTruncateLength = (width: number) => {
-    let length = 8
+    let length = 10
     if (width > 2800) {
         // Full address
         length = 40
     } else if (width > 2200) {
-        length = 32
+        length = 20
     } else if (width > 1880) {
         length = 18
     } else if (width > 1700) {
-        length = 12
+        length = 14
     } else if (width > 1500) {
-        length = 10
+        length = 12
     }
     return length
 }
