@@ -138,6 +138,36 @@ describe("PBM - Setup", () => {
 
           expect(pbmVaultDecimals).to.be.equal(dsgdDecimals);
         });
+
+        describe("When calling on the functions in the PBM vault", () => {
+          let payer: SignerWithAddress;
+          let payee: SignerWithAddress;
+
+          beforeEach(async () => {
+            payer = fixtures.signers.payer;
+            payee = fixtures.signers.payee;
+          });
+
+          it("should revert if non-PBM caller attempts to deposit", async () => {
+            const tx = pbmVaultContract
+              .connect(deployer)
+              .deposit(payer.address, payee.address, 100, 300);
+
+            await expect(tx).to.be.revertedWithCustomError(pbmVaultContract, "CallerNotPBM");
+          });
+
+          it("should revert if non-PBM caller attempts to withdraw", async () => {
+            const tx = pbmVaultContract.connect(deployer).withdraw(payee.address, [0]);
+
+            await expect(tx).to.be.revertedWithCustomError(pbmVaultContract, "CallerNotPBM");
+          });
+
+          it("should revert if non-PBM caller attempts to refund", async () => {
+            const tx = pbmVaultContract.connect(deployer).refund(payee.address, 0);
+
+            await expect(tx).to.be.revertedWithCustomError(pbmVaultContract, "CallerNotPBM");
+          });
+        });
       });
     });
 
