@@ -21,6 +21,8 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
 
     IPBMTaskManager public taskManager;
 
+    uint256 private _cancelTaskCatchCount;
+
     function __PBMBase_init(
         string memory _name,
         string memory _symbol,
@@ -109,6 +111,8 @@ contract PBMBase is PausableUpgradeable, PBMAccessControl, ERC20Upgradeable, IPB
 
         if (address(taskManager) != address(0)) {
             try taskManager.cancelWithdrawalTask(depositId) returns (bool) {} catch {
+                // Workaround for an issue with automate contract
+                ++_cancelTaskCatchCount;
                 emit TaskManagerCancelWithdrawalFailed(payee, depositId);
             }
         }

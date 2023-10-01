@@ -282,18 +282,17 @@ describe("PBM - Chargeback", () => {
     describe("When cancelling withdrawal automation on task manager", () => {
       describe("When task manager does not revert on PBM", () => {
         describe("When task manager cancelWithdrawTask returns true", () => {
-          let chargebackTx: ContractTransaction;
-
           beforeEach(async () => {
             await pbmContract
               .connect(admin)
               .setTaskManager(fixtures.mockPbmTaskManagerContract.address);
 
             await pbmContract.connect(payer).pay(payee.address, amount, lockPeriod, true);
-            chargebackTx = await pbmContract.connect(treasurer).chargeback(payee.address, 0);
           });
 
           it("should chargeback successfully without reverting", async () => {
+            const chargebackTx = await pbmContract.connect(treasurer).chargeback(payee.address, 0);
+
             expect(chargebackTx).to.not.be.reverted;
           });
         });
@@ -334,7 +333,6 @@ describe("PBM - Chargeback", () => {
 
       describe("When task manager reverts on PBM", () => {
         let mockPbmTaskManagerRevertContract: MockPBMTaskManagerRevert;
-        let chargebackTx: ContractTransaction;
 
         beforeEach(async () => {
           const { deployer } = fixtures.signers;
@@ -364,12 +362,18 @@ describe("PBM - Chargeback", () => {
           await pbmContract
             .connect(fixtures.signers.admin)
             .setTaskManager(mockPbmTaskManagerRevertContract.address);
-
-          chargebackTx = await pbmContract.connect(treasurer).chargeback(payee.address, 0);
         });
 
         it("should chargeback successfully without reverting", async () => {
+          const chargebackTx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
+
           expect(chargebackTx).to.not.be.reverted;
+        });
+
+        it("should emit TaskManagerCancelWithdrawalFailed event", async () => {
+          const chargebackTx = pbmContract.connect(treasurer).chargeback(payee.address, 0);
+
+          await expect(chargebackTx).to.emit(pbmContract, "TaskManagerCancelWithdrawalFailed");
         });
       });
 

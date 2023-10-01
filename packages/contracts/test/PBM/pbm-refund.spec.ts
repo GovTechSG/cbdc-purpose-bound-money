@@ -271,7 +271,6 @@ describe("PBM - Refund", () => {
 
       describe("When task manager reverts on PBM", () => {
         let mockPbmTaskManagerRevertContract: MockPBMTaskManagerRevert;
-        let refundTx: ContractTransaction;
 
         beforeEach(async () => {
           const { deployer } = fixtures.signers;
@@ -300,12 +299,18 @@ describe("PBM - Refund", () => {
           await pbmContract
             .connect(fixtures.signers.admin)
             .setTaskManager(mockPbmTaskManagerRevertContract.address);
-
-          refundTx = await pbmContract.connect(payee).refund(0);
         });
 
         it("should refund successfully without reverting", async () => {
-          expect(refundTx).to.not.be.reverted;
+          const refundTx = pbmContract.connect(payee).refund(0);
+
+          await expect(refundTx).to.not.be.reverted;
+        });
+
+        it("should emit TaskManagerCancelWithdrawalFailed event", async () => {
+          const refundTx = pbmContract.connect(payee).refund(0);
+
+          await expect(refundTx).to.emit(pbmContract, "TaskManagerCancelWithdrawalFailed");
         });
       });
 
