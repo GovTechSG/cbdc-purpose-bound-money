@@ -2,7 +2,7 @@ import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
 import { deployUpgradeableContract } from "../../common/utils";
-import { PBMUpgradeable__factory } from "../../types";
+import { PBM__factory } from "../../types";
 import { getDefaultSigner } from "../helpers/default-signer";
 import { wait } from "../helpers/wait";
 
@@ -31,9 +31,7 @@ task("deploy:pbm", "Deploy PBM token")
       console.log(`[Deployer] ${deployerAddress}`);
 
       console.log(`[Status] Deploying PBM token implementation...`);
-      const pbmFactory = (await ethers.getContractFactory(
-        "PBMUpgradeable",
-      )) as PBMUpgradeable__factory;
+      const pbmFactory = (await ethers.getContractFactory("PBM")) as PBM__factory;
       const pbmImpl = await pbmFactory.connect(deployer).deploy(name, symbol);
 
       const pbmImplTx = pbmImpl.deployTransaction;

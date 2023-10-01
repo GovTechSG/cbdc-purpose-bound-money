@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export { DSGD__factory } from "./DSGD__factory";
+export { PBMTaskManager__factory } from "./PBMTaskManager__factory";
 export { PBMVault__factory } from "./PBMVault__factory";

@@ -4,13 +4,13 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import { parseAmount } from "../../common/utils";
-import { DSGD, PBMUpgradeable, PBMVault } from "../../types";
+import { DSGD, PBM, PBMVault } from "../../types";
 import { PBMFixtureParamType, deployPBMFixture } from "./pbm.fixture";
 
 describe("PBM - Setup", () => {
   let fixtures: Awaited<ReturnType<typeof deployPBMFixture>>;
 
-  let pbmContract: PBMUpgradeable;
+  let pbmContract: PBM;
   let pbmVaultContract: PBMVault;
   let dsgdContract: DSGD;
 
@@ -172,7 +172,7 @@ describe("PBM - Setup", () => {
     });
 
     describe("Proxy Setup", () => {
-      let newPbmContract: PBMUpgradeable;
+      let newPbmContract: PBM;
       let newPbmVaultContract: PBMVault;
 
       let initName: string;
@@ -182,8 +182,8 @@ describe("PBM - Setup", () => {
         initName = "New PBM";
         initSymbol = "NEWPBM";
         newPbmContract = (await (
-          await ethers.getContractFactory("PBMUpgradeable")
-        ).deploy(initName, initSymbol)) as PBMUpgradeable;
+          await ethers.getContractFactory("PBM")
+        ).deploy(initName, initSymbol)) as PBM;
 
         newPbmVaultContract = (await (
           await ethers.getContractFactory("PBMVault")

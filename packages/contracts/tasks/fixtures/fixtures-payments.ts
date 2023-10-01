@@ -4,7 +4,7 @@ import { task } from "hardhat/config";
 import type { TaskArguments } from "hardhat/types";
 
 import { parseAmount } from "../../common/utils";
-import { PBMUpgradeable, PBMVault } from "../../types";
+import { PBM, PBMVault } from "../../types";
 
 type DeployPaymentFixturesArguments = {
   pbm: string;
@@ -18,10 +18,7 @@ task("fixtures:payments", "Send payment fixtures")
 
     const payees = signers.slice(0, 3);
 
-    const pbmContract = (await ethers.getContractAt(
-      "PBMUpgradeable",
-      taskArguments.pbm,
-    )) as PBMUpgradeable;
+    const pbmContract = (await ethers.getContractAt("PBM", taskArguments.pbm)) as PBM;
 
     const pbmVaultAddress = await pbmContract.vault();
     const pbmVaultContract = (await ethers.getContractAt("PBMVault", pbmVaultAddress)) as PBMVault;

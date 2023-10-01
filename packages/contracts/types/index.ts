@@ -109,13 +109,11 @@ export type { MockPBMTaskManagerRevert } from "./contracts/mocks/MockPBMTaskMana
 export { MockPBMTaskManagerRevert__factory } from "./factories/contracts/mocks/MockPBMTaskManagerRevert__factory";
 export type { PBM } from "./contracts/PBM";
 export { PBM__factory } from "./factories/contracts/PBM__factory";
-export type { PBMStandard } from "./contracts/PBMStandard";
-export { PBMStandard__factory } from "./factories/contracts/PBMStandard__factory";
-export type { PBMTaskManager } from "./contracts/PBMTaskManager";
-export { PBMTaskManager__factory } from "./factories/contracts/PBMTaskManager__factory";
 export type { PBMUpgradeable } from "./contracts/PBMUpgradeable";
 export { PBMUpgradeable__factory } from "./factories/contracts/PBMUpgradeable__factory";
 export type { DSGD } from "./contracts/utils/DSGD";
 export { DSGD__factory } from "./factories/contracts/utils/DSGD__factory";
+export type { PBMTaskManager } from "./contracts/utils/PBMTaskManager";
+export { PBMTaskManager__factory } from "./factories/contracts/utils/PBMTaskManager__factory";
 export type { PBMVault } from "./contracts/utils/PBMVault";
 export { PBMVault__factory } from "./factories/contracts/utils/PBMVault__factory";

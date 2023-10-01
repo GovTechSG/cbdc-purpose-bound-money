@@ -7,6 +7,4 @@ export * as lib from "./lib";
 export * as mocks from "./mocks";
 export * as utils from "./utils";
 export { PBM__factory } from "./PBM__factory";
-export { PBMStandard__factory } from "./PBMStandard__factory";
-export { PBMTaskManager__factory } from "./PBMTaskManager__factory";
 export { PBMUpgradeable__factory } from "./PBMUpgradeable__factory";

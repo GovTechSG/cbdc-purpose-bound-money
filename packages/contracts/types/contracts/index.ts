@@ -19,6 +19,4 @@ export type { mocks };
 
 export type { utils };
 export type { PBM } from "./PBM";
-export type { PBMStandard } from "./PBMStandard";
-export type { PBMTaskManager } from "./PBMTaskManager";
 export type { PBMUpgradeable } from "./PBMUpgradeable";

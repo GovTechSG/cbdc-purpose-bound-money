@@ -2,4 +2,5 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { DSGD } from "./DSGD";
+export type { PBMTaskManager } from "./PBMTaskManager";
 export type { PBMVault } from "./PBMVault";

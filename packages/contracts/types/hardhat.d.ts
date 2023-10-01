@@ -205,14 +205,6 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBM__factory>;
     getContractFactory(
-      name: "PBMStandard",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PBMStandard__factory>;
-    getContractFactory(
-      name: "PBMTaskManager",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.PBMTaskManager__factory>;
-    getContractFactory(
       name: "PBMUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PBMUpgradeable__factory>;
@@ -220,6 +212,10 @@ declare module "hardhat/types/runtime" {
       name: "DSGD",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.DSGD__factory>;
+    getContractFactory(
+      name: "PBMTaskManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PBMTaskManager__factory>;
     getContractFactory(
       name: "PBMVault",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -466,16 +462,6 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.PBM>;
     getContractAt(
-      name: "PBMStandard",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PBMStandard>;
-    getContractAt(
-      name: "PBMTaskManager",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.PBMTaskManager>;
-    getContractAt(
       name: "PBMUpgradeable",
       address: string,
       signer?: ethers.Signer
@@ -485,6 +471,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.DSGD>;
+    getContractAt(
+      name: "PBMTaskManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PBMTaskManager>;
     getContractAt(
       name: "PBMVault",
       address: string,
