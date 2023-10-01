@@ -8,7 +8,7 @@
 
 ## Introduction
 
-The Purpose Bound Money (PBM) proposes a protocol for the use of digital money under specified conditions. As part of a wider pilot in <a href="https://www.mas.gov.sg/publications/monographs-or-information-paper/2022/project-orchid-whitepaper" target="_blank">Project Orchid</a>, this version of the protocol releases escrow payments automatically after a specified period.
+The Purpose Bound Money (PBM) proposes a protocol for the use of digital money under specified conditions. As part of a wider pilot in <a href="https://www.mas.gov.sg/publications/monographs-or-information-paper/2022/project-orchid-whitepaper" target="_blank">Project Orchid</a>, this version of the protocol releases escrow payments automatically after a specified period. Visit <a href="https://www.pbm.money" target="_blank">pbm.money</a> for more information on the key features.
 
 ## Setup
 
@@ -26,9 +26,9 @@ This repository is a monorepo of the source files, including the smart contracts
 | `@pbm/app`       | The Web3 application frontend for interacting with the smart contracts | [Link](https://app.pbm.money) |
 | `@pbm/web`       | The main website at pbm.money homepage                                 | [Link](https://pbm.money)     |
 
-### Getting Started
+## Getting Started
 
-#### Smart Contract Deployments
+### Smart Contract Deployments
 
 The following tasks have been implemented using Hardhat for both deploying the smart contracts to the blockchain and verifying them.
 
@@ -48,22 +48,26 @@ The following tasks have been implemented using Hardhat for both deploying the s
 yarn hardhat <task-name> --network <network> --<arg-name> <arg-value>
 ```
 
-#### Start Application Frontend
+### Start Application Frontend
 
 ```bash
 yarn build:app
 yarn start:app
 ```
 
-##### Start Main Website
+### Start Main Website
 
 ```bash
 yarn build:web
 yarn start:web
 ```
 
-##### Run Smart Contract Tests
+### Run Smart Contract Tests
 
 ```bash
 yarn test:contracts
 ```
+
+### Continuous Integration/Deployment
+
+The current CI pipeline is setup to deploy to a staging and production environment based on their branches, `staging` and `main`, respectively.
