@@ -5,17 +5,20 @@ export const chainInfoPolygon: AppChainInfo = {
         address: '0x56e932991885B65bc91f719d9dac241E64B6529E',
         genesisBlock: 39239804,
     },
-    payees: ['0x24ba19062400185a9001EDC9F6200C438F62Fa53'],
+    payees: [
+        '0x63A69059B7eB694992704F06dD8C2729121b828b', // CFTE
+    ],
 }
 
 export const chainInfoMumbai: AppChainInfo = {
     pbm: {
-        address: '0x09512049d43448a82499db5f3DB2e03BCBC2ee11',
-        genesisBlock: 40620681,
+        address: '0x2347F2e9F07F75e6dCc40D92fe3daa073A20DfCB',
+        genesisBlock: 40746129,
     },
     payees: [
-        '0x771499FC4D26e0Da1C59240F7dDEe3bB863Ff4BC',
-        '0xc23b132A72BE2c122b08F8F5F6874442BAaE9a4A',
+        '0x771499FC4D26e0Da1C59240F7dDEe3bB863Ff4BC', // Test Payee #1
+        '0xc23b132A72BE2c122b08F8F5F6874442BAaE9a4A', // Seth
+        '0x63A69059B7eB694992704F06dD8C2729121b828b', // CFTE
     ],
 }
 

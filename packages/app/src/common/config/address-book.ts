@@ -11,7 +11,7 @@ export const addressBookPolygon: AddressBookData = {
 
 export const addressBookMumbai: AddressBookData = {
     // Contracts
-    '0x09512049d43448a82499db5f3DB2e03BCBC2ee11': 'Purpose Bound Money Token',
+    '0x2347F2e9F07F75e6dCc40D92fe3daa073A20DfCB': 'Purpose Bound Money Token',
     '0x36dd929b5d6250b283e0dababa3d11cb677c03d6': 'Digital SGD Token',
 
     // User Accounts
@@ -19,6 +19,7 @@ export const addressBookMumbai: AddressBookData = {
 
     // Payee Accounts
     '0x771499FC4D26e0Da1C59240F7dDEe3bB863Ff4BC': 'Test Payee #1',
+    '0x63A69059B7eB694992704F06dD8C2729121b828b': 'CFTE',
 }
 
 export const addressBookLocal: AddressBookData = {
