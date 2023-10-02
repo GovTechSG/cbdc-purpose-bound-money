@@ -1,0 +1,34 @@
+name: Smart Contracts
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+    paths:
+      - "packages/contracts/**"
+      - "yarn.lock"
+      - ".github/workflows/contracts-push.yml"
+
+jobs:
+  contracts-tests:
+    name: Smart Contracts Tests
+    runs-on: ubuntu-latest
+    env:
+      MNEMONIC: "here are my twelve golden words for you to run the tests"
+      INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version: 18.x
+
+      - name: "Install dependencies"
+        run: yarn install --frozen-lockfile
+
+      - name: "Compile contracts"
+        run: yarn build:contracts
+
+      - name: "Run test coverage"
+        run: yarn test:contracts:coverage
