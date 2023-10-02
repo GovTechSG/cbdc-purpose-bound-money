@@ -14,7 +14,7 @@ type PayeeDataSource = {
 const recipientSelectLabelRenderer = (payee: PayeeDataSource) => {
     const { name, address } = payee
     const displayAddress = ellipsizeAddress(address)
-    return `${name} (0x${displayAddress})`
+    return `${name} (${displayAddress})`
 }
 
 const recipientSelectOptions = (ds: PayeeDataSource[]) =>
