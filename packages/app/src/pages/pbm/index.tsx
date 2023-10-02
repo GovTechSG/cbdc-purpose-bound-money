@@ -154,9 +154,9 @@ const formatRefundModalDetails = (
 ) => {
     const { fromAddress, toAddress, decimals, symbol } = paymentData
     return {
-        Action: 'Recall Payment',
-        'Recall From': <AddressBookLabelWithTooltip address={toAddress} />,
-        'Return To': <AddressBookLabelWithTooltip address={fromAddress} />,
+        Action: 'Refund Payment',
+        'Refund From': <AddressBookLabelWithTooltip address={toAddress} />,
+        'Refund To': <AddressBookLabelWithTooltip address={fromAddress} />,
         Amount: `${formatNumberDisplay(
             formatUnits(paymentData.amount, decimals),
             decimals
