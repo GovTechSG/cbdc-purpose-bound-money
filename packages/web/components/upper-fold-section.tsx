@@ -1,6 +1,6 @@
 "use client";
 
-import { SecondaryLinkButton } from "@web/components/secondary-link-button";
+import { SecondaryLinkButton } from "@web/components/ui/secondary-link-button";
 import React from "react";
 import Typewriter from "typewriter-effect";
 

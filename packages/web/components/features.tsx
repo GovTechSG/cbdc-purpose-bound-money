@@ -1,4 +1,4 @@
-import { SecondaryLinkButton } from "@web/components/secondary-link-button";
+import { SecondaryLinkButton } from "@web/components/ui/secondary-link-button";
 import featureDisbursementImage from "@web/public/images/features/feature-auto-disbursement.webp";
 import featureDashboardImage from "@web/public/images/features/feature-dashboard.webp";
 import featureManageImage from "@web/public/images/features/feature-manage.webp";
