@@ -1,6 +1,7 @@
 import Features from "@web/components/features";
 import HeroUnit from "@web/components/hero-unit";
 import UpperFoldSection from "@web/components/upper-fold-section";
+import Acknowledgements from "@web/components/acknowledgements";
 
 export const metadata = {
   title: "Purpose Bound Money (PBM)",
@@ -14,6 +15,7 @@ export default function Home() {
       <UpperFoldSection baseUrl={process.env.NEXT_PUBLIC_BASE_URL!} />
       <HeroUnit />
       <Features />
+      <Acknowledgements />
     </>
   );
 }
