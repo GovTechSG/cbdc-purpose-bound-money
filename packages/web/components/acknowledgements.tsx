@@ -7,8 +7,10 @@ export default function Acknowledgements() {
       <div className="max-w-6xl mx-auto pt-10 px-4 sm:px-6 relative">
         <div className="py-12 md:py-20 border-t border-gray-200">
           <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-            <h2 className="h2 mb-4">Acknowledgements</h2>
-            <p className="text-normal md:text-lg text-gray-400">
+            <h2 className="h2 mb-4" data-aos="fade-up" data-aos-delay="100">
+              Acknowledgements
+            </h2>
+            <p className="text-normal md:text-lg text-gray-400" data-aos="fade-up" data-aos-delay="200">
               The{" "}
               <TextLink
                 href="https://www.mas.gov.sg/schemes-and-initiatives/project-orchid"
