@@ -20,7 +20,7 @@ export default function Features() {
               data-aos="fade-up"
               data-aos-delay="200"
             >
-              When you send a PBM, you transmit money imbued with specific rules
+              When you send a PBM, you transmit money embedded with specific rules
               governing its intended purpose.
             </p>
 
@@ -63,7 +63,7 @@ export default function Features() {
                 <div className="md:pr-4 lg:pr-12 xl:pr-16">
                   <h3 className="h3 mb-3">Many payments, one dashboard</h3>
                   <p className="text-normal md:text-lg text-gray-400 mb-4">
-                    As a merchant, you can track the lifecycle of each PBM
+                    As a payee, you can track the lifecycle of each PBM
                     transaction on the blockchain. Once an escrow payment
                     matures, you see them instantly reflected on your dashboard,
                     ready for your next move – unwrap the underlying money from
@@ -99,7 +99,7 @@ export default function Features() {
                     Wrap your digital money into PBM tokens, specify the holding
                     duration as a condition, and send it to the recipient. Only
                     when the payment has matured after the specified duration,
-                    the recipients can unwrap their payments into their wallet.
+                    the recipients can unwrap the payments into their wallet.
                   </p>
                 </div>
               </div>
