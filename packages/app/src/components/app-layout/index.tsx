@@ -12,6 +12,8 @@ import { ellipsizeAddress, formatNumberDisplay } from '@app/utils/helpers'
 import styled from '@emotion/styled'
 import { Layout, Menu, theme } from 'antd'
 import Head from 'next/head'
+import Image from 'next/image'
+import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { createContext, useMemo } from 'react'
 import { useAccount } from 'wagmi'
@@ -212,8 +214,34 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
                     </Content>
                     <Footer style={{ textAlign: 'center', fontSize: 'small', color: '#999' }}>
                         <div>
-                            Built with ❤️ by GovTech for Project Orchid. &copy; {getYear(2023)}. All
-                            rights reserved.
+                            Buidl with{' '}
+                            <Link href="https://github.com/superical" target="_blank">
+                                <Image
+                                    src="images/heart.svg"
+                                    alt="Love"
+                                    title="Love"
+                                    width={10}
+                                    height={10}
+                                    className="inline-flex"
+                                />
+                            </Link>{' '}
+                            by{' '}
+                            <Link
+                                href="https://www.tech.gov.sg"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                GovTech
+                            </Link>{' '}
+                            for{' '}
+                            <Link
+                                href="https://www.mas.gov.sg/schemes-and-initiatives/project-orchid"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Project Orchid
+                            </Link>
+                            . &copy; {getYear(2023)}. All rights reserved.
                         </div>
                     </Footer>
                 </Layout>
