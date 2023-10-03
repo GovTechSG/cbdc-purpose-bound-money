@@ -12,8 +12,14 @@ export default function Features() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="py-12 md:py-20 ">
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4">Digital money now with rules</h2>
-            <p className="text-normal md:text-xl text-gray-400">
+            <h2 className="h2 mb-4" data-aos="fade-up" data-aos-delay="100">
+              Digital money now with rules
+            </h2>
+            <p
+              className="text-normal md:text-xl text-gray-400"
+              data-aos="fade-up"
+              data-aos-delay="200"
+            >
               When you send a PBM, you transmit money imbued with specific rules
               governing its intended purpose.
             </p>
