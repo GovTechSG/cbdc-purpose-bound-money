@@ -50,24 +50,42 @@ yarn hardhat <task-name> --network <network> --<arg-name> <arg-value>
 
 ### Start Application Frontend
 
+#### Production mode
+
 ```bash
-yarn build:app
-yarn start:app
+yarn build:app && yarn start:app
+```
+
+#### Development mode
+
+```bash
+yarn start:app:dev
 ```
 
 ### Start Main Website
 
+#### Production mode
+
 ```bash
-yarn build:web
-yarn start:web
+yarn build:web && yarn start:web
+```
+
+#### Development mode
+
+```bash
+yarn start:web:dev
 ```
 
 ### Run Smart Contract Tests
 
 ```bash
-yarn test:contracts
+yarn test:contracts:coverage
 ```
 
 ### Continuous Integration/Deployment
 
-The current CI pipeline is setup to deploy to a staging and production environment based on their branches, `staging` and `main`, respectively.
+The CI pipeline is setup to deploy to a staging and production environment based on their branches, `staging` and `main`, respectively.
+
+#### Staging Environment
+
+Please raise an issue on Github to request for access to the staging environment if needed.
