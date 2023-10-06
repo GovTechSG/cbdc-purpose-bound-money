@@ -19,7 +19,7 @@ export const PaymentInputAmountFormItem = ({ label, formRef }: PaymentInputAmoun
     const [baseAmount, setBaseAmount] = useState<string>()
 
     // baseCurrency is largely not used for now after a change in business decision to only accept SGD
-    const [baseCurrency, _setBaseCurrency] = useState<string>('SGD')
+    const [baseCurrency, _setBaseCurrency] = useState<string>('DSGD')
 
     const {
         decimals: assetDecimals,
@@ -83,7 +83,7 @@ export const PaymentInputAmountFormItem = ({ label, formRef }: PaymentInputAmoun
                             open={false}
                             showArrow={false}
                         >
-                            <Select.Option value="SGD">SGD $</Select.Option>
+                            <Select.Option value={assetSymbol}>{assetSymbol} $</Select.Option>
                         </Select>
                     </Form.Item>
                     <Form.Item
