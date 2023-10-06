@@ -1,13 +1,13 @@
-import React from 'react'
-import { Form, Space, Typography } from 'antd'
+import { SkeletonLoader } from '@app/components/skeleton-loader'
 import { DashboardCard } from '@app/components/token-overview/dashboard-card'
-import styled from '@emotion/styled'
-import { BigNumber } from 'ethers'
-import { formatNumberDisplay } from '@app/utils/helpers'
-import { formatUnits, parseUnits } from 'ethers/lib/utils'
 import { UnwrapInputAmountFormItem } from '@app/components/token-overview/pbm-unwrap-card/unwrap-input-amount-form-item'
 import { UnwrapSubmitButtonFormItem } from '@app/components/token-overview/pbm-unwrap-card/unwrap-submit-button-form-item'
-import { SkeletonLoader } from '@app/components/skeleton-loader'
+import { formatNumberDisplay } from '@app/utils/helpers'
+import styled from '@emotion/styled'
+import { Form, Space, Typography } from 'antd'
+import { BigNumber } from 'ethers'
+import { formatUnits, parseUnits } from 'ethers/lib/utils'
+import React from 'react'
 
 const { Link } = Typography
 
@@ -65,11 +65,6 @@ export const PbmUnwrapCard: React.FC<PbmUnwrapCardProps> = ({
         onUnwrap && onUnwrap({ amount, resetForm })
     }
 
-    const onFinishFail = (values: any) => {
-        console.log('onFinishFail Form fields error:', form.getFieldsError())
-        console.log('onFinishFail Form values:', values)
-    }
-
     const formValuesChangeHandler = async () => {
         try {
             await form.validateFields()
@@ -104,7 +99,6 @@ export const PbmUnwrapCard: React.FC<PbmUnwrapCardProps> = ({
                     form={form}
                     size="large"
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFail}
                     onValuesChange={formValuesChangeHandler}
                 >
                     <UnwrapInputAmountFormItem

@@ -24,7 +24,6 @@ function SendPage() {
     const { open } = useTransactionModal()
 
     const paymentFormSubmitHandler = async (values: any) => {
-        console.log('paymentFormSubmitHandler values:', values)
         if (!pbmContract || !signer) return
         const action = () =>
             pbmContract

@@ -1,13 +1,13 @@
-import { Form, FormInstance } from 'antd'
-import { PaymentRecipientFormItem } from '@app/components/payment-form/recipient-form-item'
-import { PaymentInputAmountFormItem } from '@app/components/payment-form/input-amount-form-item'
-import { PaymentLockingPeriodFormItem } from '@app/components/payment-form/locking-period-form-item'
-import { PaymentAvailableAssetBalanceFormItem } from '@app/components/payment-form/available-asset-balance-form-item'
-import React, { forwardRef, useImperativeHandle } from 'react'
 import {
     PaymentActionButtonAssetApprovalHandler,
     PaymentActionButtonFormItem,
 } from '@app/components/payment-form/action-button-form-item'
+import { PaymentAvailableAssetBalanceFormItem } from '@app/components/payment-form/available-asset-balance-form-item'
+import { PaymentInputAmountFormItem } from '@app/components/payment-form/input-amount-form-item'
+import { PaymentLockingPeriodFormItem } from '@app/components/payment-form/locking-period-form-item'
+import { PaymentRecipientFormItem } from '@app/components/payment-form/recipient-form-item'
+import { Form, FormInstance } from 'antd'
+import React, { forwardRef, useImperativeHandle } from 'react'
 
 type PaymentFormForwardedRef = {
     form: FormInstance
@@ -26,10 +26,6 @@ export const PaymentForm = forwardRef<PaymentFormForwardedRef, PaymentFormProps>
             onSubmit && onSubmit(values)
         }
 
-        const onFinishFail = (values: any) => {
-            console.log('onFinishFail Form values:', values)
-        }
-
         useImperativeHandle(ref, () => ({
             form,
         }))
@@ -39,7 +35,6 @@ export const PaymentForm = forwardRef<PaymentFormForwardedRef, PaymentFormProps>
                 <Form
                     form={form}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFail}
                     labelCol={{ span: 8 }}
                     layout="horizontal"
                     size="large"
