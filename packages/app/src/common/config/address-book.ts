@@ -5,8 +5,11 @@ export const addressBookPolygon: AddressBookData = {
     '0x56e932991885B65bc91f719d9dac241E64B6529E': 'Purpose Bound Money Token',
     '0x8ca45A06836bA95648A576e7Ddc382A90B44990b': 'Digital SGD Token',
 
+    // User Accounts
+    '0x4353727F3ef39B7A95796b0532C43ba9d40d29c0': 'SkillsFuture Singapore',
+
     // Payee Accounts
-    '0x24ba19062400185a9001EDC9F6200C438F62Fa53': 'Local Test Payee #1',
+    '0x63A69059B7eB694992704F06dD8C2729121b828b': 'CFTE',
 }
 
 export const addressBookMumbai: AddressBookData = {
@@ -16,6 +19,7 @@ export const addressBookMumbai: AddressBookData = {
 
     // User Accounts
     '0xc23b132A72BE2c122b08F8F5F6874442BAaE9a4A': 'Seth',
+    '0x67951E3De4fdfd6F38Df65e7CfcFf18F0757a649': 'SkillsFuture Singapore',
 
     // Payee Accounts
     '0x771499FC4D26e0Da1C59240F7dDEe3bB863Ff4BC': 'Test Payee #1',
