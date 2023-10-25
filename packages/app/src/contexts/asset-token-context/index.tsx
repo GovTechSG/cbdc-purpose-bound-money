@@ -19,7 +19,6 @@ const AssetTokenContext = createContext<AssetTokenContextProps>({
 
 export const AssetTokenProvider = ({ children }: { children: React.ReactNode }) => {
     const { assetContract } = usePBMTokenContext()
-    // const provider = useProvider()
 
     const [contract, setContract] = useState<IERC20Metadata>()
     const [decimals, setDecimals] = useState<number>(0)

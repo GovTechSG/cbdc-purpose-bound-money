@@ -6,6 +6,7 @@ import { PbmUnwrapCard } from '@app/components/token-overview/pbm-unwrap-card'
 import { usePBMTokenContext } from '@app/contexts/pbm-token-context'
 import { useTransactionModal } from '@app/contexts/transaction-modal-context'
 import { useFetchPaymentData } from '@app/hooks/use-fetch-payment-data'
+import { useSafeProvider } from '@app/hooks/use-safe-provider'
 import { useTokenBalance } from '@app/hooks/use-token-balance'
 import { formatNumberDisplay } from '@app/utils/helpers'
 import { getPaymentDataSource } from '@app/utils/payments/helpers'
@@ -15,7 +16,7 @@ import { Col, Row } from 'antd'
 import { BigNumber, ethers, Signer } from 'ethers'
 import { formatUnits } from 'ethers/lib/utils'
 import React, { ComponentProps, useCallback, useEffect, useState } from 'react'
-import { useAccount, useProvider, useSigner } from 'wagmi'
+import { useAccount, useSigner } from 'wagmi'
 
 function PbmPage() {
     useAppLayoutContext({ pageHeading: 'My PBM Dashboard' })
@@ -51,7 +52,7 @@ function PbmPage() {
     const [latestBlockLoading, setLatestBlockLoading] = useState<boolean>(false)
     const [paymentDataSource, setPaymentDataSource] = useState<PaymentDataSource[]>([])
 
-    const provider = useProvider()
+    const provider = useSafeProvider()
     const { paymentData, loading: paymentDataLoading } = useFetchPaymentData({
         toAddress: connectedAddress,
     })

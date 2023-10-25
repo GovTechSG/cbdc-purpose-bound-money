@@ -1,6 +1,7 @@
 'use client'
 
 import { ERC20MetadataContextProps } from '@app/contexts/types'
+import { useSafeProvider } from '@app/hooks/use-safe-provider'
 import { getAppChainInfo } from '@app/utils/get-app-chain-info'
 import {
     IERC20Metadata,
@@ -12,7 +13,7 @@ import {
 } from '@pbm/contracts'
 import { BigNumber } from 'ethers'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import { useAccount, useNetwork, useProvider } from 'wagmi'
+import { useAccount, useNetwork } from 'wagmi'
 
 type PBMTokenContextProps = {
     asset: string | undefined
@@ -82,7 +83,7 @@ export const PBMTokenProvider = ({ children }: { children: React.ReactNode }) =>
             genesisBlock,
         ]
     )
-    const provider = useProvider()
+    const provider = useSafeProvider()
     const { address: connectedAccount } = useAccount()
 
     useEffect(() => {

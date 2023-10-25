@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
-import { BigNumber, ethers } from 'ethers'
+import { useSafeProvider } from '@app/hooks/use-safe-provider'
 import { IERC20Metadata, IERC20Metadata__factory } from '@pbm/contracts'
-import { useAccount, useNetwork, useProvider } from 'wagmi'
+import { BigNumber, ethers } from 'ethers'
+import { useCallback, useEffect, useState } from 'react'
+import { useAccount, useNetwork } from 'wagmi'
 
 type UseTokenBalanceParams = {
     token?: string
@@ -26,7 +27,7 @@ export const useTokenBalance = (props?: UseTokenBalanceParams): UseTokenBalanceR
     const [symbol, setSymbol] = useState<string>()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const provider = useProvider()
+    const provider = useSafeProvider()
     const { address: connectedAddress, isConnected } = useAccount()
     const { chain } = useNetwork()
 
