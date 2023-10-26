@@ -67,6 +67,7 @@ jobs:
         run: |
           docker build \
             --build-arg INFURA_API_KEY=${{ secrets.INFURA_API_KEY }} \
+            --build-arg ALCHEMY_API_KEY=${{ secrets.ALCHEMY_API_KEY }} \
             --build-arg WALLETCONNECT_PROJECT_ID=${{ vars.APP_WALLETCONNECT_PROJECT_ID }} \
             --build-arg ENABLE_TESTNETS=${{ vars.APP_ENABLE_TESTNETS }} \
             --build-arg ENABLE_HARDHAT_NODE=${{ vars.APP_ENABLE_HARDHAT_NODE }} \

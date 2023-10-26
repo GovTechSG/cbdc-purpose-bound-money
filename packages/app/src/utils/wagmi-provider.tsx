@@ -4,6 +4,7 @@ import { getDefaultChains } from '@app/utils/helpers'
 import { connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 import { injectedWallet, metaMaskWallet } from '@rainbow-me/rainbowkit/wallets'
+import { alchemyProvider } from '@wagmi/core/providers/alchemy'
 import { infuraProvider } from '@wagmi/core/providers/infura'
 import { publicProvider } from '@wagmi/core/providers/public'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
@@ -14,10 +15,15 @@ const defaultChains = {
     testnets: [polygonMumbai],
 }
 
-const { chains, provider, webSocketProvider } = configureChains(getDefaultChains(defaultChains), [
-    infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY!, priority: 1 }),
-    publicProvider({ priority: 2 }),
-])
+const { chains, provider, webSocketProvider } = configureChains(
+    getDefaultChains(defaultChains),
+    [
+        infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY!, priority: 0 }),
+        alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!, priority: 1 }),
+        publicProvider({ priority: 2 }),
+    ],
+    { stallTimeout: 1000 }
+)
 
 const defaultWalletParams = { chains, projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID! }
 
