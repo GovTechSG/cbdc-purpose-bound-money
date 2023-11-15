@@ -35,6 +35,7 @@ export const metadata: Metadata = {
     shortcut: ["/apple-touch-icon.png"],
   },
   manifest: "/site.webmanifest",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL!),
 };
 
 export default function RootLayout({
