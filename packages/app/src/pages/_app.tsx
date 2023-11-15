@@ -7,6 +7,7 @@ import { PBMTokenProvider } from '@app/contexts/pbm-token-context'
 import { WagmiRainbowKitProvider } from '@app/utils/wagmi-provider'
 import type { Session } from 'next-auth'
 import { AppProps, type AppType } from 'next/app'
+import Head from 'next/head'
 import Script from 'next/script'
 import React from 'react'
 
@@ -15,6 +16,15 @@ const App: AppType<{ session: Session | null }> = ({ Component, pageProps }: App
 
     return (
         <>
+            <Head>
+                <title>Purpose Bound Money (PBM) Portal</title>
+                <meta property="og:image:type" content="image/png" />
+                <meta property="og:image" content="/opengraph-image.png" />
+                <meta property="og:image:width" content="1200" />
+                <meta property="og:image:height" content="630" />
+                <meta property="og:image:alt" content="Purpose Bound Money Portal" />
+            </Head>
+
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} />
             <Script id="google-analytics">
                 {`
