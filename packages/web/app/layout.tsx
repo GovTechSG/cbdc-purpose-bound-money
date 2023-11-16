@@ -3,7 +3,6 @@ import Footer from "@web/components/ui/footer";
 import Header from "@web/components/ui/header";
 import { Metadata } from "next";
 import { Inter, Architects_Daughter } from "next/font/google";
-import Head from "next/head";
 import Script from "next/script";
 
 const inter = Inter({
@@ -63,9 +62,9 @@ export default function RootLayout({
   // noinspection HtmlRequiredTitleElement
   return (
     <html lang="en">
-      <Head>
+      <head>
         <meta name="twitter:card" content="summary_large_image" />
-      </Head>
+      </head>
       <body
         className={`${inter.variable} ${architects_daughter.variable} font-inter antialiased bg-white text-gray-700 tracking-tight bg-top bg-no-repeat bg-auto bg-blend-multiply bg-page`}
       >
