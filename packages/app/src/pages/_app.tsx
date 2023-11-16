@@ -18,11 +18,17 @@ const App: AppType<{ session: Session | null }> = ({ Component, pageProps }: App
         <>
             <Head>
                 <title>Purpose Bound Money (PBM) Portal</title>
-                <meta property="og:image:type" content="image/png" />
+                <meta property="og:image:type" content="website" />
                 <meta property="og:image" content="/opengraph-image.png" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
-                <meta property="og:image:alt" content="Purpose Bound Money Portal" />
+                <meta property="og:image:alt" content="Purpose Bound Money (PBM) Portal" />
+                <meta property="og:title" content="Purpose Bound Money (PBM) Portal" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta
+                    property="og:description"
+                    content="A protocol, developed as part of Project Orchid, enabling the use of digital money with automated on-chain escrow payment releases."
+                />
             </Head>
 
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} />
