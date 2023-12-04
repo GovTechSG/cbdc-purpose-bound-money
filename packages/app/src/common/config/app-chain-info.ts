@@ -2,8 +2,8 @@ import { type AppChainInfo } from '@app/utils/get-app-chain-info'
 
 export const chainInfoPolygon: AppChainInfo = {
     pbm: {
-        address: '0x56e932991885B65bc91f719d9dac241E64B6529E',
-        genesisBlock: 39239804,
+        address: '0xBEd3e1879F63d38d0F1463DeA9b0cf606C4C6428',
+        genesisBlock: 50733860,
     },
     payees: [
         '0x63A69059B7eB694992704F06dD8C2729121b828b', // CFTE
