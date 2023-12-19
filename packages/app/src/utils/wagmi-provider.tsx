@@ -18,8 +18,8 @@ const defaultChains = {
 const { chains, provider, webSocketProvider } = configureChains(
     getDefaultChains(defaultChains),
     [
-        infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY!, priority: 0 }),
         alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!, priority: 1 }),
+        infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_KEY!, priority: 0 }),
         publicProvider({ priority: 2 }),
     ],
     { stallTimeout: 1000 }
