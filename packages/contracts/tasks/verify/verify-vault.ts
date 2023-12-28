@@ -22,7 +22,7 @@ task("verify:vault", "Verify PBM vault")
       await verifyContract({
         address,
         constructorArgsParams: [name, symbol],
-        contract: "contracts/base/PBMVault.sol:PBMVault",
+        contract: "contracts/utils/PBMVault.sol:PBMVault",
         hre,
       });
 
