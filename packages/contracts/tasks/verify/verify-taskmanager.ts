@@ -24,7 +24,7 @@ task("verify:taskmanager", "Verify PBMTaskManager")
       await verifyContract({
         address,
         constructorArgsParams: [pbm, automate, fundsOwner],
-        contract: "contracts/PBMTaskManager.sol:PBMTaskManager",
+        contract: "contracts/utils/PBMTaskManager.sol:PBMTaskManager",
         hre,
       });
 
