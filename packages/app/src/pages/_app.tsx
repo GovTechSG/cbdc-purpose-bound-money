@@ -23,7 +23,20 @@ const App: AppType<{ session: Session | null }> = ({ Component, pageProps }: App
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
                 <meta property="og:image:alt" content="Purpose Bound Money (PBM) Portal" />
+                <meta
+                    property="og:description"
+                    content="A protocol, developed as part of Project Orchid, enabling the use of digital money with automated on-chain escrow payment releases."
+                />
                 <meta property="og:title" content="Purpose Bound Money (PBM) Portal" />
+                <meta name="twitter:title" content="Purpose Bound Money (PBM) Portal" />
+                <meta
+                    name="twitter:description"
+                    content="A protocol, developed as part of Project Orchid, enabling the use of digital money with automated on-chain escrow payment releases."
+                />
+                <meta name="twitter:image" content="/opengraph-image.png" />
+                <meta name="twitter:image:width" content="1200" />
+                <meta name="twitter:image:height" content="630" />
+                <meta name="twitter:image:alt" content="Purpose Bound Money (PBM) Portal" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta
                     property="og:description"
